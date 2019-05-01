@@ -10,5 +10,6 @@ public class NetworkConstants {
 
     // Named Injections
     public static final String NAMED_LOGGING_INTERCEPTOR = "logging-interceptor";
+    public static final String NAMED_STETHO_INTERCEPTOR = "stetho-interceptor";
     public static final String NAMED_BASE_URL = "base-url";
 }

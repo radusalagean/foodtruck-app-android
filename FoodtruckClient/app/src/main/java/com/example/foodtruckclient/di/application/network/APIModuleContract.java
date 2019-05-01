@@ -1,4 +1,4 @@
-package com.example.foodtruckclient.network;
+package com.example.foodtruckclient.di.application.network;
 
 import java.util.List;
 
@@ -21,12 +21,8 @@ public interface APIModuleContract<T> {
     /**
      * Provide the {@link OkHttpClient} instance
      */
-    OkHttpClient provideClient(List<Interceptor> interceptors);
-
-    /**
-     * Provide the interceptors that need to be used in the {@link OkHttpClient} instance
-     */
-    List<Interceptor> provideInterceptors(Interceptor loggingInterceptor);
+    OkHttpClient provideClient(Interceptor loggingInterceptor,
+                               Interceptor stethoInterceptor);
 
     /**
      * Provide the {@link Retrofit} instance

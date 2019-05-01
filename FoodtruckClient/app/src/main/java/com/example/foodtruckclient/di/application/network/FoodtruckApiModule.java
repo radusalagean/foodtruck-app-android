@@ -1,11 +1,7 @@
-package com.example.foodtruckclient.network.foodtruckapi;
+package com.example.foodtruckclient.di.application.network;
 
-import com.example.foodtruckclient.network.APIModuleContract;
-import com.example.foodtruckclient.network.BaseApiModule;
 import com.example.foodtruckclient.network.NetworkConstants;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.example.foodtruckclient.network.foodtruckapi.FoodtruckApiService;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -18,13 +14,13 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import timber.log.Timber;
 
 @Module(includes = BaseApiModule.class)
 public class FoodtruckApiModule implements APIModuleContract<FoodtruckApiService> {
 
     @Override
     @Provides
+    @Singleton
     @Named(NetworkConstants.NAMED_BASE_URL)
     public String getBaseUrl() {
         return NetworkConstants.FOODTRUCK_API_BASE_URL;
@@ -32,25 +28,22 @@ public class FoodtruckApiModule implements APIModuleContract<FoodtruckApiService
 
     @Override
     @Provides
-    public OkHttpClient provideClient(List<Interceptor> interceptors) {
+    @Singleton
+    public OkHttpClient provideClient(@Named(NetworkConstants.NAMED_LOGGING_INTERCEPTOR) Interceptor loggingInterceptor,
+                                      @Named(NetworkConstants.NAMED_STETHO_INTERCEPTOR) Interceptor stethoInterceptor) {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
-        for (Interceptor i : interceptors) {
-            builder.addInterceptor(i);
+        if (loggingInterceptor != null) {
+            builder.addInterceptor(loggingInterceptor);
+        }
+        if (stethoInterceptor != null) {
+            builder.addNetworkInterceptor(stethoInterceptor);
         }
         return builder.build();
     }
 
     @Override
     @Provides
-    public List<Interceptor> provideInterceptors(@Named(NetworkConstants.NAMED_LOGGING_INTERCEPTOR) Interceptor loggingInterceptor) {
-        List<Interceptor> interceptors = new ArrayList<>();
-        interceptors.add(loggingInterceptor);
-        // TODO Add Auth Interceptor
-        return interceptors;
-    }
-
-    @Override
-    @Provides
+    @Singleton
     public Retrofit provideRetrofit(@Named(NetworkConstants.NAMED_BASE_URL) String baseUrl, OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
                 .baseUrl(baseUrl)

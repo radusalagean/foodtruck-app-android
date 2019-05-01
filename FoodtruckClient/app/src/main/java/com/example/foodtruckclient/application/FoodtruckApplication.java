@@ -1,12 +1,25 @@
 package com.example.foodtruckclient.application;
 
-import dagger.android.AndroidInjector;
-import dagger.android.DaggerApplication;
+import android.app.Application;
 
-public class FoodtruckApplication extends DaggerApplication {
+import com.example.foodtruckclient.di.application.ApplicationComponent;
+import com.example.foodtruckclient.di.application.ApplicationModule;
+import com.example.foodtruckclient.di.application.DaggerApplicationComponent;
+import com.example.foodtruckclient.di.application.network.FoodtruckApiModule;
+import com.example.foodtruckclient.di.application.repository.RepositoryModule;
 
-    @Override
-    protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
-        return DaggerApplicationComponent.factory().create(this);
+public class FoodtruckApplication extends Application {
+
+    private ApplicationComponent applicationComponent;
+
+    public ApplicationComponent getApplicationComponent() {
+        if (applicationComponent == null) {
+            applicationComponent = DaggerApplicationComponent.builder()
+                    .applicationModule(new ApplicationModule(this))
+                    .foodtruckApiModule(new FoodtruckApiModule())
+                    .repositoryModule(new RepositoryModule())
+                    .build();
+        }
+        return applicationComponent;
     }
 }
