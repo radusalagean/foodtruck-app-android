@@ -71,13 +71,23 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    protected void addFragmentIfNecessary(@NonNull BaseFragment defaultFragment, @IdRes int containerId) {
+    /**
+     * Adds a default fragment if no fragment is present for the specified container
+     * @param containerId
+     */
+    protected void addDefaultFragmentIfNecessary(@IdRes int containerId) {
         Fragment currentFragment = getSupportFragmentManager().findFragmentById(containerId);
         if (currentFragment == null) {
-            Timber.d("No fragment was previously attached, attaching %s as starting point", defaultFragment);
+            BaseFragment defaultFragment = getDefaultFragment();
+            Timber.d("No fragment was previously attached for container id %d, attaching %s as starting point", containerId, defaultFragment);
             ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), defaultFragment, containerId);
         }
     }
+
+    /**
+     * Override to specify the default fragment to be added with the {@link #addDefaultFragmentIfNecessary(int)} method
+     */
+    protected abstract @NonNull BaseFragment getDefaultFragment();
 
     @UiThread
     protected PresentationComponent getControllerComponent() {

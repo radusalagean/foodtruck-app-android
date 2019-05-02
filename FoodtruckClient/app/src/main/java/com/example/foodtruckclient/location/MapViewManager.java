@@ -1,9 +1,10 @@
-package com.example.foodtruckclient.util;
+package com.example.foodtruckclient.location;
 
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 
+import com.example.foodtruckclient.util.NumberUtils;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 
@@ -54,7 +55,7 @@ public class MapViewManager {
         Timber.d("Syncing mapView... (state = %s)", getStateAsBinaryString());
         if (isStateMet(FLAG_CREATED)) {
             Timber.d("Syncing mapView... (calling onCreate())");
-            mapView.onCreate(mapViewBundle);
+            createMap(mapViewBundle);
         }
         if (isStateMet(FLAG_STARTED)) {
             Timber.d("Syncing mapView... (calling onStart())");
@@ -89,12 +90,16 @@ public class MapViewManager {
         return (state & flag) == flag;
     }
 
+    private void createMap(@Nullable Bundle mapViewBundle) {
+        mapView.onCreate(mapViewBundle);
+        this.mapViewBundle = null;
+        mapView.getMapAsync(onMapReadyCallback);
+    }
+
     public void onCreate(@Nullable Bundle mapViewBundle) {
         if (mapView != null) {
             Timber.d("Calling onCreate(%s) on mapView...", mapViewBundle);
-            mapView.onCreate(mapViewBundle);
-            this.mapViewBundle = null;
-            mapView.getMapAsync(onMapReadyCallback);
+            createMap(mapViewBundle);
         } else {
             this.mapViewBundle = mapViewBundle;
         }

@@ -16,8 +16,8 @@ import com.example.foodtruckclient.R;
 import com.example.foodtruckclient.generic.fragment.BaseMapFragment;
 import com.example.foodtruckclient.generic.fragment.FragmentContract;
 import com.example.foodtruckclient.generic.view.OnViewInflatedListener;
+import com.example.foodtruckclient.permission.PermissionRequestDelegate;
 import com.example.foodtruckclient.view.MorphableFloatingActionButton;
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.material.tabs.TabLayout;
 
@@ -70,18 +70,12 @@ public class DashboardFragment extends BaseMapFragment
             }
         }
     };
-    private MapView testMapView; // TODO Remove
     private View.OnClickListener fabOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             switch (viewPager.getCurrentItem()) {
                 case DashboardPagerMapper.POSITION_MAP:
-                    if (mapViewManager.getMapView() != null) {
-                        testMapView = mapViewManager.getMapView();
-                        mapViewManager.dropMapView();
-                    } else {
-                        mapViewManager.takeMapView(testMapView);
-                    }
+                    presenter.zoomOnCurrentDeviceLocation();
                     break;
                 case DashboardPagerMapper.POSITION_LIST:
                     Toast.makeText(getContext(), "Hello from the list", Toast.LENGTH_SHORT).show();
@@ -138,13 +132,28 @@ public class DashboardFragment extends BaseMapFragment
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        Timber.d("onRequestPermissionsResult(%d, %s, %s)", requestCode, permissions, grantResults);
+        presenter.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
     public void updateData(List<DashboardFoodtruckViewModel> results) {
         Timber.d("results: %d", results.size());
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
-        super.onMapReady(googleMap);
+    public PermissionRequestDelegate getPermissionRequestDelegate() {
+        return this;
+    }
 
+    @Override
+    protected void initMapViewManager() {
+        initMapViewManager(presenter.getOnMapReadyCallback());
+    }
+
+    @Override
+    protected void disposeMap() {
+        presenter.disposeMap();
     }
 }

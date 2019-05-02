@@ -8,7 +8,10 @@ import androidx.fragment.app.FragmentManager;
 import com.example.foodtruckclient.dashboard.DashboardMVP;
 import com.example.foodtruckclient.dashboard.DashboardModel;
 import com.example.foodtruckclient.dashboard.DashboardPresenter;
+import com.example.foodtruckclient.dialog.DialogManager;
 import com.example.foodtruckclient.generic.fragment.FragmentContract;
+import com.example.foodtruckclient.location.LocationManager;
+import com.example.foodtruckclient.permission.PermissionManager;
 import com.example.foodtruckclient.repository.NetworkRepository;
 
 import dagger.Module;
@@ -43,6 +46,13 @@ public class PresentationModule {
         return (FragmentContract) activity;
     }
 
+    // Dialog
+
+    @Provides
+    DialogManager provideDialogManager() {
+        return new DialogManager(activity);
+    }
+
     // Dashboard
 
     @Provides
@@ -51,7 +61,10 @@ public class PresentationModule {
     }
 
     @Provides
-    DashboardMVP.Presenter provideDashboardPresenter(DashboardMVP.Model model) {
-        return new DashboardPresenter(model);
+    DashboardMVP.Presenter provideDashboardPresenter(DashboardMVP.Model model,
+                                                     LocationManager locationManager,
+                                                     PermissionManager permissionManager,
+                                                     DialogManager dialogManager) {
+        return new DashboardPresenter(model, locationManager, permissionManager, dialogManager);
     }
 }

@@ -3,23 +3,29 @@ package com.example.foodtruckclient.generic.fragment;
 import android.os.Bundle;
 import android.view.View;
 
-import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.foodtruckclient.util.MapViewManager;
+import com.example.foodtruckclient.location.MapViewManager;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 
-import timber.log.Timber;
+public abstract class BaseMapFragment extends BaseFragment {
 
-public abstract class BaseMapFragment extends BaseFragment implements OnMapReadyCallback {
+    protected MapViewManager mapViewManager;
 
-    protected MapViewManager mapViewManager = new MapViewManager(this);
-    protected GoogleMap googleMap;
+    /**
+     * Call this in order to properly initialize the {@link MapViewManager}
+     *
+     * @param onMapReadyCallback callback used to set the {@link GoogleMap} instance
+     */
+    protected void initMapViewManager(OnMapReadyCallback onMapReadyCallback) {
+        mapViewManager = new MapViewManager(onMapReadyCallback);
+    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        initMapViewManager();
         mapViewManager.onCreate(savedInstanceState);
         super.onViewCreated(view, savedInstanceState);
     }
@@ -57,7 +63,7 @@ public abstract class BaseMapFragment extends BaseFragment implements OnMapReady
     @Override
     public void onDestroy() {
         mapViewManager.onDestroy();
-        googleMap = null;
+        disposeMap();
         super.onDestroy();
     }
 
@@ -67,11 +73,7 @@ public abstract class BaseMapFragment extends BaseFragment implements OnMapReady
         mapViewManager.onLowMemory();
     }
 
-    @Override
-    @CallSuper
-    public void onMapReady(GoogleMap googleMap) {
-        Timber.d("onMapReady(%s)", googleMap);
-        this.googleMap = googleMap;
-        // TODO add markers and whatnot
-    }
+    protected abstract void initMapViewManager();
+
+    protected abstract void disposeMap();
 }

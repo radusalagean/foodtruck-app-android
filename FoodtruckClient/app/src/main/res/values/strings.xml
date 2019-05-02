@@ -1,6 +1,16 @@
 <resources>
     <string name="app_name">Foodtruck Client</string>
 
+    <!--Alert Dialog-->
+    <string name="alert_dialog_action_ok">OK</string>
+    <string name="alert_dialog_action_cancel">Cancel</string>
+    <string name="alert_dialog_action_dismiss">Dismiss</string>
+
+    <!--Location Permission Request Alert Dialog-->
+    <string name="alert_dialog_location_permission_denied_title">Permission request denied</string>
+    <string name="alert_dialog_location_permission_canceled_title">Permission request canceled</string>
+    <string name="alert_dialog_location_no_permission_message">Unable to show your location on the map</string>
+
     <!--Dashboard-->
     <string name="dashboard_toolbar_title">Dashboard</string>
     <string name="dashboard_pager_map">Map</string>

@@ -14,10 +14,12 @@ import androidx.fragment.app.Fragment;
 import com.example.foodtruckclient.application.FoodtruckApplication;
 import com.example.foodtruckclient.di.presentation.PresentationComponent;
 import com.example.foodtruckclient.di.presentation.PresentationModule;
+import com.example.foodtruckclient.permission.PermissionRequestDelegate;
 
 import timber.log.Timber;
 
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment
+        implements PermissionRequestDelegate {
 
     private String tag = getClass().getSimpleName();
     private boolean isComponentUsed = false;
@@ -95,6 +97,11 @@ public abstract class BaseFragment extends Fragment {
     public void onDetach() {
         Timber.tag(tag).v("-F-> onDetach()");
         super.onDetach();
+    }
+
+    @Override
+    public void requestPermission(String permission, int requestCode) {
+        requestPermissions(new String[] { permission }, requestCode);
     }
 
     @UiThread
