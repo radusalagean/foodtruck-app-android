@@ -17,15 +17,17 @@ public interface DashboardMVP {
     }
 
     interface View {
-        void updateData(List<DashboardFoodtruckViewModel> results);
+        void updateFoodtrucks(List<DashboardFoodtruckViewModel> results);
         PermissionRequestDelegate getPermissionRequestDelegate();
+        void switchToMapTab();
     }
 
     interface Presenter extends BasePresenter<View> {
-        void loadData();
+        void loadFoodtrucks();
         void disposeMap();
         OnMapReadyCallback getOnMapReadyCallback();
         void zoomOnCurrentDeviceLocation();
+        void zoomOnLocation(double latitude, double longitude);
         void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults);
     }
 }

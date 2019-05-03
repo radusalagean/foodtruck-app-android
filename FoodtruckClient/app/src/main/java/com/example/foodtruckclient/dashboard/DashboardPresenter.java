@@ -9,7 +9,11 @@ import com.example.foodtruckclient.permission.PermissionConstants;
 import com.example.foodtruckclient.permission.PermissionManager;
 import com.example.foodtruckclient.permission.PermissionRequestListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -31,6 +35,7 @@ public class DashboardPresenter implements DashboardMVP.Presenter {
                               LocationManager locationManager,
                               PermissionManager permissionManager,
                               DialogManager dialogManager) {
+        Timber.d("Constructor");
         this.model = model;
         this.locationManager = locationManager;
         this.permissionManager = permissionManager;
@@ -40,15 +45,13 @@ public class DashboardPresenter implements DashboardMVP.Presenter {
 
 
     @Override
-    public void loadData() {
+    public void loadFoodtrucks() {
         compositeDisposable.add(model.getResults()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableObserver<List<DashboardFoodtruckViewModel>>() {
                     @Override
                     public void onNext(List<DashboardFoodtruckViewModel> dashboardFoodtruckViewModels) {
-                        if (view != null) {
-                            view.updateData(dashboardFoodtruckViewModels);
-                        }
+                        processFoodtrucks(dashboardFoodtruckViewModels);
                     }
 
                     @Override
@@ -59,6 +62,23 @@ public class DashboardPresenter implements DashboardMVP.Presenter {
                     @Override
                     public void onComplete() {}
                 }));
+    }
+
+    private void processFoodtrucks(List<DashboardFoodtruckViewModel> foodtrucks) {
+        // Add markers on the map
+        List<MarkerOptions> markers = new ArrayList<>();
+        for (DashboardFoodtruckViewModel model : foodtrucks) {
+            MarkerOptions marker = new MarkerOptions()
+                    .position(new LatLng(model.getLatitude(), model.getLongitude()))
+                    .title(model.getName());
+            markers.add(marker);
+        }
+        locationManager.takeMarkers(markers);
+
+        // Send foodtrucks to view
+        if (view != null) {
+            view.updateFoodtrucks(foodtrucks);
+        }
     }
 
     @Override
@@ -104,6 +124,12 @@ public class DashboardPresenter implements DashboardMVP.Presenter {
                         }
                     });
         }
+    }
+
+    @Override
+    public void zoomOnLocation(double latitude, double longitude) {
+        view.switchToMapTab();
+        locationManager.zoomOnLocation(latitude, longitude);
     }
 
     @Override

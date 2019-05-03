@@ -22,7 +22,7 @@ public class DashboardModel implements DashboardMVP.Model {
                 .map((foodtrucks) -> {
                     List<DashboardFoodtruckViewModel> results = new ArrayList<>();
                     for (Foodtruck foodtruck : foodtrucks) {
-                        results.add(DashboardFoodtruckViewModel.fromFoodtruck(foodtruck));
+                        results.add(DashboardFoodtruckViewModel.createFrom(foodtruck));
                     }
                     return results;
                 });

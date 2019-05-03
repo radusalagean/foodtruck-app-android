@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import android.view.LayoutInflater;
@@ -13,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.foodtruckclient.R;
+import com.example.foodtruckclient.generic.decoration.ListItemDecoration;
 import com.example.foodtruckclient.generic.fragment.BaseMapFragment;
 import com.example.foodtruckclient.generic.fragment.FragmentContract;
 import com.example.foodtruckclient.generic.view.OnViewInflatedListener;
@@ -47,6 +50,9 @@ public class DashboardFragment extends BaseMapFragment
     @Inject
     FragmentContract fragmentContract;
 
+    private RecyclerView recyclerView;
+    private DashboardListAdapter listAdapter;
+
     private ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
@@ -64,9 +70,15 @@ public class DashboardFragment extends BaseMapFragment
     private OnViewInflatedListener onViewInflatedListener = new OnViewInflatedListener() {
         @Override
         public void onViewInflated(View view) {
-            MapView mapView = view.findViewById(R.id.map_view);
-            if (mapView != null) {
-                DashboardFragment.this.mapViewManager.takeMapView(mapView);
+            switch (view.getId()) {
+                case R.id.layout_dashboard_map:
+                    MapView mapView = view.findViewById(R.id.map_view);
+                    DashboardFragment.this.mapViewManager.takeMapView(mapView);
+                    break;
+                case R.id.layout_dashboard_list:
+                    recyclerView = view.findViewById(R.id.recycler_view);
+                    initRecyclerView();
+                    break;
             }
         }
     };
@@ -116,7 +128,8 @@ public class DashboardFragment extends BaseMapFragment
         tabLayout.setupWithViewPager(viewPager);
         viewPager.addOnPageChangeListener(onPageChangeListener);
         fragmentContract.setToolbarTitle(R.string.dashboard_toolbar_title);
-        presenter.loadData();
+        listAdapter = new DashboardListAdapter(presenter);
+        presenter.loadFoodtrucks();
     }
 
     @Override
@@ -138,13 +151,20 @@ public class DashboardFragment extends BaseMapFragment
     }
 
     @Override
-    public void updateData(List<DashboardFoodtruckViewModel> results) {
-        Timber.d("results: %d", results.size());
+    public void updateFoodtrucks(List<DashboardFoodtruckViewModel> results) {
+        listAdapter.submitList(results);
     }
 
     @Override
     public PermissionRequestDelegate getPermissionRequestDelegate() {
         return this;
+    }
+
+    @Override
+    public void switchToMapTab() {
+        if (viewPager.getCurrentItem() != DashboardPagerMapper.POSITION_MAP) {
+            viewPager.setCurrentItem(DashboardPagerMapper.POSITION_MAP);
+        }
     }
 
     @Override
@@ -155,5 +175,11 @@ public class DashboardFragment extends BaseMapFragment
     @Override
     protected void disposeMap() {
         presenter.disposeMap();
+    }
+
+    private void initRecyclerView() {
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.addItemDecoration(new ListItemDecoration(getResources().getDimensionPixelSize(R.dimen.item_dashboard_list_offset)));
+        recyclerView.setAdapter(listAdapter);
     }
 }
