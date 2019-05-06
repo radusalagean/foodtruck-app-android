@@ -2,22 +2,22 @@ package com.example.foodtruckclient.generic.activity;
 
 import android.os.Bundle;
 
-import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.foodtruckclient.application.FoodtruckApplication;
-import com.example.foodtruckclient.di.presentation.PresentationComponent;
-import com.example.foodtruckclient.di.presentation.PresentationModule;
+import com.example.foodtruckclient.di.activity.ActivityComponent;
+import com.example.foodtruckclient.di.activity.ActivityModule;
 import com.example.foodtruckclient.generic.fragment.BaseFragment;
-import com.example.foodtruckclient.util.ActivityUtils;
 
 import timber.log.Timber;
 
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity implements ActivityContract {
 
     private String tag = getClass().getSimpleName();
     private boolean isComponentUsed = false;
@@ -71,32 +71,43 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    @Override
+    public void setActionBar(@NonNull Toolbar toolbar) {
+        setSupportActionBar(toolbar);
+    }
+
+    @Override
+    public FragmentManager getFragmentManagerCompat() {
+        return getSupportFragmentManager();
+    }
+
     /**
      * Adds a default fragment if no fragment is present for the specified container
-     * @param containerId
      */
-    protected void addDefaultFragmentIfNecessary(@IdRes int containerId) {
-        Fragment currentFragment = getSupportFragmentManager().findFragmentById(containerId);
+    protected void addDefaultFragmentIfNecessary() {
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(getFragmentContainerId());
         if (currentFragment == null) {
             BaseFragment defaultFragment = getDefaultFragment();
-            Timber.d("No fragment was previously attached for container id %d, attaching %s as starting point", containerId, defaultFragment);
-            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), defaultFragment, containerId);
+            Timber.d("No fragment was previously attached, attaching %s as starting point", defaultFragment);
+            getSupportFragmentManager().beginTransaction()
+                    .add(getFragmentContainerId(), getDefaultFragment())
+                    .commit();
         }
     }
 
     /**
-     * Override to specify the default fragment to be added with the {@link #addDefaultFragmentIfNecessary(int)} method
+     * Override to specify the default fragment to be added with the {@link #addDefaultFragmentIfNecessary()} method
      */
     protected abstract @NonNull BaseFragment getDefaultFragment();
 
     @UiThread
-    protected PresentationComponent getControllerComponent() {
+    protected ActivityComponent getControllerComponent() {
         if (isComponentUsed) {
-            throw new IllegalStateException("You shouldn't use PresentationComponent more than once");
+            throw new IllegalStateException("You shouldn't use ActivityComponent more than once");
         }
         isComponentUsed = true;
         return ((FoodtruckApplication) getApplication())
                 .getApplicationComponent()
-                .newPresentationComponent(new PresentationModule(this));
+                .newActivityComponent(new ActivityModule(this));
     }
 }

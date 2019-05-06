@@ -2,14 +2,12 @@ package com.example.foodtruckclient.di.application;
 
 import com.example.foodtruckclient.di.application.network.FoodtruckApiModule;
 import com.example.foodtruckclient.di.application.repository.RepositoryModule;
-import com.example.foodtruckclient.di.presentation.PresentationComponent;
-import com.example.foodtruckclient.di.presentation.PresentationModule;
-
-import javax.inject.Singleton;
+import com.example.foodtruckclient.di.activity.ActivityComponent;
+import com.example.foodtruckclient.di.activity.ActivityModule;
 
 import dagger.Component;
 
-@Singleton
+@ApplicationScope
 @Component(modules = {
         ApplicationModule.class,
         FoodtruckApiModule.class,
@@ -17,5 +15,5 @@ import dagger.Component;
 })
 public interface ApplicationComponent {
 
-    PresentationComponent newPresentationComponent(PresentationModule presentationModule);
+    ActivityComponent newActivityComponent(ActivityModule activityModule);
 }

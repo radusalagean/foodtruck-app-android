@@ -29,6 +29,7 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appCompatVersion"
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayoutVersion"
     implementation "com.google.android.material:material:$materialVersion"
+    implementation "androidx.legacy:legacy-support-v4:$legacySupportVersion"
     implementation "com.google.android.gms:play-services-maps:$playServicesMapsVersion"
     implementation "com.google.android.gms:play-services-location:$playServicesLocationVersion"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"

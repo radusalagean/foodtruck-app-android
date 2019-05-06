@@ -37,7 +37,7 @@ public class DashboardListViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, itemView);
     }
 
-    public void bind(DashboardFoodtruckViewModel model, DashboardMVP.Presenter presenter) {
+    public void bind(DashboardFoodtruckViewModel model, DashboardListListener listener) {
         Glide.with(imageView)
                 .load(model.getThumbnailUrl())
                 .centerCrop()
@@ -51,7 +51,10 @@ public class DashboardListViewHolder extends RecyclerView.ViewHolder {
         ratingCountTextView.setText(ratingCountTextView.getResources()
                 .getString(ratingCountResId, model.getRatingCount()));
         showOnMapButton.setOnClickListener((view) -> {
-            presenter.zoomOnLocation(model.getLatitude(), model.getLongitude());
+            listener.onFoodtruckLocationButtonClicked(model);
+        });
+        itemView.setOnClickListener((view) -> {
+            listener.onFoodtruckSelected(model);
         });
     }
 

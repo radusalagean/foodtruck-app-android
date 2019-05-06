@@ -12,8 +12,8 @@ import androidx.annotation.UiThread;
 import androidx.fragment.app.Fragment;
 
 import com.example.foodtruckclient.application.FoodtruckApplication;
-import com.example.foodtruckclient.di.presentation.PresentationComponent;
-import com.example.foodtruckclient.di.presentation.PresentationModule;
+import com.example.foodtruckclient.di.activity.ActivityComponent;
+import com.example.foodtruckclient.di.activity.ActivityModule;
 import com.example.foodtruckclient.permission.PermissionRequestDelegate;
 
 import timber.log.Timber;
@@ -43,6 +43,14 @@ public abstract class BaseFragment extends Fragment
         Timber.tag(tag).v("-F-> onCreateView(%s, %s, %s)", inflater, container,
                 savedInstanceState);
         return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        Timber.tag(tag).v("-F-> onViewCreated(%s, %s)", view, savedInstanceState);
+        initViews();
+        registerListeners();
+        super.onViewCreated(view, savedInstanceState);
     }
 
     @Override
@@ -84,6 +92,7 @@ public abstract class BaseFragment extends Fragment
     @Override
     public void onDestroyView() {
         Timber.tag(tag).v("-F-> onDestroyView()");
+        unregisterListeners();
         super.onDestroyView();
     }
 
@@ -105,13 +114,31 @@ public abstract class BaseFragment extends Fragment
     }
 
     @UiThread
-    protected PresentationComponent getControllerComponent() {
+    protected ActivityComponent getControllerComponent() {
         if (isComponentUsed) {
-            throw new IllegalStateException("You shouldn't use PresentationComponent more than once");
+            throw new IllegalStateException("You shouldn't use ActivityComponent more than once");
         }
         isComponentUsed = true;
         return ((FoodtruckApplication) getActivity().getApplication())
                 .getApplicationComponent()
-                .newPresentationComponent(new PresentationModule(getActivity()));
+                .newActivityComponent(new ActivityModule(getActivity()));
     }
+
+    /**
+     * Called during the {@link Fragment#onViewCreated(View, Bundle)} lifecycle method,
+     * override to initialize views
+     */
+    protected abstract void initViews();
+
+    /**
+     * Called during the {@link Fragment#onViewCreated(View, Bundle)} lifecycle method,
+     * override to register view listeners
+     */
+    protected abstract void registerListeners();
+
+    /**
+     * Called during the {@link Fragment#onDestroyView()} lifecycle method,
+     * override to unregister view listeners
+     */
+    protected abstract void unregisterListeners();
 }

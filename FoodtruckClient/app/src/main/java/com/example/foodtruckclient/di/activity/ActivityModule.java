@@ -1,15 +1,14 @@
-package com.example.foodtruckclient.di.presentation;
+package com.example.foodtruckclient.di.activity;
 
 import android.content.Context;
 
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 
 import com.example.foodtruckclient.dashboard.DashboardMVP;
 import com.example.foodtruckclient.dashboard.DashboardModel;
 import com.example.foodtruckclient.dashboard.DashboardPresenter;
 import com.example.foodtruckclient.dialog.DialogManager;
-import com.example.foodtruckclient.generic.fragment.FragmentContract;
+import com.example.foodtruckclient.generic.activity.ActivityContract;
 import com.example.foodtruckclient.location.LocationManager;
 import com.example.foodtruckclient.permission.PermissionManager;
 import com.example.foodtruckclient.repository.NetworkRepository;
@@ -18,37 +17,36 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module
-public class PresentationModule {
+public class ActivityModule {
 
     private final FragmentActivity activity;
 
-    public PresentationModule(FragmentActivity activity) {
+    public ActivityModule(FragmentActivity activity) {
         this.activity = activity;
     }
 
     @Provides
+    @ActivityScope
     FragmentActivity provideActivity() {
         return activity;
     }
 
     @Provides
+    @ActivityScope
     Context provideContext() {
         return activity;
     }
 
     @Provides
-    FragmentManager provideFragmentManager() {
-        return activity.getSupportFragmentManager();
-    }
-
-    @Provides
-    FragmentContract provideFragmentContract() {
-        return (FragmentContract) activity;
+    @ActivityScope
+    ActivityContract provideActivityContract() {
+        return (ActivityContract) activity;
     }
 
     // Dialog
 
     @Provides
+    @ActivityScope
     DialogManager provideDialogManager() {
         return new DialogManager(activity);
     }
@@ -64,7 +62,10 @@ public class PresentationModule {
     DashboardMVP.Presenter provideDashboardPresenter(DashboardMVP.Model model,
                                                      LocationManager locationManager,
                                                      PermissionManager permissionManager,
-                                                     DialogManager dialogManager) {
-        return new DashboardPresenter(model, locationManager, permissionManager, dialogManager);
+                                                     DialogManager dialogManager,
+                                                     ActivityContract activityContract) {
+        return new DashboardPresenter(
+                model, locationManager, permissionManager, dialogManager, activityContract
+        );
     }
 }

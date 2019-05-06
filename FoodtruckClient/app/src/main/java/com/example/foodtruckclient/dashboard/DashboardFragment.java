@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -12,12 +13,11 @@ import androidx.viewpager.widget.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.foodtruckclient.R;
 import com.example.foodtruckclient.generic.decoration.ListItemDecoration;
+import com.example.foodtruckclient.generic.activity.ActivityContract;
 import com.example.foodtruckclient.generic.fragment.BaseMapFragment;
-import com.example.foodtruckclient.generic.fragment.FragmentContract;
 import com.example.foodtruckclient.generic.view.OnViewInflatedListener;
 import com.example.foodtruckclient.permission.PermissionRequestDelegate;
 import com.example.foodtruckclient.view.MorphableFloatingActionButton;
@@ -33,7 +33,10 @@ import butterknife.ButterKnife;
 import timber.log.Timber;
 
 public class DashboardFragment extends BaseMapFragment
-        implements DashboardMVP.View {
+        implements DashboardMVP.View, DashboardListListener {
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     @BindView(R.id.view_pager)
     ViewPager viewPager;
@@ -48,9 +51,10 @@ public class DashboardFragment extends BaseMapFragment
     DashboardMVP.Presenter presenter;
 
     @Inject
-    FragmentContract fragmentContract;
+    ActivityContract activityContract;
 
     private RecyclerView recyclerView;
+    private DashboardPagerAdapter pagerAdapter;
     private DashboardListAdapter listAdapter;
 
     private ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
@@ -59,8 +63,14 @@ public class DashboardFragment extends BaseMapFragment
 
         @Override
         public void onPageSelected(int position) {
-            fab.setAvd(position == 0 ? R.drawable.avd_add_to_location : R.drawable.avd_location_to_add);
-            fab.morph();
+            switch (position) {
+                case DashboardPagerMapper.POSITION_MAP:
+                    fab.morph(R.drawable.avd_add_to_location, R.drawable.ic_my_location_white_24dp);
+                    break;
+                case DashboardPagerMapper.POSITION_LIST:
+                    fab.morph(R.drawable.avd_location_to_add, R.drawable.ic_add_circle_outline_white_24dp);
+                    break;
+            }
         }
 
         @Override
@@ -82,6 +92,7 @@ public class DashboardFragment extends BaseMapFragment
             }
         }
     };
+
     private View.OnClickListener fabOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -90,7 +101,7 @@ public class DashboardFragment extends BaseMapFragment
                     presenter.zoomOnCurrentDeviceLocation();
                     break;
                 case DashboardPagerMapper.POSITION_LIST:
-                    Toast.makeText(getContext(), "Hello from the list", Toast.LENGTH_SHORT).show();
+                    // TODO Add new Foodtruck
                     break;
             }
         }
@@ -99,10 +110,8 @@ public class DashboardFragment extends BaseMapFragment
     public DashboardFragment() {}
 
     public static DashboardFragment newInstance() {
-        DashboardFragment fragment = new DashboardFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
+        // Home fragment, no need for extra args
+        return new DashboardFragment();
     }
 
     @Override
@@ -112,24 +121,19 @@ public class DashboardFragment extends BaseMapFragment
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        pagerAdapter = new DashboardPagerAdapter(getContext(), onViewInflatedListener);
+        listAdapter = new DashboardListAdapter(this);
+        presenter.loadFoodtrucks();
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
         ButterKnife.bind(this, view);
         return view;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        fab.setAvd(R.drawable.ic_my_location_white_24dp);
-        fab.setOnClickListener(fabOnClickListener);
-        viewPager.setAdapter(new DashboardPagerAdapter(getContext(), onViewInflatedListener));
-        tabLayout.setupWithViewPager(viewPager);
-        viewPager.addOnPageChangeListener(onPageChangeListener);
-        fragmentContract.setToolbarTitle(R.string.dashboard_toolbar_title);
-        listAdapter = new DashboardListAdapter(presenter);
-        presenter.loadFoodtrucks();
     }
 
     @Override
@@ -142,6 +146,27 @@ public class DashboardFragment extends BaseMapFragment
     public void onStop() {
         super.onStop();
         presenter.dropView();
+    }
+
+    @Override
+    protected void initViews() {
+        toolbar.setTitle(R.string.dashboard_toolbar_title);
+        activityContract.setActionBar(toolbar);
+        fab.setImageResource(R.drawable.ic_my_location_white_24dp);
+        viewPager.setAdapter(pagerAdapter);
+        tabLayout.setupWithViewPager(viewPager);
+    }
+
+    @Override
+    protected void registerListeners() {
+        fab.setOnClickListener(fabOnClickListener);
+        viewPager.addOnPageChangeListener(onPageChangeListener);
+    }
+
+    @Override
+    protected void unregisterListeners() {
+        fab.setOnClickListener(null);
+        viewPager.clearOnPageChangeListeners();
     }
 
     @Override
@@ -181,5 +206,15 @@ public class DashboardFragment extends BaseMapFragment
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new ListItemDecoration(getResources().getDimensionPixelSize(R.dimen.item_dashboard_list_offset)));
         recyclerView.setAdapter(listAdapter);
+    }
+
+    @Override
+    public void onFoodtruckSelected(DashboardFoodtruckViewModel model) {
+        presenter.viewFoodtruck(model.getId(), model.getName());
+    }
+
+    @Override
+    public void onFoodtruckLocationButtonClicked(DashboardFoodtruckViewModel model) {
+        presenter.zoomOnLocation(model.getLatitude(), model.getLongitude());
     }
 }

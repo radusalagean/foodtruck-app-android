@@ -11,11 +11,11 @@ import com.example.foodtruckclient.R;
 
 public class DashboardListAdapter extends ListAdapter<DashboardFoodtruckViewModel, DashboardListViewHolder> {
 
-    private DashboardMVP.Presenter presenter;
+    private DashboardListListener listener;
 
-    public DashboardListAdapter(DashboardMVP.Presenter presenter) {
+    public DashboardListAdapter(DashboardListListener listener) {
         super(new DashboardListDiffCallback());
-        this.presenter = presenter;
+        this.listener = listener;
     }
 
     @NonNull
@@ -28,7 +28,7 @@ public class DashboardListAdapter extends ListAdapter<DashboardFoodtruckViewMode
 
     @Override
     public void onBindViewHolder(@NonNull DashboardListViewHolder holder, int position) {
-        holder.bind(getItem(position), presenter);
+        holder.bind(getItem(position), listener);
     }
 
     @Override

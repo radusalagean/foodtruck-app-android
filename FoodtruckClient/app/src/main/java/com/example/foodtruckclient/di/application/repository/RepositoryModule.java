@@ -1,9 +1,8 @@
 package com.example.foodtruckclient.di.application.repository;
 
+import com.example.foodtruckclient.di.application.ApplicationScope;
 import com.example.foodtruckclient.network.foodtruckapi.FoodtruckApiService;
 import com.example.foodtruckclient.repository.NetworkRepository;
-
-import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
@@ -12,7 +11,7 @@ import dagger.Provides;
 public class RepositoryModule {
 
     @Provides
-    @Singleton
+    @ApplicationScope
     NetworkRepository provideNetworkRepository(FoodtruckApiService foodtruckApiService) {
         return new NetworkRepository(foodtruckApiService);
     }

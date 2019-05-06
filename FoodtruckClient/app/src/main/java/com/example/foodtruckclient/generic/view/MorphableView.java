@@ -5,14 +5,10 @@ import androidx.annotation.DrawableRes;
 public interface MorphableView {
 
     /**
-     * Set the {@link android.graphics.drawable.AnimatedVectorDrawable} resource id on the view
-     *
-     * @param avdResId resource id
-     */
-    void setAvd(@DrawableRes int avdResId);
-
-    /**
      * Run the morph animation
+     *
+     * @param transitionDrawableResId the AnimatedVectorDrawable that is used to create the morphing animation
+     * @param targetDrawableResId the static Drawable that will be set once the animation has ended
      */
-    void morph();
+    void morph(@DrawableRes int transitionDrawableResId, @DrawableRes int targetDrawableResId);
 }

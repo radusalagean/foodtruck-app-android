@@ -1,4 +1,4 @@
-package com.example.foodtruckclient.di.presentation.location;
+package com.example.foodtruckclient.di.activity.location;
 
 import android.content.Context;
 

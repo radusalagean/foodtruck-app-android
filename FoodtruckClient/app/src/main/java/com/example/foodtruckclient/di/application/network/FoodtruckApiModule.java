@@ -1,10 +1,10 @@
 package com.example.foodtruckclient.di.application.network;
 
+import com.example.foodtruckclient.di.application.ApplicationScope;
 import com.example.foodtruckclient.network.NetworkConstants;
 import com.example.foodtruckclient.network.foodtruckapi.FoodtruckApiService;
 
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
@@ -20,7 +20,7 @@ public class FoodtruckApiModule implements APIModuleContract<FoodtruckApiService
 
     @Override
     @Provides
-    @Singleton
+    @ApplicationScope
     @Named(NetworkConstants.NAMED_BASE_URL)
     public String getBaseUrl() {
         return NetworkConstants.FOODTRUCK_API_BASE_URL;
@@ -28,7 +28,7 @@ public class FoodtruckApiModule implements APIModuleContract<FoodtruckApiService
 
     @Override
     @Provides
-    @Singleton
+    @ApplicationScope
     public OkHttpClient provideClient(@Named(NetworkConstants.NAMED_LOGGING_INTERCEPTOR) Interceptor loggingInterceptor,
                                       @Named(NetworkConstants.NAMED_STETHO_INTERCEPTOR) Interceptor stethoInterceptor) {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
@@ -43,7 +43,7 @@ public class FoodtruckApiModule implements APIModuleContract<FoodtruckApiService
 
     @Override
     @Provides
-    @Singleton
+    @ApplicationScope
     public Retrofit provideRetrofit(@Named(NetworkConstants.NAMED_BASE_URL) String baseUrl, OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
                 .baseUrl(baseUrl)
@@ -55,7 +55,7 @@ public class FoodtruckApiModule implements APIModuleContract<FoodtruckApiService
 
     @Override
     @Provides
-    @Singleton
+    @ApplicationScope
     public FoodtruckApiService provideApiService(Retrofit retrofit) {
         return retrofit.create(FoodtruckApiService.class);
     }

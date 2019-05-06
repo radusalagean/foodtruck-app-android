@@ -1,15 +1,17 @@
 package com.example.foodtruckclient.dashboard;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.foodtruckclient.R;
 import com.example.foodtruckclient.dialog.DialogManager;
+import com.example.foodtruckclient.foodtruckviewer.FoodtruckViewerFragment;
+import com.example.foodtruckclient.generic.activity.ActivityContract;
 import com.example.foodtruckclient.location.LocationManager;
 import com.example.foodtruckclient.permission.PermissionConstants;
 import com.example.foodtruckclient.permission.PermissionManager;
 import com.example.foodtruckclient.permission.PermissionRequestListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -24,22 +26,24 @@ import timber.log.Timber;
 public class DashboardPresenter implements DashboardMVP.Presenter {
 
     private DashboardMVP.Model model;
+    private DashboardMVP.View view;
     private LocationManager locationManager;
     private PermissionManager permissionManager;
     private DialogManager dialogManager;
-    private DashboardMVP.View view;
     private CompositeDisposable compositeDisposable;
-
+    private ActivityContract activityContract;
 
     public DashboardPresenter(DashboardMVP.Model model,
                               LocationManager locationManager,
                               PermissionManager permissionManager,
-                              DialogManager dialogManager) {
+                              DialogManager dialogManager,
+                              ActivityContract activityContract) {
         Timber.d("Constructor");
         this.model = model;
         this.locationManager = locationManager;
         this.permissionManager = permissionManager;
         this.dialogManager = dialogManager;
+        this.activityContract = activityContract;
         compositeDisposable = new CompositeDisposable();
     }
 
@@ -139,13 +143,23 @@ public class DashboardPresenter implements DashboardMVP.Presenter {
     }
 
     @Override
+    public void viewFoodtruck(String id, String name) {
+        FoodtruckViewerFragment fragment = FoodtruckViewerFragment.newInstance(id, name);
+        activityContract.getFragmentManagerCompat().beginTransaction()
+                .replace(activityContract.getFragmentContainerId(), fragment)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
     public void takeView(DashboardMVP.View view) {
         this.view = view;
     }
 
     @Override
     public void dropView() {
-        compositeDisposable.dispose();
+        compositeDisposable.clear();
         this.view = null;
     }
 }

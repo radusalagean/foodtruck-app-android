@@ -24,10 +24,10 @@ public abstract class BaseMapFragment extends BaseFragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         initMapViewManager();
         mapViewManager.onCreate(savedInstanceState);
-        super.onViewCreated(view, savedInstanceState);
     }
 
     @Override

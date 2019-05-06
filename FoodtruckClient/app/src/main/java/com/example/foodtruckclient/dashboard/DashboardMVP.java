@@ -29,5 +29,6 @@ public interface DashboardMVP {
         void zoomOnCurrentDeviceLocation();
         void zoomOnLocation(double latitude, double longitude);
         void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults);
+        void viewFoodtruck(String id, String name);
     }
 }

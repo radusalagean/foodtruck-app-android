@@ -2,8 +2,6 @@ package com.example.foodtruckclient.di.application;
 
 import android.app.Application;
 
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
 
@@ -17,7 +15,7 @@ public class ApplicationModule {
     }
 
     @Provides
-    @Singleton
+    @ApplicationScope
     Application provideApplication() {
         return application;
     }
