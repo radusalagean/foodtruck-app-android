@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import com.example.foodtruckclient.generic.decoration.ListItemDecoration;
 import com.example.foodtruckclient.generic.activity.ActivityContract;
 import com.example.foodtruckclient.generic.fragment.BaseMapFragment;
 import com.example.foodtruckclient.generic.view.OnViewInflatedListener;
+import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
 import com.example.foodtruckclient.permission.PermissionRequestDelegate;
 import com.example.foodtruckclient.view.MorphableFloatingActionButton;
 import com.google.android.gms.maps.MapView;
@@ -53,6 +55,7 @@ public class DashboardFragment extends BaseMapFragment
     @Inject
     ActivityContract activityContract;
 
+    private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private DashboardPagerAdapter pagerAdapter;
     private DashboardListAdapter listAdapter;
@@ -86,8 +89,9 @@ public class DashboardFragment extends BaseMapFragment
                     DashboardFragment.this.mapViewManager.takeMapView(mapView);
                     break;
                 case R.id.layout_dashboard_list:
-                    recyclerView = view.findViewById(R.id.recycler_view);
-                    initRecyclerView();
+                    swipeRefreshLayout = view.findViewById(R.id.dashboard_list_swipe_to_refresh_layout);
+                    recyclerView = view.findViewById(R.id.dashboard_list_recycler_view);
+                    initListTab();
                     break;
             }
         }
@@ -110,8 +114,11 @@ public class DashboardFragment extends BaseMapFragment
     public DashboardFragment() {}
 
     public static DashboardFragment newInstance() {
-        // Home fragment, no need for extra args
-        return new DashboardFragment();
+        DashboardFragment fragment = new DashboardFragment();
+        Bundle args = new Bundle();
+        fragment.generateUniqueId(args);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
@@ -125,7 +132,7 @@ public class DashboardFragment extends BaseMapFragment
         super.onCreate(savedInstanceState);
         pagerAdapter = new DashboardPagerAdapter(getContext(), onViewInflatedListener);
         listAdapter = new DashboardListAdapter(this);
-        presenter.loadFoodtrucks();
+        presenter.loadViewModel();
     }
 
     @Override
@@ -176,8 +183,16 @@ public class DashboardFragment extends BaseMapFragment
     }
 
     @Override
-    public void updateFoodtrucks(List<DashboardFoodtruckViewModel> results) {
-        listAdapter.submitList(results);
+    public void updateFoodtrucks(List<Foodtruck> foodtrucks) {
+        listAdapter.submitList(foodtrucks);
+        if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) {
+            swipeRefreshLayout.setRefreshing(false);
+        }
+    }
+
+    @Override
+    public void clearFoodtrucks() {
+        listAdapter.clearList();
     }
 
     @Override
@@ -202,19 +217,22 @@ public class DashboardFragment extends BaseMapFragment
         presenter.disposeMap();
     }
 
-    private void initRecyclerView() {
+    private void initListTab() {
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
+        swipeRefreshLayout.setOnRefreshListener(() -> presenter.reloadFoodtrucks());
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new ListItemDecoration(getResources().getDimensionPixelSize(R.dimen.item_dashboard_list_offset)));
         recyclerView.setAdapter(listAdapter);
     }
 
     @Override
-    public void onFoodtruckSelected(DashboardFoodtruckViewModel model) {
-        presenter.viewFoodtruck(model.getId(), model.getName());
+    public void onFoodtruckSelected(Foodtruck foodtruck) {
+        presenter.viewFoodtruck(foodtruck.getId(), foodtruck.getName());
     }
 
     @Override
-    public void onFoodtruckLocationButtonClicked(DashboardFoodtruckViewModel model) {
-        presenter.zoomOnLocation(model.getLatitude(), model.getLongitude());
+    public void onFoodtruckLocationButtonClicked(Foodtruck foodtruck) {
+        presenter.zoomOnLocation(foodtruck.getCoordinates().getLatitude(),
+                foodtruck.getCoordinates().getLongitude());
     }
 }

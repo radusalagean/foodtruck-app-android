@@ -2,17 +2,19 @@ package com.example.foodtruckclient.location;
 
 import android.location.Location;
 
+import androidx.collection.ArrayMap;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 import timber.log.Timber;
 
@@ -23,11 +25,13 @@ public class LocationManager implements OnMapReadyCallback {
     private FusedLocationProviderClient fusedLocationProviderClient;
     private GoogleMap googleMap;
     private Location lastKnownLocation;
-    private List<MarkerOptions> pendingMarkers;
+    private ArrayMap<String, MarkerOptions> pendingMarkers;
+    private ArrayMap<String, Marker> addedMarkers;
 
     public LocationManager(FusedLocationProviderClient fusedLocationProviderClient) {
         this.fusedLocationProviderClient = fusedLocationProviderClient;
-        pendingMarkers = new ArrayList<>();
+        pendingMarkers = new ArrayMap<>();
+        addedMarkers = new ArrayMap<>();
     }
 
     public void disposeMap() {
@@ -81,19 +85,30 @@ public class LocationManager implements OnMapReadyCallback {
         pendingMarkers.clear();
     }
 
-    public void takeMarkers(List<MarkerOptions> markers) {
+    public void takeMarkers(Map<String, MarkerOptions> markers) {
         if (googleMap == null) {
-            pendingMarkers.addAll(markers);
+            pendingMarkers.putAll(markers);
         } else {
             addMarkersToMap(markers);
         }
     }
 
-    private void addMarkersToMap(List<MarkerOptions> markers) {
+    private void addMarkersToMap(Map<String, MarkerOptions> markers) {
         if (googleMap != null) {
-            for (MarkerOptions marker : markers) {
-                googleMap.addMarker(marker);
+            for (String id : markers.keySet()) {
+                Marker marker = googleMap.addMarker(markers.get(id));
+                addedMarkers.put(id, marker);
             }
+        }
+    }
+
+    public void clearMarker(String id) {
+        addedMarkers.get(id).remove();
+    }
+
+    public void clearAllMarkers() {
+        for (Marker marker : addedMarkers.values()) {
+            marker.remove();
         }
     }
 }

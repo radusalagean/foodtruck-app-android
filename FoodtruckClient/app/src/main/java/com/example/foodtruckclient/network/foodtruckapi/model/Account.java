@@ -1,5 +1,6 @@
 package com.example.foodtruckclient.network.foodtruckapi.model;
 
+import com.example.foodtruckclient.network.NetworkConstants;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
@@ -70,5 +71,13 @@ public class Account {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getImageUrl() {
+        return image != null ? NetworkConstants.FOODTRUCK_API_PROFILE_IMAGES_BASE_URL + image : null;
+    }
+
+    public String getThumbnailUrl() {
+        return image != null ? NetworkConstants.FOODTRUCK_API_PROFILE_THUMBNAILS_BASE_URL + image : null;
     }
 }

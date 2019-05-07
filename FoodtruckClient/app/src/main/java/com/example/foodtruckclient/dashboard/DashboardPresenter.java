@@ -1,13 +1,16 @@
 package com.example.foodtruckclient.dashboard;
 
 import androidx.annotation.NonNull;
+import androidx.collection.ArrayMap;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.foodtruckclient.R;
+import com.example.foodtruckclient.dashboard.viewmodel.DashboardViewModel;
 import com.example.foodtruckclient.dialog.DialogManager;
 import com.example.foodtruckclient.foodtruckviewer.FoodtruckViewerFragment;
 import com.example.foodtruckclient.generic.activity.ActivityContract;
 import com.example.foodtruckclient.location.LocationManager;
+import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
 import com.example.foodtruckclient.permission.PermissionConstants;
 import com.example.foodtruckclient.permission.PermissionManager;
 import com.example.foodtruckclient.permission.PermissionRequestListener;
@@ -15,7 +18,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -38,7 +40,6 @@ public class DashboardPresenter implements DashboardMVP.Presenter {
                               PermissionManager permissionManager,
                               DialogManager dialogManager,
                               ActivityContract activityContract) {
-        Timber.d("Constructor");
         this.model = model;
         this.locationManager = locationManager;
         this.permissionManager = permissionManager;
@@ -49,13 +50,13 @@ public class DashboardPresenter implements DashboardMVP.Presenter {
 
 
     @Override
-    public void loadFoodtrucks() {
-        compositeDisposable.add(model.getResults()
+    public void loadViewModel() {
+        compositeDisposable.add(model.getViewModel()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<List<DashboardFoodtruckViewModel>>() {
+                .subscribeWith(new DisposableObserver<DashboardViewModel>() {
                     @Override
-                    public void onNext(List<DashboardFoodtruckViewModel> dashboardFoodtruckViewModels) {
-                        processFoodtrucks(dashboardFoodtruckViewModels);
+                    public void onNext(DashboardViewModel dashboardViewModel) {
+                        processFoodtrucks(dashboardViewModel.getFoodtrucks());
                     }
 
                     @Override
@@ -68,20 +69,49 @@ public class DashboardPresenter implements DashboardMVP.Presenter {
                 }));
     }
 
-    private void processFoodtrucks(List<DashboardFoodtruckViewModel> foodtrucks) {
+    @Override
+    public void reloadFoodtrucks() {
+        clearFoodtrucks();
+        compositeDisposable.add(model.getFoodtrucks()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableObserver<List<Foodtruck>>() {
+                    @Override
+                    public void onNext(List<Foodtruck> foodtrucks) {
+                        processFoodtrucks(foodtrucks);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Timber.e(e);
+                    }
+
+                    @Override
+                    public void onComplete() {}
+                }));
+    }
+
+    private void clearFoodtrucks() {
+        locationManager.clearAllMarkers();
+        if (view != null) {
+            view.clearFoodtrucks();
+        }
+    }
+
+    private void processFoodtrucks(@NonNull List<Foodtruck> foodtrucks) {
         // Add markers on the map
-        List<MarkerOptions> markers = new ArrayList<>();
-        for (DashboardFoodtruckViewModel model : foodtrucks) {
+        ArrayMap<String, MarkerOptions> markers = new ArrayMap<>();
+        for (Foodtruck foodtruck : foodtrucks) {
             MarkerOptions marker = new MarkerOptions()
-                    .position(new LatLng(model.getLatitude(), model.getLongitude()))
-                    .title(model.getName());
-            markers.add(marker);
+                    .position(new LatLng(foodtruck.getCoordinates().getLatitude(),
+                            foodtruck.getCoordinates().getLongitude()))
+                    .title(foodtruck.getName());
+            markers.put(foodtruck.getId(), marker);
         }
         locationManager.takeMarkers(markers);
 
         // Send foodtrucks to view
         if (view != null) {
-            view.updateFoodtrucks(foodtrucks);
+            view.updateFoodtrucks(model.getCachedViewModel().getFoodtrucks());
         }
     }
 

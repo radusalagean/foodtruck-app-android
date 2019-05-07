@@ -1,6 +1,8 @@
 package com.example.foodtruckclient.generic.mvp;
 
-public interface BasePresenter<T> {
+import androidx.annotation.NonNull;
+
+public interface BasePresenter<T extends BaseView> {
 
     /**
      * Binds presenter with a view when resumed. The Presenter will perform initialization here.
@@ -13,4 +15,10 @@ public interface BasePresenter<T> {
      * Drops the reference to the view when destroyed
      */
     void dropView();
+
+    /**
+     * Callback method to pass the result of the permission request to the appropriate handler
+     */
+    void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                    @NonNull int[] grantResults);
 }

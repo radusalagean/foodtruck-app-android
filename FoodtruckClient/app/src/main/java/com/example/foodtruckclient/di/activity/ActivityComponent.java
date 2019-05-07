@@ -16,7 +16,6 @@ import dagger.Subcomponent;
 })
 public interface ActivityComponent {
 
-    void inject(MainActivity activity);
     void inject(DashboardFragment dashboardFragment);
     void inject(FoodtruckViewerFragment foodtruckViewerFragment);
 }

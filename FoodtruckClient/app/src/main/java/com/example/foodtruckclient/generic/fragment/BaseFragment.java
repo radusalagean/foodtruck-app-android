@@ -16,13 +16,18 @@ import com.example.foodtruckclient.di.activity.ActivityComponent;
 import com.example.foodtruckclient.di.activity.ActivityModule;
 import com.example.foodtruckclient.permission.PermissionRequestDelegate;
 
+import java.util.UUID;
+
 import timber.log.Timber;
 
 public abstract class BaseFragment extends Fragment
         implements PermissionRequestDelegate {
 
+    protected static final String ARG_UUID = "UUID";
+
     private String tag = getClass().getSimpleName();
     private boolean isComponentUsed = false;
+    private UUID uuid;
 
     @Override
     public void onAttach(Context context) {
@@ -34,6 +39,10 @@ public abstract class BaseFragment extends Fragment
     public void onCreate(@Nullable Bundle savedInstanceState) {
         Timber.tag(tag).v("-F-> onCreate(%s)", savedInstanceState);
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            uuid = (UUID) getArguments().getSerializable(ARG_UUID);
+            Timber.d("Fragment's UUID: %s", uuid);
+        }
     }
 
     @Nullable
@@ -122,6 +131,17 @@ public abstract class BaseFragment extends Fragment
         return ((FoodtruckApplication) getActivity().getApplication())
                 .getApplicationComponent()
                 .newActivityComponent(new ActivityModule(getActivity()));
+    }
+
+    /**
+     * Should be called only once, during instance creation.
+     * Used for uniquely identifying the fragment's view model
+     */
+    public void generateUniqueId(@NonNull Bundle bundle) {
+        if (uuid != null) {
+            throw new UnsupportedOperationException("You shouldn't generate a new unique id for this fragment if one already exists!");
+        }
+        bundle.putSerializable(ARG_UUID, UUID.randomUUID());
     }
 
     /**

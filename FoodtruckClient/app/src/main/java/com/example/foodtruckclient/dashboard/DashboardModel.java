@@ -1,30 +1,47 @@
 package com.example.foodtruckclient.dashboard;
 
-import com.example.foodtruckclient.repository.NetworkRepository;
+import com.example.foodtruckclient.dashboard.viewmodel.DashboardViewModel;
+import com.example.foodtruckclient.dashboard.viewmodel.DashboardViewModelRepository;
+import com.example.foodtruckclient.network.NetworkRepository;
 import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import javax.annotation.Nullable;
 
 import io.reactivex.Observable;
 
 public class DashboardModel implements DashboardMVP.Model {
 
-    NetworkRepository networkRepository;
+    private NetworkRepository networkRepository;
+    private DashboardViewModelRepository viewModelRepository;
 
-    public DashboardModel(NetworkRepository networkRepository) {
+    public DashboardModel(NetworkRepository networkRepository,
+                          DashboardViewModelRepository viewModelRepository) {
         this.networkRepository = networkRepository;
+        this.viewModelRepository = viewModelRepository;
     }
 
     @Override
-    public Observable<List<DashboardFoodtruckViewModel>> getResults() {
+    public Observable<DashboardViewModel> getViewModel() {
+        DashboardViewModel viewModel = getCachedViewModel();
+        if (viewModel != null) {
+            return Observable.just(viewModel);
+        }
         return networkRepository.getAllFoodtrucks()
-                .map((foodtrucks) -> {
-                    List<DashboardFoodtruckViewModel> results = new ArrayList<>();
-                    for (Foodtruck foodtruck : foodtrucks) {
-                        results.add(DashboardFoodtruckViewModel.createFrom(foodtruck));
-                    }
-                    return results;
-                });
+                .map(DashboardViewModel::createFrom)
+                .doOnNext(model -> viewModelRepository.setViewModel(model));
+    }
+
+    @Override
+    @Nullable
+    public DashboardViewModel getCachedViewModel() {
+        return viewModelRepository.getViewModel();
+    }
+
+    @Override
+    public Observable<List<Foodtruck>> getFoodtrucks() {
+        return networkRepository.getAllFoodtrucks()
+                .doOnNext(foodtrucks -> viewModelRepository.getViewModel().setFoodtrucks(foodtrucks));
     }
 }

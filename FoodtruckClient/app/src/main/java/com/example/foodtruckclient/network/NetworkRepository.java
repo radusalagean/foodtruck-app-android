@@ -1,4 +1,4 @@
-package com.example.foodtruckclient.repository;
+package com.example.foodtruckclient.network;
 
 import com.example.foodtruckclient.network.foodtruckapi.FoodtruckApiService;
 import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;

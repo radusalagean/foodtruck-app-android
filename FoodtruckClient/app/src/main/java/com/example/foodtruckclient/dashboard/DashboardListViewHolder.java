@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.foodtruckclient.R;
+import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,24 +38,24 @@ public class DashboardListViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, itemView);
     }
 
-    public void bind(DashboardFoodtruckViewModel model, DashboardListListener listener) {
+    public void bind(Foodtruck foodtruck, DashboardListListener listener) {
         Glide.with(imageView)
-                .load(model.getThumbnailUrl())
+                .load(foodtruck.getThumbnailUrl())
                 .centerCrop()
                 .placeholder(R.drawable.ic_fastfood_24dp)
                 .into(imageView);
-        titleTextView.setText(model.getName());
-        ratingBar.setRating(model.getAverageRating());
+        titleTextView.setText(foodtruck.getName());
+        ratingBar.setRating(foodtruck.getAverageRating());
         final int ratingCountResId =
-                model.getRatingCount() == 1 ? R.string.dashboard_list_item_rating_count_singular :
+                foodtruck.getRatingCount() == 1 ? R.string.dashboard_list_item_rating_count_singular :
                         R.string.dashboard_list_item_rating_count;
         ratingCountTextView.setText(ratingCountTextView.getResources()
-                .getString(ratingCountResId, model.getRatingCount()));
+                .getString(ratingCountResId, foodtruck.getRatingCount()));
         showOnMapButton.setOnClickListener((view) -> {
-            listener.onFoodtruckLocationButtonClicked(model);
+            listener.onFoodtruckLocationButtonClicked(foodtruck);
         });
         itemView.setOnClickListener((view) -> {
-            listener.onFoodtruckSelected(model);
+            listener.onFoodtruckSelected(foodtruck);
         });
     }
 

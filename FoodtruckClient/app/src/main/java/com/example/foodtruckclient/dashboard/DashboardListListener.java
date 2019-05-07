@@ -1,7 +1,9 @@
 package com.example.foodtruckclient.dashboard;
 
+import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
+
 public interface DashboardListListener {
 
-    void onFoodtruckSelected(DashboardFoodtruckViewModel model);
-    void onFoodtruckLocationButtonClicked(DashboardFoodtruckViewModel model);
+    void onFoodtruckSelected(Foodtruck foodtruck);
+    void onFoodtruckLocationButtonClicked(Foodtruck foodtruck);
 }

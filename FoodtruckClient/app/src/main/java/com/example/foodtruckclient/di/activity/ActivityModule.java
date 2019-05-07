@@ -7,11 +7,12 @@ import androidx.fragment.app.FragmentActivity;
 import com.example.foodtruckclient.dashboard.DashboardMVP;
 import com.example.foodtruckclient.dashboard.DashboardModel;
 import com.example.foodtruckclient.dashboard.DashboardPresenter;
+import com.example.foodtruckclient.dashboard.viewmodel.DashboardViewModelRepository;
 import com.example.foodtruckclient.dialog.DialogManager;
 import com.example.foodtruckclient.generic.activity.ActivityContract;
 import com.example.foodtruckclient.location.LocationManager;
 import com.example.foodtruckclient.permission.PermissionManager;
-import com.example.foodtruckclient.repository.NetworkRepository;
+import com.example.foodtruckclient.network.NetworkRepository;
 
 import dagger.Module;
 import dagger.Provides;
@@ -54,8 +55,9 @@ public class ActivityModule {
     // Dashboard
 
     @Provides
-    DashboardMVP.Model provideDashboardModel(NetworkRepository networkRepository) {
-        return new DashboardModel(networkRepository);
+    DashboardMVP.Model provideDashboardModel(NetworkRepository networkRepository,
+                                             DashboardViewModelRepository viewModelRepository) {
+        return new DashboardModel(networkRepository, viewModelRepository);
     }
 
     @Provides

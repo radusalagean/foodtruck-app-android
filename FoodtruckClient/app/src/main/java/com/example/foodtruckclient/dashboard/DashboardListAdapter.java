@@ -8,8 +8,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ListAdapter;
 
 import com.example.foodtruckclient.R;
+import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
 
-public class DashboardListAdapter extends ListAdapter<DashboardFoodtruckViewModel, DashboardListViewHolder> {
+import java.util.ArrayList;
+
+public class DashboardListAdapter extends ListAdapter<Foodtruck, DashboardListViewHolder> {
 
     private DashboardListListener listener;
 
@@ -34,5 +37,9 @@ public class DashboardListAdapter extends ListAdapter<DashboardFoodtruckViewMode
     @Override
     public void onViewRecycled(@NonNull DashboardListViewHolder holder) {
         holder.recycle();
+    }
+
+    public void clearList() {
+        submitList(new ArrayList<>());
     }
 }

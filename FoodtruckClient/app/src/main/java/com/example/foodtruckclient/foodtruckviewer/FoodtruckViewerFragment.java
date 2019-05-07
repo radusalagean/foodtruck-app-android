@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.appcompat.widget.Toolbar;
 
@@ -29,6 +30,9 @@ public class FoodtruckViewerFragment extends BaseFragment {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
+    @BindView(R.id.foodtruck_viewer_image_view_top)
+    ImageView topImageView;
+
     @Inject
     ActivityContract activityContract;
 
@@ -37,6 +41,7 @@ public class FoodtruckViewerFragment extends BaseFragment {
     public static FoodtruckViewerFragment newInstance(String foodtruckId, String foodtruckName) {
         FoodtruckViewerFragment fragment = new FoodtruckViewerFragment();
         Bundle args = new Bundle();
+        fragment.generateUniqueId(args);
         args.putString(ARG_FOODTRUCK_ID, foodtruckId);
         args.putString(ARG_FOODTRUCK_NAME, foodtruckName);
         fragment.setArguments(args);
@@ -70,6 +75,7 @@ public class FoodtruckViewerFragment extends BaseFragment {
     protected void initViews() {
         toolbar.setTitle(foodtruckName);
         activityContract.setActionBar(toolbar);
+
     }
 
     @Override
