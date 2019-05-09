@@ -1,9 +1,6 @@
-package com.example.foodtruckclient.dashboard;
+package com.example.foodtruckclient.screens.dashboard;
 
-import com.example.foodtruckclient.dashboard.viewmodel.DashboardViewModel;
-import com.example.foodtruckclient.generic.mvp.BaseModel;
-import com.example.foodtruckclient.generic.mvp.BasePresenter;
-import com.example.foodtruckclient.generic.mvp.BaseView;
+import com.example.foodtruckclient.generic.mvp.BaseMVP;
 import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
 import com.example.foodtruckclient.permission.PermissionRequestDelegate;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -14,18 +11,19 @@ import io.reactivex.Observable;
 
 public interface DashboardMVP {
 
-    interface Model extends BaseModel<DashboardViewModel> {
+    interface Model extends BaseMVP.Model<DashboardViewModel> {
+        Observable<DashboardViewModel> getViewModel();
         Observable<List<Foodtruck>> getFoodtrucks();
     }
 
-    interface View extends BaseView {
+    interface View extends BaseMVP.View {
         void updateFoodtrucks(List<Foodtruck> foodtrucks);
         void clearFoodtrucks();
         PermissionRequestDelegate getPermissionRequestDelegate();
         void switchToMapTab();
     }
 
-    interface Presenter extends BasePresenter<View> {
+    interface Presenter extends BaseMVP.Presenter<View> {
         void loadViewModel();
         void reloadFoodtrucks();
         void disposeMap();

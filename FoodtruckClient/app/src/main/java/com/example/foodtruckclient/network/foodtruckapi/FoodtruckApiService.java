@@ -79,6 +79,9 @@ public interface FoodtruckApiService {
     @GET("foodtrucks/reviews/get/{foodtruck_id}")
     Observable<List<Review>> getAllReviews(@Path("foodtruck_id") String foodtruckId);
 
+    @GET("foodtrucks/reviews/get/my/{foodtruck_id}")
+    Observable<Review> getMyReview(@Path("foodtruck_id") String foodtruckId);
+
     @PUT("foodtrucks/reviews/update/{id}")
     Observable<Message> updateReview(@Path("id") String id, @Body Review review);
 

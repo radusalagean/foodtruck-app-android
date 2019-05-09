@@ -1,4 +1,4 @@
-package com.example.foodtruckclient.dashboard;
+package com.example.foodtruckclient.screens.dashboard;
 
 import com.example.foodtruckclient.R;
 
@@ -8,15 +8,15 @@ import java.util.List;
 
 public class DashboardPagerMapper {
 
-    public static final int POSITION_MAP = 0;
-    public static final int POSITION_LIST = 1;
+    public static final int POSITION_LIST = 0;
+    public static final int POSITION_MAP = 1;
 
     private static final List<DashboardPagerModel> PAGER_MODELS;
 
     static {
         List<DashboardPagerModel> list = new ArrayList<>();
-        list.add(new DashboardPagerModel(R.layout.layout_dashboard_map, R.string.dashboard_pager_map));
         list.add(new DashboardPagerModel(R.layout.layout_dashboard_list, R.string.dashboard_pager_list));
+        list.add(new DashboardPagerModel(R.layout.layout_dashboard_map, R.string.dashboard_pager_map));
         PAGER_MODELS = Collections.unmodifiableList(list);
     }
 

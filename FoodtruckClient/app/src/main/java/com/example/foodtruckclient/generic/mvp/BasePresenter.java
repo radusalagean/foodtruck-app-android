@@ -2,23 +2,36 @@ package com.example.foodtruckclient.generic.mvp;
 
 import androidx.annotation.NonNull;
 
-public interface BasePresenter<T extends BaseView> {
+import io.reactivex.disposables.CompositeDisposable;
 
-    /**
-     * Binds presenter with a view when resumed. The Presenter will perform initialization here.
-     *
-     * @param view the view associated with this presenter
-     */
-    void takeView(T view);
+public abstract class BasePresenter<T extends BaseMVP.View, S extends BaseMVP.Model>
+        implements BaseMVP.Presenter<T> {
 
-    /**
-     * Drops the reference to the view when destroyed
-     */
-    void dropView();
+    protected CompositeDisposable compositeDisposable;
+    protected T view;
+    protected S model;
 
-    /**
-     * Callback method to pass the result of the permission request to the appropriate handler
-     */
-    void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                    @NonNull int[] grantResults);
+    protected BasePresenter(S model) {
+        compositeDisposable = new CompositeDisposable();
+        this.model = model;
+    }
+
+    @Override
+    public void takeView(T view) {
+        this.view = view;
+    }
+
+    @Override
+    public void dropView() {
+        compositeDisposable.clear();
+        this.view = null;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (getPermissionManager() != null) {
+            getPermissionManager().onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
 }

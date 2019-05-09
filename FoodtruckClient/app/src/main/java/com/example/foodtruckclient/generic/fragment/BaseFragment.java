@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import com.example.foodtruckclient.application.FoodtruckApplication;
 import com.example.foodtruckclient.di.activity.ActivityComponent;
 import com.example.foodtruckclient.di.activity.ActivityModule;
+import com.example.foodtruckclient.generic.mvp.BaseMVP;
 import com.example.foodtruckclient.permission.PermissionRequestDelegate;
 
 import java.util.UUID;
@@ -21,7 +23,7 @@ import java.util.UUID;
 import timber.log.Timber;
 
 public abstract class BaseFragment extends Fragment
-        implements PermissionRequestDelegate {
+        implements BaseMVP.View, PermissionRequestDelegate {
 
     protected static final String ARG_UUID = "UUID";
 
@@ -120,6 +122,11 @@ public abstract class BaseFragment extends Fragment
     @Override
     public void requestPermission(String permission, int requestCode) {
         requestPermissions(new String[] { permission }, requestCode);
+    }
+
+    @Override
+    public void toast(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 
     @UiThread

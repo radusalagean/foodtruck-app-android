@@ -1,4 +1,4 @@
-package com.example.foodtruckclient.dashboard;
+package com.example.foodtruckclient.screens.dashboard;
 
 import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
 

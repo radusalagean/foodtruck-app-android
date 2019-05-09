@@ -1,4 +1,4 @@
-package com.example.foodtruckclient.dashboard;
+package com.example.foodtruckclient.screens.dashboard;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -67,11 +67,11 @@ public class DashboardFragment extends BaseMapFragment
         @Override
         public void onPageSelected(int position) {
             switch (position) {
-                case DashboardPagerMapper.POSITION_MAP:
-                    fab.morph(R.drawable.avd_add_to_location, R.drawable.ic_my_location_white_24dp);
-                    break;
                 case DashboardPagerMapper.POSITION_LIST:
                     fab.morph(R.drawable.avd_location_to_add, R.drawable.ic_add_circle_outline_white_24dp);
+                    break;
+                case DashboardPagerMapper.POSITION_MAP:
+                    fab.morph(R.drawable.avd_add_to_location, R.drawable.ic_my_location_white_24dp);
                     break;
             }
         }
@@ -84,14 +84,14 @@ public class DashboardFragment extends BaseMapFragment
         @Override
         public void onViewInflated(View view) {
             switch (view.getId()) {
-                case R.id.layout_dashboard_map:
-                    MapView mapView = view.findViewById(R.id.map_view);
-                    DashboardFragment.this.mapViewManager.takeMapView(mapView);
-                    break;
                 case R.id.layout_dashboard_list:
                     swipeRefreshLayout = view.findViewById(R.id.dashboard_list_swipe_to_refresh_layout);
                     recyclerView = view.findViewById(R.id.dashboard_list_recycler_view);
                     initListTab();
+                    break;
+                case R.id.layout_dashboard_map:
+                    MapView mapView = view.findViewById(R.id.map_view);
+                    DashboardFragment.this.mapViewManager.takeMapView(mapView);
                     break;
             }
         }
@@ -101,11 +101,11 @@ public class DashboardFragment extends BaseMapFragment
         @Override
         public void onClick(View v) {
             switch (viewPager.getCurrentItem()) {
-                case DashboardPagerMapper.POSITION_MAP:
-                    presenter.zoomOnCurrentDeviceLocation();
-                    break;
                 case DashboardPagerMapper.POSITION_LIST:
                     // TODO Add new Foodtruck
+                    break;
+                case DashboardPagerMapper.POSITION_MAP:
+                    presenter.zoomOnCurrentDeviceLocation();
                     break;
             }
         }
@@ -159,7 +159,7 @@ public class DashboardFragment extends BaseMapFragment
     protected void initViews() {
         toolbar.setTitle(R.string.dashboard_toolbar_title);
         activityContract.setActionBar(toolbar);
-        fab.setImageResource(R.drawable.ic_my_location_white_24dp);
+        fab.setImageResource(R.drawable.ic_add_circle_outline_white_24dp);
         viewPager.setAdapter(pagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
     }

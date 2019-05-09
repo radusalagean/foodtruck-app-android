@@ -1,4 +1,4 @@
-package com.example.foodtruckclient.dashboard;
+package com.example.foodtruckclient.screens.dashboard;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;

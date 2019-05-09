@@ -4,15 +4,19 @@ import android.content.Context;
 
 import androidx.fragment.app.FragmentActivity;
 
-import com.example.foodtruckclient.dashboard.DashboardMVP;
-import com.example.foodtruckclient.dashboard.DashboardModel;
-import com.example.foodtruckclient.dashboard.DashboardPresenter;
-import com.example.foodtruckclient.dashboard.viewmodel.DashboardViewModelRepository;
+import com.example.foodtruckclient.screens.dashboard.DashboardMVP;
+import com.example.foodtruckclient.screens.dashboard.DashboardModel;
+import com.example.foodtruckclient.screens.dashboard.DashboardPresenter;
+import com.example.foodtruckclient.screens.dashboard.DashboardViewModelRepository;
 import com.example.foodtruckclient.dialog.DialogManager;
 import com.example.foodtruckclient.generic.activity.ActivityContract;
 import com.example.foodtruckclient.location.LocationManager;
 import com.example.foodtruckclient.permission.PermissionManager;
 import com.example.foodtruckclient.network.NetworkRepository;
+import com.example.foodtruckclient.screens.foodtruckviewer.FoodtruckViewerMVP;
+import com.example.foodtruckclient.screens.foodtruckviewer.FoodtruckViewerModel;
+import com.example.foodtruckclient.screens.foodtruckviewer.FoodtruckViewerPresenter;
+import com.example.foodtruckclient.screens.foodtruckviewer.FoodtruckViewerViewModelRepository;
 
 import dagger.Module;
 import dagger.Provides;
@@ -69,5 +73,18 @@ public class ActivityModule {
         return new DashboardPresenter(
                 model, locationManager, permissionManager, dialogManager, activityContract
         );
+    }
+
+    // Foodtruck Viewer
+
+    @Provides
+    FoodtruckViewerMVP.Model provideFoodtruckViewerModel(NetworkRepository networkRepository,
+                                                         FoodtruckViewerViewModelRepository viewModelRepository) {
+        return new FoodtruckViewerModel(networkRepository, viewModelRepository);
+    }
+
+    @Provides
+    FoodtruckViewerMVP.Presenter provideFoodtruckViewerPresenter(FoodtruckViewerMVP.Model model) {
+        return new FoodtruckViewerPresenter(model);
     }
 }

@@ -1,6 +1,7 @@
 package com.example.foodtruckclient.network.foodtruckapi.model;
 
 import com.example.foodtruckclient.network.NetworkConstants;
+import com.google.common.base.Objects;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
@@ -79,5 +80,20 @@ public class Account {
 
     public String getThumbnailUrl() {
         return image != null ? NetworkConstants.FOODTRUCK_API_PROFILE_THUMBNAILS_BASE_URL + image : null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Account account = (Account) o;
+        return Objects.equal(id, account.id) &&
+                Objects.equal(username, account.username) &&
+                Objects.equal(image, account.image);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id, username, image);
     }
 }

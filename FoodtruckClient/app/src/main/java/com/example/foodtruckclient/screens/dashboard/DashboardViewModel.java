@@ -1,14 +1,15 @@
-package com.example.foodtruckclient.dashboard.viewmodel;
+package com.example.foodtruckclient.screens.dashboard;
 
+import com.example.foodtruckclient.generic.viewmodel.BaseViewModel;
 import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
 
 import java.util.List;
 
-public class DashboardViewModel {
+public class DashboardViewModel extends BaseViewModel {
 
     private List<Foodtruck> foodtrucks;
 
-    public DashboardViewModel(List<Foodtruck> foodtrucks) {
+    private DashboardViewModel(List<Foodtruck> foodtrucks) {
         this.foodtrucks = foodtrucks;
     }
 
@@ -21,8 +22,6 @@ public class DashboardViewModel {
     }
 
     public static DashboardViewModel createFrom(List<Foodtruck> foodtrucks) {
-        return new DashboardViewModel(
-                foodtrucks
-        );
+        return new DashboardViewModel(foodtrucks);
     }
 }

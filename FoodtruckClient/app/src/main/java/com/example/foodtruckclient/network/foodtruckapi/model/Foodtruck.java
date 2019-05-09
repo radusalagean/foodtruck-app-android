@@ -5,6 +5,7 @@ import com.google.common.base.Objects;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
+import java.util.List;
 
 public class Foodtruck {
 
@@ -14,8 +15,8 @@ public class Foodtruck {
     @SerializedName("name")
     private String name;
 
-    @SerializedName("foodtype")
-    private String foodtype;
+    @SerializedName("foodtypes")
+    private List<String> foodtypes;
 
     @SerializedName("coordinates")
     private Coordinates coordinates;
@@ -54,12 +55,12 @@ public class Foodtruck {
         this.name = name;
     }
 
-    public String getFoodtype() {
-        return foodtype;
+    public List<String> getFoodtypes() {
+        return foodtypes;
     }
 
-    public void setFoodtype(String foodtype) {
-        this.foodtype = foodtype;
+    public void setFoodtypes(List<String> foodtypes) {
+        this.foodtypes = foodtypes;
     }
 
     public Coordinates getCoordinates() {
@@ -135,7 +136,7 @@ public class Foodtruck {
                 ratingCount == foodtruck.ratingCount &&
                 Objects.equal(id, foodtruck.id) &&
                 Objects.equal(name, foodtruck.name) &&
-                Objects.equal(foodtype, foodtruck.foodtype) &&
+                Objects.equal(foodtypes, foodtruck.foodtypes) &&
                 Objects.equal(coordinates, foodtruck.coordinates) &&
                 Objects.equal(image, foodtruck.image) &&
                 Objects.equal(owner, foodtruck.owner) &&
@@ -145,6 +146,6 @@ public class Foodtruck {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id, name, foodtype, coordinates, image, owner, created, lastUpdate, averageRating, ratingCount);
+        return Objects.hashCode(id, name, foodtypes, coordinates, image, owner, created, lastUpdate, averageRating, ratingCount);
     }
 }

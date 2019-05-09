@@ -1,4 +1,4 @@
-package com.example.foodtruckclient.dashboard;
+package com.example.foodtruckclient.screens.dashboard;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.StringRes;

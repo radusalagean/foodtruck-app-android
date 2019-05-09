@@ -6,7 +6,7 @@ import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 
 import com.example.foodtruckclient.R;
-import com.example.foodtruckclient.dashboard.DashboardFragment;
+import com.example.foodtruckclient.screens.dashboard.DashboardFragment;
 import com.example.foodtruckclient.generic.fragment.BaseFragment;
 import com.example.foodtruckclient.generic.activity.BaseActivity;
 
