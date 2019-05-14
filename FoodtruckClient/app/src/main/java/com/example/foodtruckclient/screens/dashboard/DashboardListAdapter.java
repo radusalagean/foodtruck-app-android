@@ -5,20 +5,23 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.ListAdapter;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.foodtruckclient.R;
 import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class DashboardListAdapter extends ListAdapter<Foodtruck, DashboardListViewHolder> {
+public class DashboardListAdapter extends RecyclerView.Adapter<DashboardListViewHolder> {
 
+    private List<Foodtruck> foodtrucks;
     private DashboardListListener listener;
 
     public DashboardListAdapter(DashboardListListener listener) {
-        super(new DashboardListDiffCallback());
         this.listener = listener;
+        foodtrucks = new ArrayList<>();
+        setHasStableIds(true);
     }
 
     @NonNull
@@ -31,15 +34,30 @@ public class DashboardListAdapter extends ListAdapter<Foodtruck, DashboardListVi
 
     @Override
     public void onBindViewHolder(@NonNull DashboardListViewHolder holder, int position) {
-        holder.bind(getItem(position), listener);
+        holder.bind(foodtrucks.get(position), listener);
     }
 
     @Override
     public void onViewRecycled(@NonNull DashboardListViewHolder holder) {
         holder.recycle();
     }
+    @Override
+    public long getItemId(int position) {
+        return foodtrucks.get(position).getId().hashCode();
+    }
 
-    public void clearList() {
-        submitList(new ArrayList<>());
+    @Override
+    public int getItemCount() {
+        return foodtrucks.size();
+    }
+
+    public void setFoodtrucks(List<Foodtruck> foodtrucks) {
+        this.foodtrucks = foodtrucks;
+        notifyDataSetChanged();
+    }
+
+    public void clearFoodtrucks() {
+        foodtrucks.clear();
+        notifyDataSetChanged();
     }
 }

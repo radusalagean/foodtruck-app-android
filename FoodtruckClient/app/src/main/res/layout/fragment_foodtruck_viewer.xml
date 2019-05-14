@@ -34,6 +34,11 @@
                     android:scaleType="centerCrop"
                     tools:ignore="ContentDescription" />
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/shape_image_gradient" />
+
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
@@ -45,7 +50,7 @@
 
         </com.example.foodtruckclient.view.StateAwareAppBarLayout>
 
-        <include layout="@layout/content_scrolling" />
+        <include layout="@layout/fragment_foodtruck_viewer_content" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"
@@ -54,7 +59,7 @@
             android:layout_margin="@dimen/fab_margin"
             app:layout_anchor="@id/app_bar"
             app:layout_anchorGravity="bottom|end"
-            app:srcCompat="@android:drawable/ic_dialog_email" />
+            app:srcCompat="@drawable/ic_edit_white_24dp" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

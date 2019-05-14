@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/text_view_reviews_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/general_layout_margin"
+        android:layout_marginLeft="@dimen/general_layout_margin"
+        android:layout_marginTop="@dimen/general_layout_margin"
+        android:layout_marginEnd="@dimen/general_layout_margin"
+        android:layout_marginRight="@dimen/general_layout_margin"
+        android:text="@string/foodtruck_reviews_label"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_view_rating_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/general_layout_margin"
+        android:layout_marginLeft="@dimen/general_layout_margin"
+        android:layout_marginTop="@dimen/general_layout_margin"
+        android:layout_marginEnd="@dimen/general_layout_margin"
+        android:layout_marginRight="@dimen/general_layout_margin"
+        android:background="@drawable/shape_review_count_background"
+        android:paddingStart="@dimen/rating_count_horizontal_padding"
+        android:paddingLeft="@dimen/rating_count_horizontal_padding"
+        android:paddingRight="@dimen/rating_count_horizontal_padding"
+        android:paddingEnd="@dimen/rating_count_horizontal_padding"
+        android:paddingTop="@dimen/rating_count_vertical_padding"
+        android:paddingBottom="@dimen/rating_count_vertical_padding"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="@color/colorWhite"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_reviews_label"
+        tools:text="10"
+        android:includeFontPadding="false"/>
+
+    <RatingBar
+        android:id="@+id/average_rating_bar"
+        style="@style/Widget.AppCompat.RatingBar.Indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/general_layout_margin"
+        android:layout_marginLeft="@dimen/general_layout_margin"
+        android:layout_marginTop="@dimen/general_layout_margin"
+        android:layout_marginEnd="@dimen/general_layout_margin"
+        android:layout_marginRight="@dimen/general_layout_margin"
+        android:layout_marginBottom="@dimen/general_layout_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_rating_count"
+        android:isIndicator="true"
+        android:numStars="5"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,9 +9,15 @@ import androidx.recyclerview.widget.RecyclerView;
 public class ListItemDecoration extends RecyclerView.ItemDecoration {
 
     private int offset;
+    private int listEndOffset;
 
     public ListItemDecoration(int offset) {
         this.offset = offset;
+    }
+
+    public ListItemDecoration(int offset, int listEndOffset) {
+        this.offset = offset;
+        this.listEndOffset = listEndOffset;
     }
 
     @Override
@@ -22,6 +28,11 @@ public class ListItemDecoration extends RecyclerView.ItemDecoration {
             outRect.top = offset;
         }
         outRect.right = offset;
-        outRect.bottom = offset;
+        if (parent.getAdapter() != null &&
+                parent.getChildAdapterPosition(view) == parent.getAdapter().getItemCount() - 1)  {
+            outRect.bottom = offset + listEndOffset;
+        } else {
+            outRect.bottom = offset;
+        }
     }
 }

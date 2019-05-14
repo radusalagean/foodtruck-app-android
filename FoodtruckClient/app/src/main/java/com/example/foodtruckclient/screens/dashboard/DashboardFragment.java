@@ -18,10 +18,9 @@ import android.view.ViewGroup;
 import com.example.foodtruckclient.R;
 import com.example.foodtruckclient.generic.decoration.ListItemDecoration;
 import com.example.foodtruckclient.generic.activity.ActivityContract;
-import com.example.foodtruckclient.generic.fragment.BaseMapFragment;
+import com.example.foodtruckclient.generic.mapmvp.BaseMapFragment;
 import com.example.foodtruckclient.generic.view.OnViewInflatedListener;
 import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
-import com.example.foodtruckclient.permission.PermissionRequestDelegate;
 import com.example.foodtruckclient.view.MorphableFloatingActionButton;
 import com.google.android.gms.maps.MapView;
 import com.google.android.material.tabs.TabLayout;
@@ -176,6 +175,12 @@ public class DashboardFragment extends BaseMapFragment
         viewPager.clearOnPageChangeListeners();
     }
 
+    @Nullable
+    @Override
+    protected SwipeRefreshLayout getSwipeRefreshLayout() {
+        return swipeRefreshLayout;
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         Timber.d("onRequestPermissionsResult(%d, %s, %s)", requestCode, permissions, grantResults);
@@ -184,20 +189,12 @@ public class DashboardFragment extends BaseMapFragment
 
     @Override
     public void updateFoodtrucks(List<Foodtruck> foodtrucks) {
-        listAdapter.submitList(foodtrucks);
-        if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) {
-            swipeRefreshLayout.setRefreshing(false);
-        }
+        listAdapter.setFoodtrucks(foodtrucks);
     }
 
     @Override
     public void clearFoodtrucks() {
-        listAdapter.clearList();
-    }
-
-    @Override
-    public PermissionRequestDelegate getPermissionRequestDelegate() {
-        return this;
+        listAdapter.clearFoodtrucks();
     }
 
     @Override
@@ -208,18 +205,19 @@ public class DashboardFragment extends BaseMapFragment
     }
 
     @Override
-    protected void initMapViewManager() {
+    public void initMapViewManager() {
         initMapViewManager(presenter.getOnMapReadyCallback());
     }
 
     @Override
-    protected void disposeMap() {
+    public void disposeMap() {
         presenter.disposeMap();
     }
 
     private void initListTab() {
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
         swipeRefreshLayout.setOnRefreshListener(() -> presenter.reloadFoodtrucks());
+        swipeRefreshLayout.setRefreshing(presenter.isRefreshing());
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new ListItemDecoration(getResources().getDimensionPixelSize(R.dimen.item_dashboard_list_offset)));
         recyclerView.setAdapter(listAdapter);

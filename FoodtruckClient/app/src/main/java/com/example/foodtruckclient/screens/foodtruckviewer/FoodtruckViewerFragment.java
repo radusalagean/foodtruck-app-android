@@ -8,16 +8,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.example.foodtruckclient.R;
 import com.example.foodtruckclient.generic.activity.ActivityContract;
-import com.example.foodtruckclient.generic.fragment.BaseFragment;
+import com.example.foodtruckclient.generic.decoration.ListItemDecoration;
+import com.example.foodtruckclient.generic.mapmvp.BaseMapFragment;
 import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
 import com.example.foodtruckclient.network.foodtruckapi.model.Review;
 import com.example.foodtruckclient.view.StateAwareAppBarLayout;
+import com.google.android.gms.maps.MapView;
 
 import java.util.List;
 
@@ -26,8 +31,8 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class FoodtruckViewerFragment extends BaseFragment
-        implements FoodtruckViewerMVP.View {
+public class FoodtruckViewerFragment extends BaseMapFragment
+        implements FoodtruckViewerMVP.View, FoodtruckViewerListener {
 
     private static final String ARG_FOODTRUCK_ID = "foodtruck_id";
     private static final String ARG_FOODTRUCK_NAME = "foodtruck_name";
@@ -47,15 +52,19 @@ public class FoodtruckViewerFragment extends BaseFragment
     @BindView(R.id.foodtruck_viewer_image_view_top)
     ImageView topImageView;
 
+    @BindView(R.id.foodtruck_viewer_recycler_view)
+    RecyclerView recyclerView;
+
     @Inject
     FoodtruckViewerMVP.Presenter presenter;
 
     @Inject
     ActivityContract activityContract;
 
-    private StateAwareAppBarLayout.OnStateChangedListener appBarOnStateChangeListener = state -> {
+    private FoodtruckViewerAdapter adapter;
+
+    private StateAwareAppBarLayout.OnStateChangedListener appBarOnStateChangeListener = state ->
         swipeRefreshLayout.setEnabled(state == StateAwareAppBarLayout.STATE_EXPANDED);
-    };
 
     public FoodtruckViewerFragment() {}
 
@@ -82,7 +91,7 @@ public class FoodtruckViewerFragment extends BaseFragment
             foodtruckId = getArguments().getString(ARG_FOODTRUCK_ID);
             foodtruckName = getArguments().getString(ARG_FOODTRUCK_NAME);
         }
-        //
+        adapter = new FoodtruckViewerAdapter(this);
         presenter.loadViewModel(foodtruckId, false);
     }
 
@@ -107,10 +116,29 @@ public class FoodtruckViewerFragment extends BaseFragment
     }
 
     @Override
+    public void initMapViewManager() {
+        initMapViewManager(presenter.getOnMapReadyCallback());
+    }
+
+    @Override
+    public void disposeMap() {
+        presenter.disposeMap();
+    }
+
+    @Override
     protected void initViews() {
         toolbar.setTitle(foodtruckName);
         activityContract.setActionBar(toolbar);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
+        swipeRefreshLayout.setRefreshing(presenter.isRefreshing());
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.addItemDecoration(new ListItemDecoration(
+                getResources().getDimensionPixelSize(R.dimen.general_layout_margin),
+                getResources().getDimensionPixelSize(R.dimen.general_layout_margin)
+        ));
+        recyclerView.setAdapter(adapter);
+        presenter.setGesturesEnabled(false);
+        presenter.setZoomButtonsEnabled(true);
     }
 
     @Override
@@ -125,24 +153,35 @@ public class FoodtruckViewerFragment extends BaseFragment
         appBarLayout.setOnStateChangedListener(null);
     }
 
+    @Nullable
+    @Override
+    protected SwipeRefreshLayout getSwipeRefreshLayout() {
+        return swipeRefreshLayout;
+    }
+
     @Override
     public void updateFoodtruck(Foodtruck foodtruck) {
-        if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) {
-            swipeRefreshLayout.setRefreshing(false);
+        if (foodtruck.getImageUrl() != null) {
+            Glide.with(topImageView)
+                    .load(foodtruck.getImageUrl())
+                    .centerCrop()
+                    .into(topImageView);
         }
-        Glide.with(topImageView)
-                .load(foodtruck.getImageUrl())
-                .centerCrop()
-                .into(topImageView);
+        adapter.setFoodtruck(foodtruck);
     }
 
     @Override
     public void updateReviews(List<Review> reviews) {
-
+        adapter.setReviews(reviews);
     }
 
     @Override
     public void updateMyReview(Review myReview) {
 
+    }
+
+    @Override
+    public void takeMapView(MapView mapView) {
+        mapViewManager.takeMapView(mapView);
     }
 }

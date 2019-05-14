@@ -3,10 +3,20 @@
     <dimen name="dashboard_fab_margin">16dp</dimen>
 
     <!--Dashboard List Item-->
-    <dimen name="item_dashboard_list_image_size">75dp</dimen>
+    <dimen name="item_thumbnail_image_size">75dp</dimen>
     <dimen name="item_dashboard_list_offset">8dp</dimen>
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+
+    <!--Tag View-->
+    <dimen name="tag_view_padding">8dp</dimen>
+
+    <!--Rating Count-->
+    <dimen name="rating_count_horizontal_padding">16dp</dimen>
+    <dimen name="rating_count_vertical_padding">8dp</dimen>
+
+    <!--General-->
+    <dimen name="general_layout_margin">8dp</dimen>
 
 </resources>

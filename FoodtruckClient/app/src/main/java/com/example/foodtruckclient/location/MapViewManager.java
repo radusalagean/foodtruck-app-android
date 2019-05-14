@@ -32,8 +32,10 @@ public class MapViewManager {
     }
 
     public void takeMapView(MapView mapView) {
-        this.mapView = mapView;
-        syncLifecycle();
+        if (this.mapView != mapView) {
+            this.mapView = mapView;
+            syncLifecycle();
+        }
     }
 
     public MapView getMapView() {

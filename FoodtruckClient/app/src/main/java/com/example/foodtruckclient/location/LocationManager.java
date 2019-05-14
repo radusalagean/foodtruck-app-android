@@ -14,7 +14,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 
 import timber.log.Timber;
 
@@ -27,11 +29,13 @@ public class LocationManager implements OnMapReadyCallback {
     private Location lastKnownLocation;
     private ArrayMap<String, MarkerOptions> pendingMarkers;
     private ArrayMap<String, Marker> addedMarkers;
+    private Queue<Runnable> pendingRunnables;
 
     public LocationManager(FusedLocationProviderClient fusedLocationProviderClient) {
         this.fusedLocationProviderClient = fusedLocationProviderClient;
         pendingMarkers = new ArrayMap<>();
         addedMarkers = new ArrayMap<>();
+        pendingRunnables = new LinkedList<>();
     }
 
     public void disposeMap() {
@@ -44,6 +48,7 @@ public class LocationManager implements OnMapReadyCallback {
         this.googleMap = googleMap;
         configureMapUi();
         addPendingMarkersToMap();
+        runPendingRunnables();
     }
 
     private void configureMapUi() {
@@ -51,10 +56,28 @@ public class LocationManager implements OnMapReadyCallback {
         googleMap.getUiSettings().setMapToolbarEnabled(false);
     }
 
+    private void handleRunnable(Runnable runnable) {
+        if (googleMap == null) {
+            pendingRunnables.offer(runnable);
+        } else {
+            runnable.run();
+        }
+    }
+
+    public void setGesturesEnabled(boolean enabled) {
+        Runnable runnable = () -> googleMap.getUiSettings().setAllGesturesEnabled(enabled);
+        handleRunnable(runnable);
+    }
+
+    public void setZoomButtonsEnabled(boolean enabled) {
+        Runnable runnable = () -> googleMap.getUiSettings().setZoomControlsEnabled(enabled);
+        handleRunnable(runnable);
+    }
+
     public void zoomOnLocation(double latitude, double longitude) {
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                new LatLng(latitude, longitude), DEFAULT_ZOOM
-        ));
+        Runnable runnable = () -> googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                    new LatLng(latitude, longitude), DEFAULT_ZOOM));
+        handleRunnable(runnable);
     }
 
     public void zoomOnCurrentDeviceLocation() {
@@ -69,13 +92,20 @@ public class LocationManager implements OnMapReadyCallback {
     }
 
     public void getDeviceLocationAsync(OnCompleteListener<Location> onCompleteListener) {
-        try {
-            Timber.d("getDeviceLocationAsync()");
-            Task<Location> lastLocationTask = fusedLocationProviderClient.getLastLocation();
-            googleMap.setMyLocationEnabled(true);
-            lastLocationTask.addOnCompleteListener(onCompleteListener);
-        } catch (SecurityException se) {
-            Timber.e(se);
+        Runnable runnable = () -> {
+            try {
+                Timber.d("getDeviceLocationAsync()");
+                Task<Location> lastLocationTask = fusedLocationProviderClient.getLastLocation();
+                googleMap.setMyLocationEnabled(true);
+                lastLocationTask.addOnCompleteListener(onCompleteListener);
+            } catch (SecurityException se) {
+                Timber.e(se);
+            }
+        };
+        if (googleMap == null) {
+            pendingRunnables.offer(runnable);
+        } else {
+            runnable.run();
         }
     }
 
@@ -85,11 +115,33 @@ public class LocationManager implements OnMapReadyCallback {
         pendingMarkers.clear();
     }
 
+    private void runPendingRunnables() {
+        Timber.d("Pending runnables to run: %d", pendingRunnables.size());
+        while (!pendingRunnables.isEmpty()) {
+            pendingRunnables.poll().run();
+        }
+    }
+
+    public void takeMarker(String foodtruckId, MarkerOptions marker) {
+        if (googleMap == null) {
+            pendingMarkers.put(foodtruckId, marker);
+        } else {
+            addMarkerToMap(foodtruckId, marker);
+        }
+    }
+
     public void takeMarkers(Map<String, MarkerOptions> markers) {
         if (googleMap == null) {
             pendingMarkers.putAll(markers);
         } else {
             addMarkersToMap(markers);
+        }
+    }
+
+    private void addMarkerToMap(String foodtruckId, MarkerOptions marker) {
+        if (googleMap != null) {
+            Marker m = googleMap.addMarker(marker);
+            addedMarkers.put(foodtruckId, m);
         }
     }
 

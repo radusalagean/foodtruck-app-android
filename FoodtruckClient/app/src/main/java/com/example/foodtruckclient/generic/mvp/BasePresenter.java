@@ -10,10 +10,18 @@ public abstract class BasePresenter<T extends BaseMVP.View, S extends BaseMVP.Mo
     protected CompositeDisposable compositeDisposable;
     protected T view;
     protected S model;
+    private boolean refreshing;
 
     protected BasePresenter(S model) {
         compositeDisposable = new CompositeDisposable();
         this.model = model;
+    }
+
+    @Override
+    public void postOnView(Runnable runnable) {
+        if (view != null) {
+            runnable.run();
+        }
     }
 
     @Override
@@ -33,5 +41,16 @@ public abstract class BasePresenter<T extends BaseMVP.View, S extends BaseMVP.Mo
         if (getPermissionManager() != null) {
             getPermissionManager().onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+    }
+
+    @Override
+    public void setRefreshing(boolean refreshing) {
+        this.refreshing = refreshing;
+        postOnView(() -> view.setRefreshingIndicator(refreshing));
+    }
+
+    @Override
+    public boolean isRefreshing() {
+        return refreshing;
     }
 }

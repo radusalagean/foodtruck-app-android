@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/layout_foodtruck_owner_image_view"
+        android:layout_width="@dimen/item_thumbnail_image_size"
+        android:layout_height="@dimen/item_thumbnail_image_size"
+        android:layout_marginStart="@dimen/general_layout_margin"
+        android:layout_marginLeft="@dimen/general_layout_margin"
+        android:layout_marginTop="@dimen/general_layout_margin"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/text_view_owner_username_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/general_layout_margin"
+        android:layout_marginLeft="@dimen/general_layout_margin"
+        android:layout_marginTop="@dimen/general_layout_margin"
+        android:fontFamily="sans-serif-light"
+        android:text="@string/foodtruck_owner_label"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@+id/layout_foodtruck_owner_image_view"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_view_owner_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/general_layout_margin"
+        android:layout_marginLeft="@dimen/general_layout_margin"
+        android:layout_marginTop="@dimen/general_layout_margin"
+        android:ellipsize="end"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@+id/text_view_owner_username_label"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Username" />
+
+    <TextView
+        android:id="@+id/text_view_created_date_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/general_layout_margin"
+        android:layout_marginLeft="@dimen/general_layout_margin"
+        android:layout_marginTop="@dimen/general_layout_margin"
+        android:fontFamily="sans-serif-light"
+        android:text="@string/foodtruck_created_label"
+        app:layout_constraintStart_toEndOf="@+id/layout_foodtruck_owner_image_view"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_owner_username_label" />
+
+    <TextView
+        android:id="@+id/text_view_created_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/general_layout_margin"
+        android:layout_marginLeft="@dimen/general_layout_margin"
+        android:layout_marginTop="@dimen/general_layout_margin"
+        android:ellipsize="end"
+        app:layout_constraintStart_toEndOf="@+id/text_view_created_date_label"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_owner_username"
+        tools:text="Date" />
+
+    <TextView
+        android:id="@+id/text_view_last_update_date_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/general_layout_margin"
+        android:layout_marginLeft="@dimen/general_layout_margin"
+        android:fontFamily="sans-serif-light"
+        android:text="@string/foodtruck_last_update_label"
+        app:layout_constraintStart_toEndOf="@+id/layout_foodtruck_owner_image_view"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_created_date_label" />
+
+    <TextView
+        android:id="@+id/text_view_last_update_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/general_layout_margin"
+        android:layout_marginLeft="@dimen/general_layout_margin"
+        android:ellipsize="end"
+        app:layout_constraintStart_toEndOf="@+id/text_view_last_update_date_label"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_created_date"
+        tools:text="Date" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

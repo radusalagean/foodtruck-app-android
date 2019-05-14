@@ -1,16 +1,17 @@
-package com.example.foodtruckclient.generic.fragment;
+package com.example.foodtruckclient.generic.mapmvp;
 
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.foodtruckclient.generic.fragment.BaseFragment;
 import com.example.foodtruckclient.location.MapViewManager;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 
-public abstract class BaseMapFragment extends BaseFragment {
+public abstract class BaseMapFragment extends BaseFragment
+        implements BaseMapMVP.View {
 
     protected MapViewManager mapViewManager;
 
@@ -72,8 +73,4 @@ public abstract class BaseMapFragment extends BaseFragment {
         super.onLowMemory();
         mapViewManager.onLowMemory();
     }
-
-    protected abstract void initMapViewManager();
-
-    protected abstract void disposeMap();
 }

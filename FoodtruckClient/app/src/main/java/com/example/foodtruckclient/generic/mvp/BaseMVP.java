@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.example.foodtruckclient.generic.viewmodel.BaseViewModel;
 import com.example.foodtruckclient.permission.PermissionManager;
+import com.example.foodtruckclient.permission.PermissionRequestDelegate;
 
 public interface BaseMVP {
 
@@ -12,10 +13,17 @@ public interface BaseMVP {
     }
 
     interface View {
+        void setRefreshingIndicator(boolean refreshing);
         void toast(String message);
+        PermissionRequestDelegate getPermissionRequestDelegate();
     }
 
     interface Presenter<T extends View> {
+        /**
+         * Run a specific runnable, if the view is not null
+         */
+        void postOnView(Runnable runnable);
+
         /**
          * Binds presenter with a view when resumed. The Presenter will perform initialization here.
          *
@@ -41,5 +49,15 @@ public interface BaseMVP {
         default PermissionManager getPermissionManager() {
             return null;
         }
+
+        /**
+         * Set the refreshing flag and indicator
+         */
+        void setRefreshing(boolean refreshing);
+
+        /**
+         * Returns true if the data is refreshing, false otherwise
+         */
+        boolean isRefreshing();
     }
 }

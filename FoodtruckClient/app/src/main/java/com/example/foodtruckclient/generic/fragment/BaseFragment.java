@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.foodtruckclient.application.FoodtruckApplication;
 import com.example.foodtruckclient.di.activity.ActivityComponent;
@@ -125,8 +126,20 @@ public abstract class BaseFragment extends Fragment
     }
 
     @Override
+    public void setRefreshingIndicator(boolean refreshing) {
+        if (getSwipeRefreshLayout() != null) {
+            getSwipeRefreshLayout().setRefreshing(refreshing);
+        }
+    }
+
+    @Override
     public void toast(String message) {
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public PermissionRequestDelegate getPermissionRequestDelegate() {
+        return this;
     }
 
     @UiThread
@@ -138,6 +151,11 @@ public abstract class BaseFragment extends Fragment
         return ((FoodtruckApplication) getActivity().getApplication())
                 .getApplicationComponent()
                 .newActivityComponent(new ActivityModule(getActivity()));
+    }
+
+    @Nullable
+    protected SwipeRefreshLayout getSwipeRefreshLayout() {
+        return null;
     }
 
     /**

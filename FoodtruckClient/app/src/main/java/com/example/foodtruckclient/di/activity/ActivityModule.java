@@ -84,7 +84,10 @@ public class ActivityModule {
     }
 
     @Provides
-    FoodtruckViewerMVP.Presenter provideFoodtruckViewerPresenter(FoodtruckViewerMVP.Model model) {
-        return new FoodtruckViewerPresenter(model);
+    FoodtruckViewerMVP.Presenter provideFoodtruckViewerPresenter(FoodtruckViewerMVP.Model model,
+                                                                 LocationManager locationManager,
+                                                                 PermissionManager permissionManager,
+                                                                 DialogManager dialogManager) {
+        return new FoodtruckViewerPresenter(model, locationManager, permissionManager, dialogManager);
     }
 }
