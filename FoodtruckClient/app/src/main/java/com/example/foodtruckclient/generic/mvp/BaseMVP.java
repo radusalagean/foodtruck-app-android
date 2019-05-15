@@ -16,6 +16,7 @@ public interface BaseMVP {
         void setRefreshingIndicator(boolean refreshing);
         void toast(String message);
         PermissionRequestDelegate getPermissionRequestDelegate();
+        void onBackPressed();
     }
 
     interface Presenter<T extends View> {

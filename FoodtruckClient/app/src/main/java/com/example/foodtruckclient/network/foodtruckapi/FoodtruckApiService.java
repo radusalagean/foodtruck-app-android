@@ -1,7 +1,11 @@
 package com.example.foodtruckclient.network.foodtruckapi;
 
+import androidx.annotation.Nullable;
+
+import com.example.foodtruckclient.network.NetworkConstants;
 import com.example.foodtruckclient.network.foodtruckapi.model.Account;
 import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
+import com.example.foodtruckclient.network.foodtruckapi.model.LoginResponse;
 import com.example.foodtruckclient.network.foodtruckapi.model.Message;
 import com.example.foodtruckclient.network.foodtruckapi.model.Review;
 
@@ -12,6 +16,7 @@ import okhttp3.RequestBody;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -26,13 +31,13 @@ public interface FoodtruckApiService {
     Observable<Message> registerAccount(@Body Account account);
 
     @POST("account/login")
-    Observable<Account> login(@Body Account account);
+    Observable<LoginResponse> login(@Body Account account);
 
     @POST("account/logout")
     Observable<Message> logout();
 
     @GET("account/me")
-    Observable<Account> me();
+    Observable<Account> me(@Nullable @Header(NetworkConstants.HEADER_KEY_AUTHORIZATION) String token);
 
     @GET("account/get/{id}")
     Observable<Account> getAccount(@Path("id") String id);

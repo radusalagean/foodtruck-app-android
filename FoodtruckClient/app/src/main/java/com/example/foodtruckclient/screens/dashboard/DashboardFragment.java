@@ -84,7 +84,7 @@ public class DashboardFragment extends BaseMapFragment
         public void onViewInflated(View view) {
             switch (view.getId()) {
                 case R.id.layout_dashboard_list:
-                    swipeRefreshLayout = view.findViewById(R.id.dashboard_list_swipe_to_refresh_layout);
+                    swipeRefreshLayout = view.findViewById(R.id.dashboard_list_swipe_refresh_layout);
                     recyclerView = view.findViewById(R.id.dashboard_list_recycler_view);
                     initListTab();
                     break;
@@ -150,8 +150,8 @@ public class DashboardFragment extends BaseMapFragment
 
     @Override
     public void onStop() {
-        super.onStop();
         presenter.dropView();
+        super.onStop();
     }
 
     @Override

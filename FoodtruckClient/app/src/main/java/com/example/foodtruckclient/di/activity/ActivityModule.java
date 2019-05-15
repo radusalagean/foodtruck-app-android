@@ -4,6 +4,7 @@ import android.content.Context;
 
 import androidx.fragment.app.FragmentActivity;
 
+import com.example.foodtruckclient.authentication.AuthenticationRepository;
 import com.example.foodtruckclient.screens.dashboard.DashboardMVP;
 import com.example.foodtruckclient.screens.dashboard.DashboardModel;
 import com.example.foodtruckclient.screens.dashboard.DashboardPresenter;
@@ -17,6 +18,9 @@ import com.example.foodtruckclient.screens.foodtruckviewer.FoodtruckViewerMVP;
 import com.example.foodtruckclient.screens.foodtruckviewer.FoodtruckViewerModel;
 import com.example.foodtruckclient.screens.foodtruckviewer.FoodtruckViewerPresenter;
 import com.example.foodtruckclient.screens.foodtruckviewer.FoodtruckViewerViewModelRepository;
+import com.example.foodtruckclient.screens.login.LoginMVP;
+import com.example.foodtruckclient.screens.login.LoginModel;
+import com.example.foodtruckclient.screens.login.LoginPresenter;
 
 import dagger.Module;
 import dagger.Provides;
@@ -89,5 +93,20 @@ public class ActivityModule {
                                                                  PermissionManager permissionManager,
                                                                  DialogManager dialogManager) {
         return new FoodtruckViewerPresenter(model, locationManager, permissionManager, dialogManager);
+    }
+
+    // Login
+
+    @Provides
+    LoginMVP.Model provideLoginModel(NetworkRepository networkRepository,
+                                     AuthenticationRepository authenticationRepository) {
+        return new LoginModel(networkRepository, authenticationRepository);
+    }
+
+    @Provides
+    LoginMVP.Presenter provideLoginPresenter(LoginMVP.Model model,
+                                             Context context,
+                                             DialogManager dialogManager) {
+        return new LoginPresenter(model, context, dialogManager);
     }
 }

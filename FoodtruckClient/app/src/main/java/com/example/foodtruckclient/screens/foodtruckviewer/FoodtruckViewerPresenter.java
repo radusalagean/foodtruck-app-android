@@ -42,6 +42,7 @@ public class FoodtruckViewerPresenter extends BaseMapPresenter<FoodtruckViewerMV
                     public void onError(Throwable e) {
                         Timber.e(e);
                         postOnView(() -> view.toast(e.getMessage()));
+                        setRefreshing(false);
                     }
 
                     @Override

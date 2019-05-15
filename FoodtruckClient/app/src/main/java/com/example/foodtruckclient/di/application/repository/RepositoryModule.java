@@ -1,5 +1,9 @@
 package com.example.foodtruckclient.di.application.repository;
 
+import android.content.SharedPreferences;
+
+import com.example.foodtruckclient.authentication.AuthenticationRepository;
+import com.example.foodtruckclient.persistence.SharedPreferencesRepository;
 import com.example.foodtruckclient.screens.dashboard.DashboardViewModelRepository;
 import com.example.foodtruckclient.di.application.ApplicationScope;
 import com.example.foodtruckclient.screens.foodtruckviewer.FoodtruckViewerViewModelRepository;
@@ -16,6 +20,18 @@ public class RepositoryModule {
     @ApplicationScope
     NetworkRepository provideNetworkRepository(FoodtruckApiService foodtruckApiService) {
         return new NetworkRepository(foodtruckApiService);
+    }
+
+    @Provides
+    @ApplicationScope
+    SharedPreferencesRepository provideSharedPreferencesRepository(SharedPreferences sharedPreferences) {
+        return new SharedPreferencesRepository(sharedPreferences);
+    }
+
+    @Provides
+    @ApplicationScope
+    AuthenticationRepository provideAuthenticationRepository(SharedPreferencesRepository sharedPreferencesRepository) {
+        return new AuthenticationRepository(sharedPreferencesRepository);
     }
 
     // View Model Repositories

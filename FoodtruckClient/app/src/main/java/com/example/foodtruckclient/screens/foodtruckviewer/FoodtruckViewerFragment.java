@@ -43,7 +43,7 @@ public class FoodtruckViewerFragment extends BaseMapFragment
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    @BindView(R.id.foodtruck_viewer_swipe_to_refresh_layout)
+    @BindView(R.id.foodtruck_viewer_swipe_refresh_layout)
     SwipeRefreshLayout swipeRefreshLayout;
 
     @BindView(R.id.app_bar)
@@ -111,8 +111,8 @@ public class FoodtruckViewerFragment extends BaseMapFragment
 
     @Override
     public void onStop() {
-        super.onStop();
         presenter.dropView();
+        super.onStop();
     }
 
     @Override

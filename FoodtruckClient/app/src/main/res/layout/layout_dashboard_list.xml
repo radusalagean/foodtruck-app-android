@@ -5,7 +5,7 @@
     android:id="@+id/layout_dashboard_list">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/dashboard_list_swipe_to_refresh_layout"
+        android:id="@+id/dashboard_list_swipe_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

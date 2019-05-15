@@ -1,6 +1,8 @@
 package com.example.foodtruckclient.di.application;
 
 import android.app.Application;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import dagger.Module;
 import dagger.Provides;
@@ -18,5 +20,11 @@ public class ApplicationModule {
     @ApplicationScope
     Application provideApplication() {
         return application;
+    }
+
+    @Provides
+    @ApplicationScope
+    SharedPreferences provideSharedPreferences(Application application) {
+        return PreferenceManager.getDefaultSharedPreferences(application);
     }
 }

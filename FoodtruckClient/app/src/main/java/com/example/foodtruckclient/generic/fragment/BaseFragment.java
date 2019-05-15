@@ -142,6 +142,11 @@ public abstract class BaseFragment extends Fragment
         return this;
     }
 
+    @Override
+    public void onBackPressed() {
+        getActivity().onBackPressed();
+    }
+
     @UiThread
     protected ActivityComponent getControllerComponent() {
         if (isComponentUsed) {

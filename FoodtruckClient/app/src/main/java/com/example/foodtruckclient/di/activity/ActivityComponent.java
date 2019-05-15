@@ -4,6 +4,7 @@ import com.example.foodtruckclient.screens.dashboard.DashboardFragment;
 import com.example.foodtruckclient.di.activity.location.LocationModule;
 import com.example.foodtruckclient.di.activity.permission.PermissionModule;
 import com.example.foodtruckclient.screens.foodtruckviewer.FoodtruckViewerFragment;
+import com.example.foodtruckclient.screens.login.LoginFragment;
 
 import dagger.Subcomponent;
 
@@ -17,4 +18,5 @@ public interface ActivityComponent {
 
     void inject(DashboardFragment dashboardFragment);
     void inject(FoodtruckViewerFragment foodtruckViewerFragment);
+    void inject(LoginFragment loginFragment);
 }

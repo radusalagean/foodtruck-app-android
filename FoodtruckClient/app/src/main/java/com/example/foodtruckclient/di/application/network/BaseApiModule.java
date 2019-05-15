@@ -1,7 +1,9 @@
 package com.example.foodtruckclient.di.application.network;
 
 import com.example.foodtruckclient.BuildConfig;
+import com.example.foodtruckclient.authentication.AuthenticationRepository;
 import com.example.foodtruckclient.network.NetworkConstants;
+import com.example.foodtruckclient.network.interceptor.AuthenticationInterceptor;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 
 import javax.inject.Named;
@@ -20,7 +22,7 @@ public class BaseApiModule {
 
     @Provides
     @Named(NetworkConstants.NAMED_LOGGING_INTERCEPTOR)
-    Interceptor getLoggingInterceptor() {
+    Interceptor provideLoggingInterceptor() {
         if (BuildConfig.DEBUG) {
             return new HttpLoggingInterceptor(message -> Timber.tag(NetworkConstants.OKHTTP_TAG).i(message))
                     .setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -30,7 +32,16 @@ public class BaseApiModule {
 
     @Provides
     @Named(NetworkConstants.NAMED_STETHO_INTERCEPTOR)
-    Interceptor getStethoInterceptor() {
+    Interceptor provideStethoInterceptor() {
         return BuildConfig.DEBUG ? new StethoInterceptor() : null;
+    }
+
+    @Provides
+    @Named(NetworkConstants.NAMED_AUTHENTICATION_INTERCEPTOR)
+    Interceptor provideAuthenticationInterceptor(AuthenticationRepository authenticationRepository) {
+        if (authenticationRepository.getAuthenticatedAccount() == null) {
+            return null;
+        }
+        return new AuthenticationInterceptor(authenticationRepository);
     }
 }

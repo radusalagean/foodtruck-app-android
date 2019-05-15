@@ -96,4 +96,9 @@ public class Account {
     public int hashCode() {
         return Objects.hashCode(id, username, image);
     }
+
+    public static Account createFrom(LoginResponse loginResponse, Account account) {
+        account.setToken(loginResponse.getToken());
+        return account;
+    }
 }

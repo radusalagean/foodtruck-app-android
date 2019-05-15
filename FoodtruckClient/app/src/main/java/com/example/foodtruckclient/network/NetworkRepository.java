@@ -1,7 +1,11 @@
 package com.example.foodtruckclient.network;
 
+import androidx.annotation.Nullable;
+
 import com.example.foodtruckclient.network.foodtruckapi.FoodtruckApiService;
+import com.example.foodtruckclient.network.foodtruckapi.model.Account;
 import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
+import com.example.foodtruckclient.network.foodtruckapi.model.LoginResponse;
 import com.example.foodtruckclient.network.foodtruckapi.model.Review;
 
 import java.util.List;
@@ -14,6 +18,16 @@ public class NetworkRepository {
 
     public NetworkRepository(FoodtruckApiService foodtruckApiService) {
         this.foodtruckApiService = foodtruckApiService;
+    }
+
+    // Accounts
+
+    public Observable<LoginResponse> login(Account account) {
+        return foodtruckApiService.login(account);
+    }
+
+    public Observable<Account> me(@Nullable String token) {
+        return foodtruckApiService.me(token);
     }
 
     // Foodtrucks
