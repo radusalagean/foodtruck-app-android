@@ -16,6 +16,8 @@ import dagger.Provides;
 @Module
 public class RepositoryModule {
 
+    // Repositories
+
     @Provides
     @ApplicationScope
     NetworkRepository provideNetworkRepository(FoodtruckApiService foodtruckApiService) {

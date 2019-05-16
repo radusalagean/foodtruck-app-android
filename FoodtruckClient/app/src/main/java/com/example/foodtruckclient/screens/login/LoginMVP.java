@@ -1,5 +1,7 @@
 package com.example.foodtruckclient.screens.login;
 
+import androidx.annotation.NonNull;
+
 import com.example.foodtruckclient.generic.mvp.BaseMVP;
 import com.example.foodtruckclient.generic.viewmodel.BaseViewModel;
 import com.example.foodtruckclient.network.foodtruckapi.model.Account;
@@ -13,7 +15,7 @@ public interface LoginMVP {
     }
 
     interface View extends BaseMVP.View {
-
+        void setAuthenticatedAccount(@NonNull Account account);
     }
 
     interface Presenter extends BaseMVP.Presenter<View> {

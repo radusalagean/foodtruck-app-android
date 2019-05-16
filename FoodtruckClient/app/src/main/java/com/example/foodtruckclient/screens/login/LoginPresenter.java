@@ -37,7 +37,7 @@ public class LoginPresenter extends BasePresenter<LoginMVP.View, LoginMVP.Model>
                     @Override
                     public void onNext(Account account) {
                         postOnView(() -> {
-                            view.toast(context.getString(R.string.logged_in_toast, account.getUsername()));
+                            view.setAuthenticatedAccount(account);
                             view.onBackPressed();
                         });
                     }

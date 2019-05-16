@@ -19,6 +19,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.foodtruckclient.R;
 import com.example.foodtruckclient.generic.activity.ActivityContract;
 import com.example.foodtruckclient.generic.fragment.BaseFragment;
+import com.example.foodtruckclient.network.foodtruckapi.model.Account;
 
 import javax.inject.Inject;
 
@@ -157,10 +158,15 @@ public class LoginFragment extends BaseFragment implements LoginMVP.View {
         usernameEditText.setEnabled(!refreshing);
         passwordEditText.setEnabled(!refreshing);
         registerLinkButton.setEnabled(!refreshing);
-        if (!refreshing) {
+        if (refreshing) {
             loginButton.setEnabled(false);
         } else {
             refreshLoginButtonEnabledState();
         }
+    }
+
+    @Override
+    public void setAuthenticatedAccount(@NonNull Account account) {
+        activityContract.setAuthenticatedAccount(account);
     }
 }

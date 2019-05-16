@@ -3,7 +3,7 @@ package com.example.foodtruckclient.di.application.network;
 import com.example.foodtruckclient.BuildConfig;
 import com.example.foodtruckclient.authentication.AuthenticationRepository;
 import com.example.foodtruckclient.network.NetworkConstants;
-import com.example.foodtruckclient.network.interceptor.AuthenticationInterceptor;
+import com.example.foodtruckclient.network.interceptor.HeaderInterceptor;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 
 import javax.inject.Named;
@@ -37,11 +37,8 @@ public class BaseApiModule {
     }
 
     @Provides
-    @Named(NetworkConstants.NAMED_AUTHENTICATION_INTERCEPTOR)
-    Interceptor provideAuthenticationInterceptor(AuthenticationRepository authenticationRepository) {
-        if (authenticationRepository.getAuthenticatedAccount() == null) {
-            return null;
-        }
-        return new AuthenticationInterceptor(authenticationRepository);
+    @Named(NetworkConstants.NAMED_HEADER_INTERCEPTOR)
+    Interceptor provideHeaderInterceptor(AuthenticationRepository authenticationRepository) {
+        return new HeaderInterceptor(authenticationRepository);
     }
 }

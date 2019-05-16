@@ -23,7 +23,7 @@ public interface APIModuleContract<T> {
      */
     OkHttpClient provideClient(Interceptor loggingInterceptor,
                                Interceptor stethoInterceptor,
-                               Interceptor authenticationInterceptor);
+                               Interceptor headerInterceptor);
 
     /**
      * Provide the {@link Retrofit} instance
