@@ -38,7 +38,6 @@ public class LoginPresenter extends BasePresenter<LoginMVP.View, LoginMVP.Model>
                     public void onNext(Account account) {
                         postOnView(() -> {
                             view.setAuthenticatedAccount(account);
-                            view.onBackPressed();
                         });
                     }
 

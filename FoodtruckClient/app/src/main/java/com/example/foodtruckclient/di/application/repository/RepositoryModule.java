@@ -3,6 +3,7 @@ package com.example.foodtruckclient.di.application.repository;
 import android.content.SharedPreferences;
 
 import com.example.foodtruckclient.authentication.AuthenticationRepository;
+import com.example.foodtruckclient.generic.viewmodel.ViewModelManager;
 import com.example.foodtruckclient.persistence.SharedPreferencesRepository;
 import com.example.foodtruckclient.screens.dashboard.DashboardViewModelRepository;
 import com.example.foodtruckclient.di.application.ApplicationScope;
@@ -37,6 +38,13 @@ public class RepositoryModule {
     }
 
     // View Model Repositories
+
+    @Provides
+    @ApplicationScope
+    ViewModelManager provideViewModelManager(DashboardViewModelRepository dashboardViewModelRepository,
+                                             FoodtruckViewerViewModelRepository foodtruckViewerViewModelRepository) {
+        return new ViewModelManager(dashboardViewModelRepository, foodtruckViewerViewModelRepository);
+    }
 
     @Provides
     @ApplicationScope

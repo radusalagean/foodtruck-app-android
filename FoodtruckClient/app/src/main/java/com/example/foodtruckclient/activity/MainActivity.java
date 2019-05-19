@@ -10,10 +10,12 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.foodtruckclient.R;
 import com.example.foodtruckclient.authentication.AuthenticationRepository;
+import com.example.foodtruckclient.generic.viewmodel.ViewModelManager;
 import com.example.foodtruckclient.network.foodtruckapi.model.Account;
 import com.example.foodtruckclient.screens.dashboard.DashboardFragment;
 import com.example.foodtruckclient.generic.fragment.BaseFragment;
@@ -43,6 +45,9 @@ public class MainActivity extends BaseActivity
     @Inject
     AuthenticationRepository authenticationRepository;
 
+    @Inject
+    ViewModelManager viewModelManager;
+
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
     @Override
@@ -59,6 +64,13 @@ public class MainActivity extends BaseActivity
     protected void onStart() {
         super.onStart();
         authenticationNavigationView.setAuthenticatedAccount(authenticationRepository.getAuthenticatedAccount());
+        viewModelManager.registerListener(getFragmentManagerCompat());
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        viewModelManager.unregisterListener(getFragmentManagerCompat());
     }
 
     @NonNull
@@ -77,17 +89,30 @@ public class MainActivity extends BaseActivity
     public void setAuthenticatedAccount(@NonNull Account account) {
         authenticationNavigationView.setAuthenticatedAccount(account);
         showSnackBar(getResources().getString(R.string.logged_in_message, account.getUsername()));
+        popAllFragments();
     }
 
     @Override
     public void clearAuthenticatedAccount() {
         authenticationNavigationView.clearAuthenticatedAccount();
         showSnackBar(getResources().getString(R.string.logged_out_message));
+        popAllFragments();
+    }
+
+    @Override
+    public boolean isUserAuthenticated() {
+        return authenticationRepository.getAuthenticatedAccount() != null;
     }
 
     @Override
     public void showSnackBar(String message) {
-        Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void popAllFragments() {
+        getFragmentManagerCompat()
+                .popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
     @Override
@@ -124,8 +149,9 @@ public class MainActivity extends BaseActivity
 
                 break;
             case R.id.nav_login:
+                LoginFragment loginFragment = LoginFragment.newInstance();
                 getFragmentManagerCompat().beginTransaction()
-                        .replace(getFragmentContainerId(), LoginFragment.newInstance())
+                        .replace(getFragmentContainerId(), loginFragment, loginFragment.getUuid().toString())
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .addToBackStack(null)
                         .commit();

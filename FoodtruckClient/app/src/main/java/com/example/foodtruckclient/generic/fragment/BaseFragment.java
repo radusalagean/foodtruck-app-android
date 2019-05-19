@@ -16,6 +16,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.foodtruckclient.application.FoodtruckApplication;
 import com.example.foodtruckclient.di.activity.ActivityComponent;
 import com.example.foodtruckclient.di.activity.ActivityModule;
+import com.example.foodtruckclient.generic.activity.ActivityContract;
 import com.example.foodtruckclient.generic.mvp.BaseMVP;
 import com.example.foodtruckclient.permission.PermissionRequestDelegate;
 
@@ -44,6 +45,7 @@ public abstract class BaseFragment extends Fragment
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             uuid = (UUID) getArguments().getSerializable(ARG_UUID);
+            getPresenter().setUuid(uuid);
             Timber.d("Fragment's UUID: %s", uuid);
         }
     }
@@ -138,6 +140,20 @@ public abstract class BaseFragment extends Fragment
     }
 
     @Override
+    public void showSnackBar(int stringResID) {
+        if (getActivityContract() != null) {
+            getActivityContract().showSnackBar(getString(stringResID));
+        }
+    }
+
+    @Override
+    public void showSnackBar(int stringResId, Object... formatArgs) {
+        if (getActivityContract() != null) {
+            getActivityContract().showSnackBar(getResources().getString(stringResId, formatArgs));
+        }
+    }
+
+    @Override
     public PermissionRequestDelegate getPermissionRequestDelegate() {
         return this;
     }
@@ -163,6 +179,15 @@ public abstract class BaseFragment extends Fragment
         return null;
     }
 
+    @Nullable
+    protected ActivityContract getActivityContract() {
+        return null;
+    }
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
     /**
      * Should be called only once, during instance creation.
      * Used for uniquely identifying the fragment's view model
@@ -171,7 +196,9 @@ public abstract class BaseFragment extends Fragment
         if (uuid != null) {
             throw new UnsupportedOperationException("You shouldn't generate a new unique id for this fragment if one already exists!");
         }
-        bundle.putSerializable(ARG_UUID, UUID.randomUUID());
+        UUID uuid = UUID.randomUUID();
+        bundle.putSerializable(ARG_UUID, uuid);
+        this.uuid = uuid;
     }
 
     /**
@@ -191,4 +218,9 @@ public abstract class BaseFragment extends Fragment
      * override to unregister view listeners
      */
     protected abstract void unregisterListeners();
+
+    /**
+     * Override to return the presenter
+     */
+    protected abstract BaseMVP.Presenter getPresenter();
 }

@@ -19,6 +19,7 @@ import com.example.foodtruckclient.R;
 import com.example.foodtruckclient.generic.activity.ActivityContract;
 import com.example.foodtruckclient.generic.decoration.ListItemDecoration;
 import com.example.foodtruckclient.generic.mapmvp.BaseMapFragment;
+import com.example.foodtruckclient.generic.mvp.BaseMVP;
 import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
 import com.example.foodtruckclient.network.foodtruckapi.model.Review;
 import com.example.foodtruckclient.view.StateAwareAppBarLayout;
@@ -32,7 +33,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class FoodtruckViewerFragment extends BaseMapFragment
-        implements FoodtruckViewerMVP.View, FoodtruckViewerListener {
+        implements FoodtruckViewerMVP.View, FoodtruckViewerContract {
 
     private static final String ARG_FOODTRUCK_ID = "foodtruck_id";
     private static final String ARG_FOODTRUCK_NAME = "foodtruck_name";
@@ -153,10 +154,21 @@ public class FoodtruckViewerFragment extends BaseMapFragment
         appBarLayout.setOnStateChangedListener(null);
     }
 
+    @Override
+    protected BaseMVP.Presenter getPresenter() {
+        return presenter;
+    }
+
     @Nullable
     @Override
     protected SwipeRefreshLayout getSwipeRefreshLayout() {
         return swipeRefreshLayout;
+    }
+
+    @Nullable
+    @Override
+    protected ActivityContract getActivityContract() {
+        return activityContract;
     }
 
     @Override
@@ -171,17 +183,42 @@ public class FoodtruckViewerFragment extends BaseMapFragment
     }
 
     @Override
+    public void updateMyReview(Review myReview) {
+        adapter.setMyReview(myReview);
+    }
+
+    @Override
     public void updateReviews(List<Review> reviews) {
         adapter.setReviews(reviews);
     }
 
     @Override
-    public void updateMyReview(Review myReview) {
-
+    public void triggerDataRefresh() {
+        presenter.reloadData(foodtruckId);
     }
 
     @Override
     public void takeMapView(MapView mapView) {
         mapViewManager.takeMapView(mapView);
+    }
+
+    @Override
+    public boolean isUserAuthenticated() {
+        return activityContract.isUserAuthenticated();
+    }
+
+    @Override
+    public void submitReview(String title, String content, float rating) {
+        presenter.submitReview(foodtruckId, title, content, rating);
+    }
+
+    @Override
+    public void updateReview(String reviewId, String title, String content, float rating) {
+        presenter.updateReview(reviewId, title, content, rating);
+    }
+
+    @Override
+    public void removeReview(String reviewId) {
+        presenter.removeReview(reviewId);
     }
 }

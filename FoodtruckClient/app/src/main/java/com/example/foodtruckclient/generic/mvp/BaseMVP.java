@@ -6,15 +6,20 @@ import com.example.foodtruckclient.generic.viewmodel.BaseViewModel;
 import com.example.foodtruckclient.permission.PermissionManager;
 import com.example.foodtruckclient.permission.PermissionRequestDelegate;
 
+import java.util.UUID;
+
 public interface BaseMVP {
 
     interface Model<T extends BaseViewModel> {
+        void setUuid(UUID uuid);
         T getCachedViewModel();
     }
 
     interface View {
         void setRefreshingIndicator(boolean refreshing);
         void toast(String message);
+        void showSnackBar(int stringResId);
+        void showSnackBar(int stringResId, Object... formatArgs);
         PermissionRequestDelegate getPermissionRequestDelegate();
         void onBackPressed();
     }
@@ -60,5 +65,11 @@ public interface BaseMVP {
          * Returns true if the data is refreshing, false otherwise
          */
         boolean isRefreshing();
+
+        /**
+         * Set the UUID of the fragment. (necessary for uniquely identifying the view model
+         * in the view model repository)
+         */
+        void setUuid(UUID uuid);
     }
 }

@@ -2,6 +2,8 @@ package com.example.foodtruckclient.generic.mvp;
 
 import androidx.annotation.NonNull;
 
+import java.util.UUID;
+
 import io.reactivex.disposables.CompositeDisposable;
 
 public abstract class BasePresenter<T extends BaseMVP.View, S extends BaseMVP.Model>
@@ -52,5 +54,10 @@ public abstract class BasePresenter<T extends BaseMVP.View, S extends BaseMVP.Mo
     @Override
     public boolean isRefreshing() {
         return refreshing;
+    }
+
+    @Override
+    public void setUuid(UUID uuid) {
+        model.setUuid(uuid);
     }
 }

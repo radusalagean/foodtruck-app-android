@@ -25,6 +25,18 @@
     <string name="foodtruck_created_label">Created:</string>
     <string name="foodtruck_last_update_label">Last update:</string>
     <string name="foodtruck_reviews_label">Reviews</string>
+    <string name="foodtruck_my_review_login_hint">Please log in to post a review</string>
+    <string name="foodtruck_my_review">My Review</string>
+    <string name="foodtruck_my_review_title_hint">Review title</string>
+    <string name="foodtruck_my_review_content_hint">Review content</string>
+    <string name="foodtruck_my_review_submit">Submit</string>
+    <string name="foodtruck_my_review_edit">Edit</string>
+    <string name="foodtruck_my_review_remove">Remove</string>
+    <string name="foodtruck_my_review_save">Save</string>
+    <string name="foodtruck_my_review_cancel">Cancel</string>
+    <string name="foodtruck_my_review_submitted_message">You review was submitted</string>
+    <string name="foodtruck_my_review_updated_message">Your review was updated successfully</string>
+    <string name="foodtruck_my_review_removed_message">Your review was successfully removed</string>
     <string name="foodtruck_review_edited">edited</string>
     <string name="foodtruck_review_date_created_edited_pattern" translatable="false">%s (%s)</string>
     <string name="foodtruck_review_date_created_pattern" translatable="false">%s</string>

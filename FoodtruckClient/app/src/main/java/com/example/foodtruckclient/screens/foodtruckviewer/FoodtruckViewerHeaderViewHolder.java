@@ -57,7 +57,7 @@ public class FoodtruckViewerHeaderViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, itemView);
     }
 
-    public void bind(@Nullable Foodtruck foodtruck, FoodtruckViewerListener listener) {
+    public void bind(@Nullable Foodtruck foodtruck, FoodtruckViewerContract listener) {
         Timber.d("bind(%s, %s)", foodtruck, listener);
         if (foodtruck == null) {
             rootLayout.setVisibility(View.INVISIBLE);

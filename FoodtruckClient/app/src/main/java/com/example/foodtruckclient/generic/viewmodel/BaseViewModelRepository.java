@@ -1,17 +1,40 @@
 package com.example.foodtruckclient.generic.viewmodel;
 
+import androidx.collection.ArrayMap;
+import androidx.fragment.app.FragmentManager;
+
+import java.util.Iterator;
+import java.util.Map;
+import java.util.UUID;
+
 import timber.log.Timber;
 
 public abstract class BaseViewModelRepository<T extends BaseViewModel> {
 
-    protected T viewModel;
+    private Map<UUID, T> viewModelMap;
 
-    public T getViewModel() {
-        return viewModel;
+    public BaseViewModelRepository() {
+        this.viewModelMap = new ArrayMap<>();
     }
 
-    public void setViewModel(T viewModel) {
-        Timber.w("setViewModel");
-        this.viewModel = viewModel;
+    public T getViewModel(UUID uuid) {
+        return viewModelMap.get(uuid);
+    }
+
+    public void addViewModel(UUID uuid, T viewModel) {
+        Timber.w("addViewModel(%s, %s)", uuid, viewModel);
+        viewModelMap.put(uuid, viewModel);
+    }
+
+    public void disposeUnusedViewModels(FragmentManager fragmentManager) {
+        Iterator<Map.Entry<UUID, T>> iterator = viewModelMap.entrySet().iterator();
+        while (iterator.hasNext()) {
+            if (fragmentManager.findFragmentByTag(iterator.next().getKey().toString()) == null) {
+                // No reference to the fragment found, so release the associated View Model
+                // reference from the map
+                Timber.w("Removing unused view model");
+                iterator.remove();
+            }
+        }
     }
 }

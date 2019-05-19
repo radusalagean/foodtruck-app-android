@@ -117,7 +117,7 @@ public class DashboardPresenter extends BaseMapPresenter<DashboardMVP.View, Dash
     public void viewFoodtruck(String id, String name) {
         FoodtruckViewerFragment fragment = FoodtruckViewerFragment.newInstance(id, name);
         activityContract.getFragmentManagerCompat().beginTransaction()
-                .replace(activityContract.getFragmentContainerId(), fragment)
+                .replace(activityContract.getFragmentContainerId(), fragment, fragment.getUuid().toString())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .addToBackStack(null)
                 .commit();

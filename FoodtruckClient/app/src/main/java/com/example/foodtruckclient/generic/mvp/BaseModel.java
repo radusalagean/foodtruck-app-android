@@ -6,9 +6,12 @@ import com.example.foodtruckclient.generic.viewmodel.BaseViewModel;
 import com.example.foodtruckclient.generic.viewmodel.BaseViewModelRepository;
 import com.example.foodtruckclient.network.NetworkRepository;
 
+import java.util.UUID;
+
 public abstract class BaseModel<T extends BaseViewModel, S extends BaseViewModelRepository<T>>
         implements BaseMVP.Model<T> {
 
+    protected UUID uuid;
     protected NetworkRepository networkRepository;
     protected S viewModelRepository;
 
@@ -22,8 +25,13 @@ public abstract class BaseModel<T extends BaseViewModel, S extends BaseViewModel
     }
 
     @Override
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
+
+    @Override
     @Nullable
     public T getCachedViewModel() {
-        return viewModelRepository != null ? viewModelRepository.getViewModel() : null;
+        return viewModelRepository != null ? viewModelRepository.getViewModel(uuid) : null;
     }
 }

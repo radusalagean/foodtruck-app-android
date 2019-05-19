@@ -6,6 +6,7 @@ import com.example.foodtruckclient.network.foodtruckapi.FoodtruckApiService;
 import com.example.foodtruckclient.network.foodtruckapi.model.Account;
 import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
 import com.example.foodtruckclient.network.foodtruckapi.model.LoginResponse;
+import com.example.foodtruckclient.network.foodtruckapi.model.Message;
 import com.example.foodtruckclient.network.foodtruckapi.model.Review;
 
 import java.util.List;
@@ -48,5 +49,17 @@ public class NetworkRepository {
 
     public Observable<Review> getMyReview(String foodtruckId) {
         return foodtruckApiService.getMyReview(foodtruckId);
+    }
+
+    public Observable<Message> addFoodtruckReview(String foodtruckId, Review review) {
+        return foodtruckApiService.addFoodtruckReview(foodtruckId, review);
+    }
+
+    public Observable<Message> updateFoodtruckReview(String reviewId, Review review) {
+        return foodtruckApiService.updateReview(reviewId, review);
+    }
+
+    public Observable<Message> deleteReview(String id) {
+        return foodtruckApiService.deleteReview(id);
     }
 }

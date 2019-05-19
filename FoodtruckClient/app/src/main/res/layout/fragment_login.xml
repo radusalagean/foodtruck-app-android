@@ -47,11 +47,9 @@
                         android:layout_height="wrap_content"
                         android:autofillHints="@string/username_hint"
                         android:hint="@string/username_hint"
-                        android:imeActionLabel="Next"
                         android:imeOptions="actionNext"
                         android:inputType="text"
-                        android:maxLines="1"
-                        android:singleLine="true" />
+                        android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -74,8 +72,7 @@
                         android:hint="@string/password_hint"
                         android:imeOptions="actionDone"
                         android:inputType="textPassword"
-                        android:maxLines="1"
-                        android:singleLine="true" />
+                        android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 

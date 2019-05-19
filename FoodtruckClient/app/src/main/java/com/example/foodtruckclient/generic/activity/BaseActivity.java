@@ -90,7 +90,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
             BaseFragment defaultFragment = getDefaultFragment();
             Timber.d("No fragment was previously attached, attaching %s as starting point", defaultFragment);
             getSupportFragmentManager().beginTransaction()
-                    .add(getFragmentContainerId(), getDefaultFragment())
+                    .add(getFragmentContainerId(), defaultFragment, defaultFragment.getUuid().toString())
                     .commit();
         }
     }

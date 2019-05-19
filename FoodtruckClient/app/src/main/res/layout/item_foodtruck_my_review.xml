@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/foodtruck_viewer_card_view_my_review"
+    android:layout_marginTop="@dimen/general_layout_margin"
+    android:layout_marginStart="@dimen/general_layout_margin"
+    android:layout_marginLeft="@dimen/general_layout_margin"
+    android:layout_marginEnd="@dimen/general_layout_margin"
+    android:layout_marginRight="@dimen/general_layout_margin"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/foodtruck_viewer_map_view"
+    card_view:cardElevation="4dp">
+
+    <TextView
+        android:id="@+id/foodtruck_viewer_text_view_my_review_login_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/foodtruck_my_review_login_hint"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/general_layout_margin"
+        android:layout_marginStart="@dimen/general_layout_margin"
+        android:layout_marginLeft="@dimen/general_layout_margin"
+        android:layout_marginEnd="@dimen/general_layout_margin"
+        android:layout_marginRight="@dimen/general_layout_margin"
+        android:layout_marginBottom="@dimen/general_layout_margin"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:visibility="gone"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/foodtruck_viewer_constraint_layout_my_review"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/foodtruck_viewer_text_view_my_review_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@string/foodtruck_my_review" />
+
+        <EditText
+            android:id="@+id/foodtruck_viewer_edit_text_review_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:autofillHints="@string/foodtruck_my_review_title_hint"
+            android:hint="@string/foodtruck_my_review_title_hint"
+            android:imeOptions="actionNext"
+            android:inputType="textCapSentences"
+            android:maxLength="100"
+            android:maxLines="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/foodtruck_viewer_text_view_my_review_header" />
+
+        <EditText
+            android:id="@+id/foodtruck_viewer_edit_text_review_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:autofillHints="@string/foodtruck_my_review_content_hint"
+            android:hint="@string/foodtruck_my_review_content_hint"
+            android:inputType="textCapSentences|textMultiLine"
+            android:maxLength="1000"
+            android:scrollHorizontally="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/foodtruck_viewer_edit_text_review_title" />
+
+        <RatingBar
+            android:id="@+id/foodtruck_viewer_my_review_rating_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/general_layout_margin"
+            android:layout_marginBottom="@dimen/general_layout_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/foodtruck_viewer_edit_text_review_content"
+            android:numStars="5"
+            android:stepSize="1"/>
+
+        <!--Submit review button-->
+
+        <Button
+            android:id="@+id/foodtruck_viewer_my_review_submit_button"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/foodtruck_my_review_submit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/foodtruck_viewer_my_review_rating_bar"
+            android:visibility="gone"/>
+
+        <!--Read-only review mode button group-->
+
+        <Button
+            android:id="@+id/foodtruck_viewer_my_review_edit_button"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/foodtruck_my_review_edit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/foodtruck_viewer_my_review_rating_bar"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/foodtruck_viewer_my_review_remove_button"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/foodtruck_my_review_remove"
+            android:textColor="#ff0000"
+            app:layout_constraintEnd_toStartOf="@id/foodtruck_viewer_my_review_edit_button"
+            app:layout_constraintTop_toBottomOf="@id/foodtruck_viewer_my_review_rating_bar"
+            android:visibility="gone"/>
+
+        <!--Edit Review Button Group-->
+
+        <Button
+            android:id="@+id/foodtruck_viewer_my_review_save_button"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/foodtruck_my_review_save"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/foodtruck_viewer_my_review_rating_bar"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/foodtruck_viewer_my_review_cancel_button"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/foodtruck_my_review_cancel"
+            app:layout_constraintEnd_toStartOf="@id/foodtruck_viewer_my_review_save_button"
+            app:layout_constraintTop_toBottomOf="@id/foodtruck_viewer_my_review_rating_bar"
+            android:visibility="gone"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

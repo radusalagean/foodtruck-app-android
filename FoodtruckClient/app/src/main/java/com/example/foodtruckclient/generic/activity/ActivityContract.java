@@ -22,5 +22,9 @@ public interface ActivityContract {
 
     void clearAuthenticatedAccount();
 
+    boolean isUserAuthenticated();
+
     void showSnackBar(String message);
+
+    void popAllFragments();
 }

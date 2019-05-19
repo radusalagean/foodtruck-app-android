@@ -24,12 +24,13 @@ public class DashboardModel extends BaseModel<DashboardViewModel, DashboardViewM
         }
         return networkRepository.getAllFoodtrucks()
                 .map(DashboardViewModel::createFrom)
-                .doOnNext(viewModel -> viewModelRepository.setViewModel(viewModel));
+                .doOnNext(viewModel -> viewModelRepository.addViewModel(uuid, viewModel));
     }
 
     @Override
     public Observable<List<Foodtruck>> getFoodtrucks() {
         return networkRepository.getAllFoodtrucks()
-                .doOnNext(foodtrucks -> viewModelRepository.getViewModel().setFoodtrucks(foodtrucks));
+                .doOnNext(foodtrucks ->
+                        viewModelRepository.getViewModel(uuid).setFoodtrucks(foodtrucks));
     }
 }

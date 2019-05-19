@@ -19,6 +19,7 @@ import com.example.foodtruckclient.R;
 import com.example.foodtruckclient.generic.decoration.ListItemDecoration;
 import com.example.foodtruckclient.generic.activity.ActivityContract;
 import com.example.foodtruckclient.generic.mapmvp.BaseMapFragment;
+import com.example.foodtruckclient.generic.mvp.BaseMVP;
 import com.example.foodtruckclient.generic.view.OnViewInflatedListener;
 import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
 import com.example.foodtruckclient.view.MorphableFloatingActionButton;
@@ -173,6 +174,11 @@ public class DashboardFragment extends BaseMapFragment
     protected void unregisterListeners() {
         fab.setOnClickListener(null);
         viewPager.clearOnPageChangeListeners();
+    }
+
+    @Override
+    protected BaseMVP.Presenter getPresenter() {
+        return presenter;
     }
 
     @Nullable

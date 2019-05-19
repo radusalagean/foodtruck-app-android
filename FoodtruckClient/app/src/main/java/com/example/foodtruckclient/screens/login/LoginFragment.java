@@ -19,6 +19,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.foodtruckclient.R;
 import com.example.foodtruckclient.generic.activity.ActivityContract;
 import com.example.foodtruckclient.generic.fragment.BaseFragment;
+import com.example.foodtruckclient.generic.mvp.BaseMVP;
 import com.example.foodtruckclient.network.foodtruckapi.model.Account;
 
 import javax.inject.Inject;
@@ -137,6 +138,11 @@ public class LoginFragment extends BaseFragment implements LoginMVP.View {
         passwordEditText.removeTextChangedListener(onTextChangedListener);
         passwordEditText.setOnEditorActionListener(null);
         loginButton.setOnClickListener(null);
+    }
+
+    @Override
+    protected BaseMVP.Presenter getPresenter() {
+        return presenter;
     }
 
     @Nullable
