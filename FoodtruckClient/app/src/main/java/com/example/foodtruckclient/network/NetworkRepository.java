@@ -11,6 +11,7 @@ import com.example.foodtruckclient.network.foodtruckapi.model.Review;
 
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 
 public class NetworkRepository {
@@ -23,8 +24,16 @@ public class NetworkRepository {
 
     // Accounts
 
+    public Observable<Message> register(Account account) {
+        return foodtruckApiService.registerAccount(account);
+    }
+
     public Observable<LoginResponse> login(Account account) {
         return foodtruckApiService.login(account);
+    }
+
+    public Completable checkUsernameAvailability(String username) {
+        return foodtruckApiService.checkUsernameAvailability(username);
     }
 
     public Observable<Account> me(@Nullable String token) {

@@ -22,6 +22,7 @@ import com.example.foodtruckclient.screens.dashboard.DashboardFragment;
 import com.example.foodtruckclient.generic.fragment.BaseFragment;
 import com.example.foodtruckclient.generic.activity.BaseActivity;
 import com.example.foodtruckclient.screens.login.LoginFragment;
+import com.example.foodtruckclient.screens.register.RegisterFragment;
 import com.example.foodtruckclient.view.AuthenticationNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -153,6 +154,16 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
+    public void showRegisterScreen() {
+        RegisterFragment fragment = RegisterFragment.newInstance();
+        getFragmentManagerCompat().beginTransaction()
+                .replace(getFragmentContainerId(), fragment, fragment.getUuid().toString())
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
     public void setActionBar(@NonNull Toolbar toolbar) {
         if (actionBarDrawerToggle != null) {
             drawerLayout.removeDrawerListener(actionBarDrawerToggle);
@@ -194,7 +205,7 @@ public class MainActivity extends BaseActivity
                         .commit();
                 break;
             case R.id.nav_register:
-
+                showRegisterScreen();
                 break;
             case R.id.nav_logout:
                 authenticationRepository.clearAuthenticatedAccount();

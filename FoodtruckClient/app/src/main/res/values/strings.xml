@@ -13,8 +13,8 @@
 
     <!--Dashboard-->
     <string name="dashboard_toolbar_title">Dashboard</string>
-    <string name="dashboard_pager_map">Map</string>
-    <string name="dashboard_pager_list">List</string>
+    <string name="dashboard_pager_map">🗺️</string>
+    <string name="dashboard_pager_list">🚚</string>
 
     <!--Rating count-->
     <string name="rating_count">(%d ratings)</string>
@@ -51,6 +51,9 @@
     <string name="register_link">No account?</string>
     <string name="logged_in_message">Logged in as %s</string>
     <string name="logged_out_message">Logged out</string>
+    <string name="username_available">Username available</string>
+    <string name="username_unavailable">Username unavailable</string>
+    <string name="registered_message">%s successfully registered</string>
 
 
     <!--Vector Paths-->
@@ -66,7 +69,7 @@
     <!--Nav Drawer Menu-->
     <string name="menu_dashboard">Dashboard</string>
     <string name="menu_my_profile">My Profile</string>
-    <string name="menu_group_authentication">Authentication</string>
+    <string name="menu_group_authentication">🔒 Authentication</string>
     <string name="menu_login">Login</string>
     <string name="menu_register">Register</string>
     <string name="menu_logout">Logout</string>

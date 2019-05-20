@@ -9,4 +9,7 @@
     <color name="colorMediumGray">#65000000</color>
     <color name="colorDarkGray">#BA000000</color>
     <color name="colorBlack">#000000</color>
+
+    <color name="colorRed">#FF0000</color>
+    <color name="colorGreen">#0BB637</color>
 </resources>

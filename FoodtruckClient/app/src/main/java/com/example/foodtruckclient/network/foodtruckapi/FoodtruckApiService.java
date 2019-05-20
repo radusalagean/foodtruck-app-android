@@ -11,6 +11,7 @@ import com.example.foodtruckclient.network.foodtruckapi.model.Review;
 
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import okhttp3.RequestBody;
 import retrofit2.http.Body;
@@ -43,7 +44,7 @@ public interface FoodtruckApiService {
     Observable<Account> getAccount(@Path("id") String id);
 
     @GET("account/availability/{username}")
-    Observable<Void> checkUsernameAvailability(@Path("username") String username);
+    Completable checkUsernameAvailability(@Path("username") String username);
 
     @Multipart
     @POST("account/image")

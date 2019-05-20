@@ -69,7 +69,7 @@ public class AuthenticationNavigationView extends NavigationView {
                 .load(account.getThumbnailUrl())
                 .circleCrop()
                 .apply(RequestOptions.circleCropTransform())
-                .placeholder(R.drawable.ic_account_circle_black_24dp)
+                .placeholder(R.drawable.ic_account_circle_white_24dp)
                 .into(imageView);
         usernameTextView.setText(account.getUsername());
         toggleUserVisibility(true);

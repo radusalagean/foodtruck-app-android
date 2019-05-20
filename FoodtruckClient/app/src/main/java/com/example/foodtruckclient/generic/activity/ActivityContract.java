@@ -37,4 +37,6 @@ public interface ActivityContract {
     void validateDashboard();
 
     boolean isDashboardInvalidated();
+
+    void showRegisterScreen();
 }

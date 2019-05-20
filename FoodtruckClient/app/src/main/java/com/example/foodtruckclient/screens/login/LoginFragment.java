@@ -83,11 +83,6 @@ public class LoginFragment extends BaseFragment implements LoginMVP.View {
         super.onAttach(context);
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -131,6 +126,7 @@ public class LoginFragment extends BaseFragment implements LoginMVP.View {
         loginButton.setOnClickListener(v -> presenter.login(
                 usernameEditText.getText().toString(), passwordEditText.getText().toString()
         ));
+        registerLinkButton.setOnClickListener(v -> activityContract.showRegisterScreen());
     }
 
     @Override
@@ -139,6 +135,7 @@ public class LoginFragment extends BaseFragment implements LoginMVP.View {
         passwordEditText.removeTextChangedListener(onTextChangedListener);
         passwordEditText.setOnEditorActionListener(null);
         loginButton.setOnClickListener(null);
+        registerLinkButton.setOnClickListener(null);
     }
 
     @Override
@@ -150,6 +147,12 @@ public class LoginFragment extends BaseFragment implements LoginMVP.View {
     @Override
     protected SwipeRefreshLayout getSwipeRefreshLayout() {
         return swipeRefreshLayout;
+    }
+
+    @Nullable
+    @Override
+    protected ActivityContract getActivityContract() {
+        return activityContract;
     }
 
     private void refreshLoginButtonEnabledState() {

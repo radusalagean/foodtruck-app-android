@@ -21,6 +21,9 @@ import com.example.foodtruckclient.screens.foodtruckviewer.FoodtruckViewerViewMo
 import com.example.foodtruckclient.screens.login.LoginMVP;
 import com.example.foodtruckclient.screens.login.LoginModel;
 import com.example.foodtruckclient.screens.login.LoginPresenter;
+import com.example.foodtruckclient.screens.register.RegisterMVP;
+import com.example.foodtruckclient.screens.register.RegisterModel;
+import com.example.foodtruckclient.screens.register.RegisterPresenter;
 
 import dagger.Module;
 import dagger.Provides;
@@ -105,8 +108,19 @@ public class ActivityModule {
 
     @Provides
     LoginMVP.Presenter provideLoginPresenter(LoginMVP.Model model,
-                                             Context context,
                                              DialogManager dialogManager) {
-        return new LoginPresenter(model, context, dialogManager);
+        return new LoginPresenter(model, dialogManager);
+    }
+
+    // Register
+
+    @Provides
+    RegisterMVP.Model provideRegisterModel(NetworkRepository networkRepository) {
+        return new RegisterModel(networkRepository);
+    }
+
+    @Provides
+    RegisterMVP.Presenter provideRegisterPresenter(RegisterMVP.Model model) {
+        return new RegisterPresenter(model);
     }
 }

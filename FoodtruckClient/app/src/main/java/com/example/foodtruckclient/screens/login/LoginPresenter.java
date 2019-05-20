@@ -14,14 +14,11 @@ import timber.log.Timber;
 public class LoginPresenter extends BasePresenter<LoginMVP.View, LoginMVP.Model>
         implements LoginMVP.Presenter {
 
-    private Context context;
     private DialogManager dialogManager;
 
     public LoginPresenter(LoginMVP.Model model,
-                          Context context,
                           DialogManager dialogManager) {
         super(model);
-        this.context = context;
         this.dialogManager = dialogManager;
     }
 
@@ -36,9 +33,8 @@ public class LoginPresenter extends BasePresenter<LoginMVP.View, LoginMVP.Model>
                 .subscribeWith(new DisposableObserver<Account>() {
                     @Override
                     public void onNext(Account account) {
-                        postOnView(() -> {
-                            view.setAuthenticatedAccount(account);
-                        });
+                        postOnView(() ->
+                            view.setAuthenticatedAccount(account));
                     }
 
                     @Override
