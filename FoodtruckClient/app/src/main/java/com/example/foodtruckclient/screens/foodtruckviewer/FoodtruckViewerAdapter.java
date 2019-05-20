@@ -51,7 +51,8 @@ public class FoodtruckViewerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         if (holder instanceof FoodtruckViewerHeaderViewHolder) {
             ((FoodtruckViewerHeaderViewHolder) holder).bind(foodtruck, contract);
         } else if (holder instanceof FoodtruckViewerMyReviewViewHolder) {
-            ((FoodtruckViewerMyReviewViewHolder) holder).bind(myReview, contract);
+            ((FoodtruckViewerMyReviewViewHolder) holder)
+                    .bind(myReview, foodtruck, contract);
         } else {
             ((FoodtruckViewerReviewViewHolder) holder).bind(getReviewByAdapterPosition(position));
         }

@@ -14,6 +14,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.foodtruckclient.R;
+import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
 import com.example.foodtruckclient.network.foodtruckapi.model.Review;
 
 import java.util.List;
@@ -97,9 +98,9 @@ public class FoodtruckViewerMyReviewViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, itemView);
     }
 
-    public void bind(@Nullable Review myReview, FoodtruckViewerContract contract) {
+    public void bind(@Nullable Review myReview, Foodtruck foodtruck, FoodtruckViewerContract contract) {
         if (currentState == FoodtruckViewerMyReviewState.UNKNOWN) {
-            initCurrentState(myReview, contract);
+            initCurrentState(myReview, foodtruck, contract);
         }
         syncViews();
         reviewTitleEditText.addTextChangedListener(textWatcher);
@@ -189,9 +190,12 @@ public class FoodtruckViewerMyReviewViewHolder extends RecyclerView.ViewHolder {
                 ratingBar.getRating() >= 1.0f;
     }
 
-    private void initCurrentState(Review myReview, FoodtruckViewerContract contract) {
+    private void initCurrentState(Review myReview, Foodtruck foodtruck, FoodtruckViewerContract contract) {
         if (!contract.isUserAuthenticated()) {
             currentState = FoodtruckViewerMyReviewState.NOT_AUTHENTICATED;
+        } else if (foodtruck == null || foodtruck.getOwner() == null ||
+                foodtruck.getOwner().getId().equals(contract.getAuthenticatedUserId())) {
+            currentState = FoodtruckViewerMyReviewState.HIDDEN;
         } else if (myReview == null || myReview.getId() == null) {
             currentState = FoodtruckViewerMyReviewState.NO_REVIEW_SUBMITTED;
         } else if (myReview.getId() != null) {
@@ -245,6 +249,9 @@ public class FoodtruckViewerMyReviewViewHolder extends RecyclerView.ViewHolder {
                 ViewCollections.run(editSubmittedReviewButtons, ((view, index) ->
                         view.setVisibility(View.VISIBLE)));
                 saveButton.setEnabled(areFieldsValid());
+                break;
+            case FoodtruckViewerMyReviewState.HIDDEN:
+                myReviewConstraintLayout.setVisibility(View.GONE);
                 break;
         }
     }

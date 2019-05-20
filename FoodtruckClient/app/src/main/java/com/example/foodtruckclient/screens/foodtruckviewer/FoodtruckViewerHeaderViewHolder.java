@@ -57,8 +57,8 @@ public class FoodtruckViewerHeaderViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, itemView);
     }
 
-    public void bind(@Nullable Foodtruck foodtruck, FoodtruckViewerContract listener) {
-        Timber.d("bind(%s, %s)", foodtruck, listener);
+    public void bind(@Nullable Foodtruck foodtruck, FoodtruckViewerContract contract) {
+        Timber.d("bind(%s, %s)", foodtruck, contract);
         if (foodtruck == null) {
             rootLayout.setVisibility(View.INVISIBLE);
             return;
@@ -76,7 +76,7 @@ public class FoodtruckViewerHeaderViewHolder extends RecyclerView.ViewHolder {
         lastUpdateDateTextView.setText(DateFormat.format(DateConstants.DATE_FORMAT, foodtruck.getLastUpdate()));
         ratingCountTextView.setText(String.valueOf(foodtruck.getRatingCount()));
         averageRatingBar.setRating(foodtruck.getAverageRating());
-        listener.takeMapView(mapView);
+        contract.takeMapView(mapView);
     }
 
     public void recycle() {

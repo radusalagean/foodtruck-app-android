@@ -5,6 +5,7 @@ import android.view.MenuItem;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -102,6 +103,15 @@ public class MainActivity extends BaseActivity
     @Override
     public boolean isUserAuthenticated() {
         return authenticationRepository.getAuthenticatedAccount() != null;
+    }
+
+    @Override
+    @Nullable
+    public String getAuthenticatedUserId() {
+        if (authenticationRepository.getAuthenticatedAccount() != null) {
+            return authenticationRepository.getAuthenticatedAccount().getId();
+        }
+        return null;
     }
 
     @Override

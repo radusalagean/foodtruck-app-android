@@ -24,6 +24,7 @@ import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
 import com.example.foodtruckclient.network.foodtruckapi.model.Review;
 import com.example.foodtruckclient.view.StateAwareAppBarLayout;
 import com.google.android.gms.maps.MapView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
@@ -55,6 +56,9 @@ public class FoodtruckViewerFragment extends BaseMapFragment
 
     @BindView(R.id.foodtruck_viewer_recycler_view)
     RecyclerView recyclerView;
+
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
 
     @Inject
     FoodtruckViewerMVP.Presenter presenter;
@@ -179,6 +183,11 @@ public class FoodtruckViewerFragment extends BaseMapFragment
                     .centerCrop()
                     .into(topImageView);
         }
+        if (foodtruck.getOwner().getId().equals(activityContract.getAuthenticatedUserId())) {
+            fab.show();
+        } else {
+            fab.hide();
+        }
         adapter.setFoodtruck(foodtruck);
     }
 
@@ -205,6 +214,12 @@ public class FoodtruckViewerFragment extends BaseMapFragment
     @Override
     public boolean isUserAuthenticated() {
         return activityContract.isUserAuthenticated();
+    }
+
+    @Nullable
+    @Override
+    public String getAuthenticatedUserId() {
+        return activityContract.getAuthenticatedUserId();
     }
 
     @Override

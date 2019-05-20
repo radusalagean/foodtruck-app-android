@@ -7,6 +7,8 @@ import androidx.fragment.app.FragmentManager;
 
 import com.example.foodtruckclient.network.foodtruckapi.model.Account;
 
+import javax.annotation.Nullable;
+
 public interface ActivityContract {
 
     void setActionBar(@NonNull Toolbar toolbar);
@@ -23,6 +25,8 @@ public interface ActivityContract {
     void clearAuthenticatedAccount();
 
     boolean isUserAuthenticated();
+
+    @Nullable String getAuthenticatedUserId();
 
     void showSnackBar(String message);
 
