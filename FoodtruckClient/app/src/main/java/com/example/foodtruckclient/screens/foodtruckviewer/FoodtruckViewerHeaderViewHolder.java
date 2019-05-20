@@ -16,8 +16,11 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.foodtruckclient.R;
 import com.example.foodtruckclient.generic.date.DateConstants;
 import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
+import com.example.foodtruckclient.util.NumberUtils;
 import com.example.foodtruckclient.view.TagLayout;
 import com.google.android.gms.maps.MapView;
+
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,11 +49,14 @@ public class FoodtruckViewerHeaderViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.text_view_last_update_date)
     TextView lastUpdateDateTextView;
 
+    @BindView(R.id.text_view_rating_average)
+    TextView ratingAverageTextView;
+
+    @BindView(R.id.rating_bar_average)
+    RatingBar averageRatingBar;
+
     @BindView(R.id.text_view_rating_count)
     TextView ratingCountTextView;
-
-    @BindView(R.id.average_rating_bar)
-    RatingBar averageRatingBar;
 
     public FoodtruckViewerHeaderViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -74,8 +80,19 @@ public class FoodtruckViewerHeaderViewHolder extends RecyclerView.ViewHolder {
         ownerUsernameTextView.setText(foodtruck.getOwner().getUsername());
         createDateTextView.setText(DateFormat.format(DateConstants.DATE_FORMAT, foodtruck.getCreated()));
         lastUpdateDateTextView.setText(DateFormat.format(DateConstants.DATE_FORMAT, foodtruck.getLastUpdate()));
-        ratingCountTextView.setText(String.valueOf(foodtruck.getRatingCount()));
+        if (foodtruck.getAverageRating() > 0.0f) {
+            ratingAverageTextView.setText(String
+                    .format(Locale.US, NumberUtils.AVERAGE_RATING_FORMAT, foodtruck.getAverageRating()));
+        } else {
+            ratingAverageTextView.setText(ratingAverageTextView
+                    .getResources().getString(R.string.foodtruck_rating_not_available));
+        }
         averageRatingBar.setRating(foodtruck.getAverageRating());
+        final int ratingCountResId =
+                foodtruck.getRatingCount() == 1 ? R.string.rating_count_singular :
+                        R.string.rating_count;
+        ratingCountTextView.setText(ratingCountTextView.getResources()
+                .getString(ratingCountResId, foodtruck.getRatingCount()));
         contract.takeMapView(mapView);
     }
 
@@ -86,7 +103,8 @@ public class FoodtruckViewerHeaderViewHolder extends RecyclerView.ViewHolder {
         ownerUsernameTextView.setText(null);
         createDateTextView.setText(null);
         lastUpdateDateTextView.setText(null);
-        ratingCountTextView.setText(null);
+        ratingAverageTextView.setText(null);
         averageRatingBar.setRating(0.0f);
+        ratingCountTextView.setText(null);
     }
 }

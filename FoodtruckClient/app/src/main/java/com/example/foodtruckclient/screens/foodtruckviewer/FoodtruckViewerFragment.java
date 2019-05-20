@@ -225,15 +225,18 @@ public class FoodtruckViewerFragment extends BaseMapFragment
     @Override
     public void submitReview(String title, String content, float rating) {
         presenter.submitReview(foodtruckId, title, content, rating);
+        activityContract.invalidateDashboard();
     }
 
     @Override
     public void updateReview(String reviewId, String title, String content, float rating) {
         presenter.updateReview(reviewId, title, content, rating);
+        activityContract.invalidateDashboard();
     }
 
     @Override
     public void removeReview(String reviewId) {
         presenter.removeReview(reviewId);
+        activityContract.invalidateDashboard();
     }
 }

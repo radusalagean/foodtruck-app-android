@@ -111,6 +111,7 @@ public class LoginFragment extends BaseFragment implements LoginMVP.View {
 
     @Override
     protected void initViews() {
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
         toolbar.setTitle(getString(R.string.login));
         activityContract.setActionBar(toolbar);
     }

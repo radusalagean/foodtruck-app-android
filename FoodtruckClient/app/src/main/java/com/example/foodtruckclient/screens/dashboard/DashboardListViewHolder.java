@@ -47,8 +47,8 @@ public class DashboardListViewHolder extends RecyclerView.ViewHolder {
         titleTextView.setText(foodtruck.getName());
         ratingBar.setRating(foodtruck.getAverageRating());
         final int ratingCountResId =
-                foodtruck.getRatingCount() == 1 ? R.string.dashboard_list_item_rating_count_singular :
-                        R.string.dashboard_list_item_rating_count;
+                foodtruck.getRatingCount() == 1 ? R.string.rating_count_singular :
+                        R.string.rating_count;
         ratingCountTextView.setText(ratingCountTextView.getResources()
                 .getString(ratingCountResId, foodtruck.getRatingCount()));
         showOnMapButton.setOnClickListener((view) -> {

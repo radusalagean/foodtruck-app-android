@@ -144,6 +144,15 @@ public class DashboardFragment extends BaseMapFragment
     }
 
     @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (activityContract.isDashboardInvalidated()) {
+            presenter.reloadFoodtrucks();
+            activityContract.validateDashboard();
+        }
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         presenter.takeView(this);

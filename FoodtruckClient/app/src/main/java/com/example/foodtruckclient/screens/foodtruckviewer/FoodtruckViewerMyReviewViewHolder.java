@@ -99,7 +99,8 @@ public class FoodtruckViewerMyReviewViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(@Nullable Review myReview, Foodtruck foodtruck, FoodtruckViewerContract contract) {
-        if (currentState == FoodtruckViewerMyReviewState.UNKNOWN) {
+        if (currentState == FoodtruckViewerMyReviewState.UNKNOWN ||
+                currentState == FoodtruckViewerMyReviewState.HIDDEN) {
             initCurrentState(myReview, foodtruck, contract);
         }
         syncViews();

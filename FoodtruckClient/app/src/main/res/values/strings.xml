@@ -16,15 +16,16 @@
     <string name="dashboard_pager_map">Map</string>
     <string name="dashboard_pager_list">List</string>
 
-    <!--Dashboard List Item-->
-    <string name="dashboard_list_item_rating_count">(%d ratings)</string>
-    <string name="dashboard_list_item_rating_count_singular">(%d rating)</string>
+    <!--Rating count-->
+    <string name="rating_count">(%d ratings)</string>
+    <string name="rating_count_singular">(%d rating)</string>
 
     <!--Foodtruck viewer-->
     <string name="foodtruck_owner_label">Owner:</string>
     <string name="foodtruck_created_label">Created:</string>
     <string name="foodtruck_last_update_label">Last update:</string>
-    <string name="foodtruck_reviews_label">Reviews</string>
+    <string name="foodtruck_rating_label">Rating</string>
+    <string name="foodtruck_rating_not_available">N/A</string>
     <string name="foodtruck_my_review_login_hint">Please log in to post a review</string>
     <string name="foodtruck_my_review">My Review</string>
     <string name="foodtruck_my_review_title_hint">Review title</string>

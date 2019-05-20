@@ -34,6 +34,8 @@ import butterknife.ButterKnife;
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final String BUNDLE_DASHBOARD_INVALIDATED = "dashboard_invalidated";
+
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
 
@@ -50,6 +52,7 @@ public class MainActivity extends BaseActivity
     ViewModelManager viewModelManager;
 
     private ActionBarDrawerToggle actionBarDrawerToggle;
+    private boolean dashboardInvalidated;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +60,9 @@ public class MainActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        if (savedInstanceState != null) {
+            dashboardInvalidated = savedInstanceState.getBoolean(BUNDLE_DASHBOARD_INVALIDATED, false);
+        }
         authenticationNavigationView.setNavigationItemSelectedListener(this);
         addDefaultFragmentIfNecessary();
     }
@@ -66,6 +72,12 @@ public class MainActivity extends BaseActivity
         super.onStart();
         authenticationNavigationView.setAuthenticatedAccount(authenticationRepository.getAuthenticatedAccount());
         viewModelManager.registerListener(getFragmentManagerCompat());
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(BUNDLE_DASHBOARD_INVALIDATED, dashboardInvalidated);
     }
 
     @Override
@@ -123,6 +135,21 @@ public class MainActivity extends BaseActivity
     public void popAllFragments() {
         getFragmentManagerCompat()
                 .popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+    }
+
+    @Override
+    public void invalidateDashboard() {
+        dashboardInvalidated = true;
+    }
+
+    @Override
+    public void validateDashboard() {
+        dashboardInvalidated = false;
+    }
+
+    @Override
+    public boolean isDashboardInvalidated() {
+        return dashboardInvalidated;
     }
 
     @Override

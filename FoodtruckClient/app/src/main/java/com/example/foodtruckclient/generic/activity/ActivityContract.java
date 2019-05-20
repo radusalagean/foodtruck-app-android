@@ -31,4 +31,10 @@ public interface ActivityContract {
     void showSnackBar(String message);
 
     void popAllFragments();
+
+    void invalidateDashboard();
+
+    void validateDashboard();
+
+    boolean isDashboardInvalidated();
 }

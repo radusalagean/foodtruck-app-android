@@ -8,7 +8,7 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/text_view_reviews_label"
+        android:id="@+id/text_view_rating_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/general_layout_margin"
@@ -16,14 +16,14 @@
         android:layout_marginTop="@dimen/general_layout_margin"
         android:layout_marginEnd="@dimen/general_layout_margin"
         android:layout_marginRight="@dimen/general_layout_margin"
-        android:text="@string/foodtruck_reviews_label"
+        android:text="@string/foodtruck_rating_label"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/text_view_rating_count"
+        android:id="@+id/text_view_rating_average"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/general_layout_margin"
@@ -42,26 +42,41 @@
         android:textColor="@color/colorWhite"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_reviews_label"
-        tools:text="10"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_rating_label"
+        tools:text="5.00"
         android:includeFontPadding="false"/>
 
     <RatingBar
-        android:id="@+id/average_rating_bar"
+        android:id="@+id/rating_bar_average"
         style="@style/Widget.AppCompat.RatingBar.Indicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/general_layout_margin"
         android:layout_marginLeft="@dimen/general_layout_margin"
-        android:layout_marginTop="@dimen/general_layout_margin"
         android:layout_marginEnd="@dimen/general_layout_margin"
         android:layout_marginRight="@dimen/general_layout_margin"
         android:layout_marginBottom="@dimen/general_layout_margin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_rating_count"
+        app:layout_constraintTop_toBottomOf="@id/text_view_rating_average"
         android:isIndicator="true"
         android:numStars="5"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_view_rating_count"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        tools:text="(0 ratings)"
+        android:layout_marginStart="@dimen/general_layout_margin"
+        android:layout_marginLeft="@dimen/general_layout_margin"
+        android:layout_marginTop="@dimen/general_layout_margin"
+        android:layout_marginEnd="@dimen/general_layout_margin"
+        android:layout_marginRight="@dimen/general_layout_margin"
+        android:layout_marginBottom="@dimen/general_layout_margin"
+        app:layout_constraintTop_toBottomOf="@id/rating_bar_average"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
