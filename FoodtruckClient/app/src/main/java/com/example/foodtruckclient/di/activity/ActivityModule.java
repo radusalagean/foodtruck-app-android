@@ -21,6 +21,10 @@ import com.example.foodtruckclient.screens.foodtruckviewer.FoodtruckViewerViewMo
 import com.example.foodtruckclient.screens.login.LoginMVP;
 import com.example.foodtruckclient.screens.login.LoginModel;
 import com.example.foodtruckclient.screens.login.LoginPresenter;
+import com.example.foodtruckclient.screens.profile.ProfileMVP;
+import com.example.foodtruckclient.screens.profile.ProfileModel;
+import com.example.foodtruckclient.screens.profile.ProfilePresenter;
+import com.example.foodtruckclient.screens.profile.ProfileViewModelRepository;
 import com.example.foodtruckclient.screens.register.RegisterMVP;
 import com.example.foodtruckclient.screens.register.RegisterModel;
 import com.example.foodtruckclient.screens.register.RegisterPresenter;
@@ -75,10 +79,9 @@ public class ActivityModule {
     DashboardMVP.Presenter provideDashboardPresenter(DashboardMVP.Model model,
                                                      LocationManager locationManager,
                                                      PermissionManager permissionManager,
-                                                     DialogManager dialogManager,
-                                                     ActivityContract activityContract) {
+                                                     DialogManager dialogManager) {
         return new DashboardPresenter(
-                model, locationManager, permissionManager, dialogManager, activityContract
+                model, locationManager, permissionManager, dialogManager
         );
     }
 
@@ -122,5 +125,21 @@ public class ActivityModule {
     @Provides
     RegisterMVP.Presenter provideRegisterPresenter(RegisterMVP.Model model) {
         return new RegisterPresenter(model);
+    }
+
+    // Profile
+
+    @Provides
+    ProfileMVP.Model provideProfileModel(NetworkRepository networkRepository,
+                                         ProfileViewModelRepository viewModelRepository) {
+        return new ProfileModel(networkRepository, viewModelRepository);
+    }
+
+    @Provides
+    ProfileMVP.Presenter provideProfilePresenter(ProfileMVP.Model model,
+                                                 PermissionManager permissionManager,
+                                                 DialogManager dialogManager,
+                                                 Context context) {
+        return new ProfilePresenter(model, permissionManager, dialogManager, context);
     }
 }

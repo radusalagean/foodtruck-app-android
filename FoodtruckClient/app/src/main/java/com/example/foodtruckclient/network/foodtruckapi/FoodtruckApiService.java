@@ -13,6 +13,7 @@ import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -48,7 +49,7 @@ public interface FoodtruckApiService {
 
     @Multipart
     @POST("account/image")
-    Observable<Message> uploadAccountImage(@Part("image") RequestBody image);
+    Observable<Message> uploadAccountImage(@Part MultipartBody.Part image);
 
     @DELETE("account/image")
     Observable<Message> deleteAccountImage();
@@ -60,6 +61,9 @@ public interface FoodtruckApiService {
 
     @GET("foodtrucks/get")
     Observable<List<Foodtruck>> getAllFoodtrucks();
+
+    @GET("foodtrucks/get/owned_by/{owner_id}")
+    Observable<List<Foodtruck>> getFoodtrucks(@Path("owner_id") String ownerId);
 
     @GET("foodtrucks/get/{id}")
     Observable<Foodtruck> getFoodtruck(@Path("id") String id);

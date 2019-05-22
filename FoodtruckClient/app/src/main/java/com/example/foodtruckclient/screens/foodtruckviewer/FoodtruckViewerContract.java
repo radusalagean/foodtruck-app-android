@@ -1,8 +1,9 @@
 package com.example.foodtruckclient.screens.foodtruckviewer;
 
-import com.google.android.gms.maps.MapView;
+import androidx.annotation.Nullable;
 
-import javax.annotation.Nullable;
+import com.example.foodtruckclient.network.foodtruckapi.model.Account;
+import com.google.android.gms.maps.MapView;
 
 public interface FoodtruckViewerContract {
 
@@ -12,4 +13,5 @@ public interface FoodtruckViewerContract {
     void submitReview(String title, String content, float rating);
     void updateReview(String reviewId, String title, String content, float rating);
     void removeReview(String reviewId);
+    void onAccountSelected(Account account);
 }

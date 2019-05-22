@@ -46,7 +46,8 @@
             android:textColor="@color/colorBlack"
             app:layout_constraintStart_toEndOf="@id/review_image_view_profile_picture"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Username" />
+            tools:text="Username"
+            android:background="?selectableItemBackgroundBorderless"/>
 
         <TextView
             android:id="@+id/review_text_view_last_update"

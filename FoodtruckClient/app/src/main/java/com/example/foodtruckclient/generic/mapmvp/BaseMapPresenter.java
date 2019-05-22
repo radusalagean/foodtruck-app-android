@@ -15,8 +15,6 @@ public abstract class BaseMapPresenter<T extends BaseMapMVP.View, S extends Base
         extends BasePresenter<T, S> implements BaseMapMVP.Presenter<T> {
 
     protected LocationManager locationManager;
-    protected PermissionManager permissionManager;
-    protected DialogManager dialogManager;
 
     public BaseMapPresenter(S model,
                             LocationManager locationManager,
@@ -40,37 +38,11 @@ public abstract class BaseMapPresenter<T extends BaseMapMVP.View, S extends Base
 
     @Override
     public void zoomOnCurrentDeviceLocation() {
-        if (permissionManager.isPermissionGranted(PermissionConstants.PERMISSION_ACCESS_FINE_LOCATION)) {
-            locationManager.zoomOnCurrentDeviceLocation();
-        } else {
-            permissionManager.requestPermission(PermissionConstants.PERMISSION_ACCESS_FINE_LOCATION,
-                    view.getPermissionRequestDelegate(),
-                    new PermissionRequestListener() {
-                        @Override
-                        public void onPermissionRequestGranted() {
-                            Timber.d("zoomOnCurrentDeviceLocation() permission request granted");
-                            zoomOnCurrentDeviceLocation();
-                        }
-
-                        @Override
-                        public void onPermissionRequestDenied() {
-                            Timber.d("zoomOnCurrentDeviceLocation() permission request denied");
-                            dialogManager.showBasicAlertDialog(
-                                    R.string.alert_dialog_location_permission_denied_title,
-                                    R.string.alert_dialog_location_no_permission_message
-                            );
-                        }
-
-                        @Override
-                        public void onPermissionRequestCanceled() {
-                            Timber.d("zoomOnCurrentDeviceLocation() permission request canceled");
-                            dialogManager.showBasicAlertDialog(
-                                    R.string.alert_dialog_location_permission_canceled_title,
-                                    R.string.alert_dialog_location_no_permission_message
-                            );
-                        }
-                    });
-        }
+        doOnPermissionGranted(
+                PermissionConstants.PERMISSION_ACCESS_FINE_LOCATION,
+                R.string.alert_dialog_location_no_permission_message,
+                view.getPermissionRequestDelegate(), locationManager::zoomOnCurrentDeviceLocation
+        );
     }
 
     @Override

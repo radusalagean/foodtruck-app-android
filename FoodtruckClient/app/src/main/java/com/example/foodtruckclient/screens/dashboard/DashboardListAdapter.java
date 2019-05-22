@@ -8,17 +8,19 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.foodtruckclient.R;
+import com.example.foodtruckclient.generic.list.foodtruck.FoodtruckViewHolder;
+import com.example.foodtruckclient.generic.list.foodtruck.FoodtruckContract;
 import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DashboardListAdapter extends RecyclerView.Adapter<DashboardListViewHolder> {
+public class DashboardListAdapter extends RecyclerView.Adapter<FoodtruckViewHolder> {
 
     private List<Foodtruck> foodtrucks;
-    private DashboardListListener listener;
+    private FoodtruckContract listener;
 
-    public DashboardListAdapter(DashboardListListener listener) {
+    public DashboardListAdapter(FoodtruckContract listener) {
         this.listener = listener;
         foodtrucks = new ArrayList<>();
         setHasStableIds(true);
@@ -26,19 +28,19 @@ public class DashboardListAdapter extends RecyclerView.Adapter<DashboardListView
 
     @NonNull
     @Override
-    public DashboardListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public FoodtruckViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_dashboard_list, parent, false);
-        return new DashboardListViewHolder(view);
+                .inflate(R.layout.item_foodtruck, parent, false);
+        return new FoodtruckViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull DashboardListViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull FoodtruckViewHolder holder, int position) {
         holder.bind(foodtrucks.get(position), listener);
     }
 
     @Override
-    public void onViewRecycled(@NonNull DashboardListViewHolder holder) {
+    public void onViewRecycled(@NonNull FoodtruckViewHolder holder) {
         holder.recycle();
     }
     @Override

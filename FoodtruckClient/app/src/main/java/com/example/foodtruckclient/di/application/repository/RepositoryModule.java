@@ -10,6 +10,7 @@ import com.example.foodtruckclient.di.application.ApplicationScope;
 import com.example.foodtruckclient.screens.foodtruckviewer.FoodtruckViewerViewModelRepository;
 import com.example.foodtruckclient.network.foodtruckapi.FoodtruckApiService;
 import com.example.foodtruckclient.network.NetworkRepository;
+import com.example.foodtruckclient.screens.profile.ProfileViewModelRepository;
 
 import dagger.Module;
 import dagger.Provides;
@@ -48,7 +49,7 @@ public class RepositoryModule {
 
     @Provides
     @ApplicationScope
-    DashboardViewModelRepository provideViewModelRepository() {
+    DashboardViewModelRepository provideDashboardViewModelRepository() {
         return new DashboardViewModelRepository();
     }
 
@@ -56,5 +57,11 @@ public class RepositoryModule {
     @ApplicationScope
     FoodtruckViewerViewModelRepository provideFoodtruckViewerViewModelRepository() {
         return new FoodtruckViewerViewModelRepository();
+    }
+
+    @Provides
+    @ApplicationScope
+    ProfileViewModelRepository provideProfileViewModelRepository() {
+        return new ProfileViewModelRepository();
     }
 }

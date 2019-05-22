@@ -43,7 +43,8 @@
         android:textSize="20sp"
         app:layout_constraintStart_toEndOf="@+id/text_view_owner_username_label"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Username" />
+        tools:text="Username"
+        android:background="?selectableItemBackgroundBorderless"/>
 
     <TextView
         android:id="@+id/text_view_created_date_label"

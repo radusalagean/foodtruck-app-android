@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import com.example.foodtruckclient.R;
 import com.example.foodtruckclient.generic.decoration.ListItemDecoration;
 import com.example.foodtruckclient.generic.activity.ActivityContract;
+import com.example.foodtruckclient.generic.list.foodtruck.FoodtruckContract;
 import com.example.foodtruckclient.generic.mapmvp.BaseMapFragment;
 import com.example.foodtruckclient.generic.mvp.BaseMVP;
 import com.example.foodtruckclient.generic.view.OnViewInflatedListener;
@@ -35,7 +36,7 @@ import butterknife.ButterKnife;
 import timber.log.Timber;
 
 public class DashboardFragment extends BaseMapFragment
-        implements DashboardMVP.View, DashboardListListener {
+        implements DashboardMVP.View, FoodtruckContract {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -197,12 +198,6 @@ public class DashboardFragment extends BaseMapFragment
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        Timber.d("onRequestPermissionsResult(%d, %s, %s)", requestCode, permissions, grantResults);
-        presenter.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
-    @Override
     public void updateFoodtrucks(List<Foodtruck> foodtrucks) {
         listAdapter.setFoodtrucks(foodtrucks);
     }
@@ -240,7 +235,7 @@ public class DashboardFragment extends BaseMapFragment
 
     @Override
     public void onFoodtruckSelected(Foodtruck foodtruck) {
-        presenter.viewFoodtruck(foodtruck.getId(), foodtruck.getName());
+        activityContract.showFoodtruckViewerScreen(foodtruck.getId(), foodtruck.getName());
     }
 
     @Override

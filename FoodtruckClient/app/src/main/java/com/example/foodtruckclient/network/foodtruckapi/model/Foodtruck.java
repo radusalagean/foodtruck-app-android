@@ -120,7 +120,7 @@ public class Foodtruck {
     }
 
     public String getImageUrl() {
-        return image != null ? NetworkConstants.FOODTRUCK_API_FOODTRUCK_IMAGES_BASE_URL + image : null;
+        return image != null ? NetworkConstants.FOODTRUCK_API_FOODTRUCK_500_BASE_URL + image : null;
     }
 
     public String getThumbnailUrl() {

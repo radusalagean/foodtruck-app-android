@@ -23,6 +23,7 @@ public class AuthenticationRepository {
     }
 
     public void setAuthenticatedAccount(Account authenticatedAccount) {
+        clearAuthenticatedAccount();
         this.authenticatedAccount = authenticatedAccount;
         sharedPreferencesRepository.updateAuthenticatedAccount(authenticatedAccount);
     }

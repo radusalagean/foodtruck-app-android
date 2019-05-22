@@ -2,12 +2,13 @@ package com.example.foodtruckclient.generic.activity;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.foodtruckclient.network.foodtruckapi.model.Account;
 
-import javax.annotation.Nullable;
+import java.util.Date;
 
 public interface ActivityContract {
 
@@ -24,6 +25,8 @@ public interface ActivityContract {
 
     void clearAuthenticatedAccount();
 
+    void setAuthenticatedAccountImage(@Nullable String imageUrl, Date lastUpdate);
+
     boolean isUserAuthenticated();
 
     @Nullable String getAuthenticatedUserId();
@@ -38,5 +41,11 @@ public interface ActivityContract {
 
     boolean isDashboardInvalidated();
 
+    void showFoodtruckViewerScreen(String foodtruckId, String foodtruckName);
+
+    void showLoginScreen();
+
     void showRegisterScreen();
+
+    void showProfileScreen(String profileId, String profileName);
 }

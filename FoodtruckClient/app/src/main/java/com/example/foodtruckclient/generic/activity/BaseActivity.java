@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.foodtruckclient.application.FoodtruckApplication;
 import com.example.foodtruckclient.di.activity.ActivityComponent;
@@ -89,9 +90,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
         if (currentFragment == null) {
             BaseFragment defaultFragment = getDefaultFragment();
             Timber.d("No fragment was previously attached, attaching %s as starting point", defaultFragment);
-            getSupportFragmentManager().beginTransaction()
-                    .add(getFragmentContainerId(), defaultFragment, defaultFragment.getUuid().toString())
-                    .commit();
+            showFragment(defaultFragment, false, null);
         }
     }
 
@@ -109,5 +108,21 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
         return ((FoodtruckApplication) getApplication())
                 .getApplicationComponent()
                 .newActivityComponent(new ActivityModule(this));
+    }
+
+    protected <T extends BaseFragment> void showFragment(T fragment) {
+        showFragment(fragment, true, null);
+    }
+
+    protected <T extends BaseFragment> void showFragment(T fragment,
+                                                         boolean addToBackStack,
+                                                         @Nullable String backStackStateName) {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction()
+                .replace(getFragmentContainerId(), fragment, fragment.getUuid().toString())
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        if (addToBackStack) {
+            ft.addToBackStack(backStackStateName);
+        }
+        ft.commit();
     }
 }

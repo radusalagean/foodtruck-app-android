@@ -20,6 +20,9 @@ public class Account {
     @SerializedName("joined")
     private Date joined;
 
+    @SerializedName("lastUpdate")
+    private Date lastUpdate;
+
     @SerializedName("image")
     private String image;
 
@@ -58,6 +61,14 @@ public class Account {
         this.joined = joined;
     }
 
+    public Date getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
     public String getImage() {
         return image;
     }
@@ -75,7 +86,7 @@ public class Account {
     }
 
     public String getImageUrl() {
-        return image != null ? NetworkConstants.FOODTRUCK_API_PROFILE_IMAGES_BASE_URL + image : null;
+        return image != null ? NetworkConstants.FOODTRUCK_API_PROFILE_500_BASE_URL + image : null;
     }
 
     public String getThumbnailUrl() {

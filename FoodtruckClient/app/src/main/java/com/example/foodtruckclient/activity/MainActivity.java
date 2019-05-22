@@ -21,11 +21,15 @@ import com.example.foodtruckclient.network.foodtruckapi.model.Account;
 import com.example.foodtruckclient.screens.dashboard.DashboardFragment;
 import com.example.foodtruckclient.generic.fragment.BaseFragment;
 import com.example.foodtruckclient.generic.activity.BaseActivity;
+import com.example.foodtruckclient.screens.foodtruckviewer.FoodtruckViewerFragment;
 import com.example.foodtruckclient.screens.login.LoginFragment;
+import com.example.foodtruckclient.screens.profile.ProfileFragment;
 import com.example.foodtruckclient.screens.register.RegisterFragment;
 import com.example.foodtruckclient.view.AuthenticationNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.util.Date;
 
 import javax.inject.Inject;
 
@@ -114,6 +118,11 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
+    public void setAuthenticatedAccountImage(@Nullable String imageUrl, Date lastUpdate) {
+        authenticationNavigationView.setAuthenticatedAccountImage(imageUrl, lastUpdate);
+    }
+
+    @Override
     public boolean isUserAuthenticated() {
         return authenticationRepository.getAuthenticatedAccount() != null;
     }
@@ -154,13 +163,23 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
+    public void showFoodtruckViewerScreen(String foodtruckId, String foodtruckName) {
+        showFragment(FoodtruckViewerFragment.newInstance(foodtruckId, foodtruckName));
+    }
+
+    @Override
+    public void showLoginScreen() {
+        showFragment(LoginFragment.newInstance());
+    }
+
+    @Override
     public void showRegisterScreen() {
-        RegisterFragment fragment = RegisterFragment.newInstance();
-        getFragmentManagerCompat().beginTransaction()
-                .replace(getFragmentContainerId(), fragment, fragment.getUuid().toString())
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .addToBackStack(null)
-                .commit();
+        showFragment(RegisterFragment.newInstance());
+    }
+
+    @Override
+    public void showProfileScreen(String profileId, String profileName) {
+        showFragment(ProfileFragment.newInstance(profileId, profileName));
     }
 
     @Override
@@ -194,15 +213,12 @@ public class MainActivity extends BaseActivity
 
                 break;
             case R.id.nav_my_profile:
-
+                String profileId = authenticationRepository.getAuthenticatedAccount().getId();
+                String profileName = authenticationRepository.getAuthenticatedAccount().getUsername();
+                showProfileScreen(profileId, profileName);
                 break;
             case R.id.nav_login:
-                LoginFragment loginFragment = LoginFragment.newInstance();
-                getFragmentManagerCompat().beginTransaction()
-                        .replace(getFragmentContainerId(), loginFragment, loginFragment.getUuid().toString())
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                        .addToBackStack(null)
-                        .commit();
+                showLoginScreen();
                 break;
             case R.id.nav_register:
                 showRegisterScreen();

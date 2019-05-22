@@ -15,11 +15,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.signature.ObjectKey;
 import com.example.foodtruckclient.R;
 import com.example.foodtruckclient.generic.activity.ActivityContract;
 import com.example.foodtruckclient.generic.decoration.ListItemDecoration;
 import com.example.foodtruckclient.generic.mapmvp.BaseMapFragment;
 import com.example.foodtruckclient.generic.mvp.BaseMVP;
+import com.example.foodtruckclient.network.foodtruckapi.model.Account;
 import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
 import com.example.foodtruckclient.network.foodtruckapi.model.Review;
 import com.example.foodtruckclient.view.StateAwareAppBarLayout;
@@ -181,6 +183,7 @@ public class FoodtruckViewerFragment extends BaseMapFragment
             Glide.with(topImageView)
                     .load(foodtruck.getImageUrl())
                     .centerCrop()
+                    .signature(new ObjectKey(foodtruck.getImageUrl() + "@" + foodtruck.getLastUpdate()))
                     .into(topImageView);
         }
         if (foodtruck.getOwner().getId().equals(activityContract.getAuthenticatedUserId())) {
@@ -238,5 +241,10 @@ public class FoodtruckViewerFragment extends BaseMapFragment
     public void removeReview(String reviewId) {
         presenter.removeReview(reviewId);
         activityContract.invalidateDashboard();
+    }
+
+    @Override
+    public void onAccountSelected(Account account) {
+        activityContract.showProfileScreen(account.getId(), account.getUsername());
     }
 }

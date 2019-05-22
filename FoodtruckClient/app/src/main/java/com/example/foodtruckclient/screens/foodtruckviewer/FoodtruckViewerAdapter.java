@@ -16,6 +16,8 @@ import java.util.List;
 
 public class FoodtruckViewerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private static final int REVIEW_POSITION_OFFSET = 2;
+
     private Foodtruck foodtruck;
     private Review myReview;
     private List<Review> reviews;
@@ -25,6 +27,10 @@ public class FoodtruckViewerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         this.contract = contract;
         reviews = new ArrayList<>();
         setHasStableIds(true);
+    }
+
+    private Review getReview(int adapterPosition) {
+        return reviews.get(adapterPosition - REVIEW_POSITION_OFFSET);
     }
 
     @NonNull
@@ -53,8 +59,8 @@ public class FoodtruckViewerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         } else if (holder instanceof FoodtruckViewerMyReviewViewHolder) {
             ((FoodtruckViewerMyReviewViewHolder) holder)
                     .bind(myReview, foodtruck, contract);
-        } else {
-            ((FoodtruckViewerReviewViewHolder) holder).bind(getReviewByAdapterPosition(position));
+        } else if (holder instanceof FoodtruckViewerReviewViewHolder) {
+            ((FoodtruckViewerReviewViewHolder) holder).bind(getReview(position), contract);
         }
     }
 
@@ -64,14 +70,14 @@ public class FoodtruckViewerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             ((FoodtruckViewerHeaderViewHolder) holder).recycle();
         } else if (holder instanceof FoodtruckViewerMyReviewViewHolder) {
             ((FoodtruckViewerMyReviewViewHolder) holder).recycle();
-        } else {
+        } else if (holder instanceof FoodtruckViewerReviewViewHolder){
             ((FoodtruckViewerReviewViewHolder) holder).recycle();
         }
     }
 
     @Override
     public int getItemCount() {
-        return reviews.size() + 2;
+        return reviews.size() + REVIEW_POSITION_OFFSET;
     }
 
     @Override
@@ -92,13 +98,9 @@ public class FoodtruckViewerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             return myReview != null && myReview.getId() != null ?
                     foodtruck.getId().hashCode() >> 1 : View.NO_ID;
         } else {
-            Review review = getReviewByAdapterPosition(position);
+            Review review = getReview(position);
             return review != null ? review.getId().hashCode() : View.NO_ID;
         }
-    }
-
-    private Review getReviewByAdapterPosition(int position) {
-        return reviews.get(position - 2);
     }
 
     public void setFoodtruck(Foodtruck foodtruck) {

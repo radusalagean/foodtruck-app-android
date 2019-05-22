@@ -1,9 +1,9 @@
 package com.example.foodtruckclient.generic.mvp;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 
 import com.example.foodtruckclient.generic.viewmodel.BaseViewModel;
-import com.example.foodtruckclient.permission.PermissionManager;
 import com.example.foodtruckclient.permission.PermissionRequestDelegate;
 
 import java.util.UUID;
@@ -49,14 +49,6 @@ public interface BaseMVP {
                                         @NonNull int[] grantResults);
 
         /**
-         * Override this method in the screen-specific presenter implementation to provide an
-         * instance of {@link PermissionManager}, if available
-         */
-        default PermissionManager getPermissionManager() {
-            return null;
-        }
-
-        /**
          * Set the refreshing flag and indicator
          */
         void setRefreshing(boolean refreshing);
@@ -71,5 +63,13 @@ public interface BaseMVP {
          * in the view model repository)
          */
         void setUuid(UUID uuid);
+
+        /**
+         * Execute a payload upon granting the required permission
+         */
+        void doOnPermissionGranted(String permission,
+                                   @StringRes int permissionDeniedMessage,
+                                   PermissionRequestDelegate delegate,
+                                   Runnable payload);
     }
 }

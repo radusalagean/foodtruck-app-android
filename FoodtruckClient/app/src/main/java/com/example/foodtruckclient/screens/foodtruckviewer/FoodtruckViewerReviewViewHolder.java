@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.signature.ObjectKey;
 import com.example.foodtruckclient.R;
 import com.example.foodtruckclient.generic.date.DateConstants;
 import com.example.foodtruckclient.network.foodtruckapi.model.Review;
@@ -45,15 +46,18 @@ public class FoodtruckViewerReviewViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, itemView);
     }
 
-    public void bind(Review review) {
+    public void bind(Review review, FoodtruckViewerContract contract) {
         Timber.d("bind(%s)", review);
         Glide.with(profilePictureImageView)
                 .load(review.getAuthor().getThumbnailUrl())
                 .circleCrop()
                 .apply(RequestOptions.circleCropTransform())
                 .placeholder(R.drawable.ic_account_circle_black_24dp)
+                .signature(new ObjectKey(review.getAuthor().getImageUrl() + "@" + review.getAuthor().getLastUpdate()))
                 .into(profilePictureImageView);
+        profilePictureImageView.setOnClickListener(v -> contract.onAccountSelected(review.getAuthor()));
         authorUsernameTextView.setText(review.getAuthor().getUsername());
+        authorUsernameTextView.setOnClickListener(v -> contract.onAccountSelected(review.getAuthor()));
         boolean edited = !review.getCreated().equals(review.getLastUpdate());
         String lastUpdateString = (String) DateFormat.format(DateConstants.DATE_FORMAT, review.getLastUpdate());
         String editedString = lastUpdateTextView.getResources().getString(R.string.foodtruck_review_edited);
@@ -77,7 +81,10 @@ public class FoodtruckViewerReviewViewHolder extends RecyclerView.ViewHolder {
     public void recycle() {
         Timber.d("recycle()");
         Glide.with(profilePictureImageView).clear(profilePictureImageView);
+        profilePictureImageView.setImageDrawable(null);
+        profilePictureImageView.setOnClickListener(null);
         authorUsernameTextView.setText(null);
+        authorUsernameTextView.setOnClickListener(null);
         lastUpdateTextView.setText(null);
         ratingBar.setRating(0.0f);
         titleTextView.setText(null);

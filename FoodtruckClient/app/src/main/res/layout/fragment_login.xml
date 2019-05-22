@@ -13,7 +13,7 @@
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/login_swipe_refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:enabled="false">
 
         <androidx.constraintlayout.widget.ConstraintLayout

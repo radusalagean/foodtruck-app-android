@@ -14,8 +14,6 @@ import timber.log.Timber;
 public class LoginPresenter extends BasePresenter<LoginMVP.View, LoginMVP.Model>
         implements LoginMVP.Presenter {
 
-    private DialogManager dialogManager;
-
     public LoginPresenter(LoginMVP.Model model,
                           DialogManager dialogManager) {
         super(model);

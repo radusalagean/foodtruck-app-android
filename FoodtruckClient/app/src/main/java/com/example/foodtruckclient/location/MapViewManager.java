@@ -3,12 +3,11 @@ package com.example.foodtruckclient.location;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.example.foodtruckclient.util.NumberUtils;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-
-import javax.annotation.Nullable;
 
 import timber.log.Timber;
 

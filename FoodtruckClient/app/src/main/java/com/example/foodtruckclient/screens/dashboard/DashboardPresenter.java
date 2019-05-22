@@ -23,15 +23,11 @@ import timber.log.Timber;
 public class DashboardPresenter extends BaseMapPresenter<DashboardMVP.View, DashboardMVP.Model>
         implements DashboardMVP.Presenter {
 
-    private ActivityContract activityContract;
-
     public DashboardPresenter(DashboardMVP.Model model,
                               LocationManager locationManager,
                               PermissionManager permissionManager,
-                              DialogManager dialogManager,
-                              ActivityContract activityContract) {
+                              DialogManager dialogManager) {
         super(model, locationManager, permissionManager, dialogManager);
-        this.activityContract = activityContract;
     }
 
 
@@ -111,20 +107,5 @@ public class DashboardPresenter extends BaseMapPresenter<DashboardMVP.View, Dash
     public void zoomOnLocation(double latitude, double longitude) {
         super.zoomOnLocation(latitude, longitude);
         postOnView(() -> view.switchToMapTab());
-    }
-
-    @Override
-    public void viewFoodtruck(String id, String name) {
-        FoodtruckViewerFragment fragment = FoodtruckViewerFragment.newInstance(id, name);
-        activityContract.getFragmentManagerCompat().beginTransaction()
-                .replace(activityContract.getFragmentContainerId(), fragment, fragment.getUuid().toString())
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .addToBackStack(null)
-                .commit();
-    }
-
-    @Override
-    public PermissionManager getPermissionManager() {
-        return permissionManager;
     }
 }

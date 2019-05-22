@@ -1,7 +1,9 @@
 package com.example.foodtruckclient.generic.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +28,9 @@ import timber.log.Timber;
 
 public abstract class BaseFragment extends Fragment
         implements BaseMVP.View, PermissionRequestDelegate {
+
+    public static final int REQ_CODE_TAKE_PHOTO = 1;
+    public static final int REQ_CODE_PICK_FROM_GALLERY = 2;
 
     protected static final String ARG_UUID = "UUID";
 
@@ -126,6 +131,12 @@ public abstract class BaseFragment extends Fragment
     public void requestPermission(String permission, int requestCode) {
         requestPermissions(new String[] { permission }, requestCode);
     }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        Timber.d("onRequestPermissionsResult(%d, %s, %s)", requestCode, permissions, grantResults);
+        getPresenter().onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
 
     @Override
     public void setRefreshingIndicator(boolean refreshing) {
@@ -199,6 +210,17 @@ public abstract class BaseFragment extends Fragment
         UUID uuid = UUID.randomUUID();
         bundle.putSerializable(ARG_UUID, uuid);
         this.uuid = uuid;
+    }
+
+    protected void openImagePicker() {
+        Intent intent = new Intent(Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, REQ_CODE_PICK_FROM_GALLERY);
+    }
+
+    protected void openCamera() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, REQ_CODE_TAKE_PHOTO);
     }
 
     /**

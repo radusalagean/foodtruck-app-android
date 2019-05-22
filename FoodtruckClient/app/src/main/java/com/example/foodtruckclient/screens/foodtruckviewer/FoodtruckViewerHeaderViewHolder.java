@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.signature.ObjectKey;
 import com.example.foodtruckclient.R;
 import com.example.foodtruckclient.generic.date.DateConstants;
 import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
@@ -76,8 +77,11 @@ public class FoodtruckViewerHeaderViewHolder extends RecyclerView.ViewHolder {
                 .centerCrop()
                 .apply(RequestOptions.circleCropTransform())
                 .placeholder(R.drawable.ic_account_circle_black_24dp)
+                .signature(new ObjectKey(foodtruck.getOwner().getImageUrl() + "@" + foodtruck.getOwner().getLastUpdate()))
                 .into(ownerImageView);
+        ownerImageView.setOnClickListener(v -> contract.onAccountSelected(foodtruck.getOwner()));
         ownerUsernameTextView.setText(foodtruck.getOwner().getUsername());
+        ownerUsernameTextView.setOnClickListener(v -> contract.onAccountSelected(foodtruck.getOwner()));
         createDateTextView.setText(DateFormat.format(DateConstants.DATE_FORMAT, foodtruck.getCreated()));
         lastUpdateDateTextView.setText(DateFormat.format(DateConstants.DATE_FORMAT, foodtruck.getLastUpdate()));
         if (foodtruck.getAverageRating() > 0.0f) {
@@ -100,7 +104,10 @@ public class FoodtruckViewerHeaderViewHolder extends RecyclerView.ViewHolder {
         Timber.d("recycle()");
         tagLayout.clearTags();
         Glide.with(ownerImageView).clear(ownerImageView);
+        ownerImageView.setImageDrawable(null);
+        ownerImageView.setOnClickListener(null);
         ownerUsernameTextView.setText(null);
+        ownerUsernameTextView.setOnClickListener(null);
         createDateTextView.setText(null);
         lastUpdateDateTextView.setText(null);
         ratingAverageTextView.setText(null);

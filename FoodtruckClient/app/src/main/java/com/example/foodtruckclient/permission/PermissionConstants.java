@@ -9,9 +9,15 @@ public class PermissionConstants {
 
     public static final String PERMISSION_ACCESS_FINE_LOCATION =
             android.Manifest.permission.ACCESS_FINE_LOCATION;
+    public static final String PERMISSION_READ_EXTERNAL_STORAGE =
+            android.Manifest.permission.READ_EXTERNAL_STORAGE;
+    public static final String PERMISSION_CAMERA =
+            android.Manifest.permission.CAMERA;
 
     private static final int REQ_CODE_INVALID = -1;
     private static final int REQ_CODE_PERMISSION_ACCESS_FINE_LOCATION = 0;
+    private static final int REQ_CODE_PERMISSION_READ_EXTERNAL_STORAGE = 1;
+    private static final int REQ_CODE_PERMISSION_CAMERA = 2;
 
     /**
      * Key: Permission name
@@ -22,6 +28,8 @@ public class PermissionConstants {
     static {
         ArrayMap<String, Integer> map = new ArrayMap<>();
         map.put(PERMISSION_ACCESS_FINE_LOCATION, REQ_CODE_PERMISSION_ACCESS_FINE_LOCATION);
+        map.put(PERMISSION_READ_EXTERNAL_STORAGE, REQ_CODE_PERMISSION_READ_EXTERNAL_STORAGE);
+        map.put(PERMISSION_CAMERA, REQ_CODE_PERMISSION_CAMERA);
         PERMISSION_CODE_MAP = Collections.unmodifiableMap(map);
     }
     

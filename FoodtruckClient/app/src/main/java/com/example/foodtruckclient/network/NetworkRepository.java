@@ -13,6 +13,7 @@ import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
+import okhttp3.MultipartBody;
 
 public class NetworkRepository {
 
@@ -40,10 +41,26 @@ public class NetworkRepository {
         return foodtruckApiService.me(token);
     }
 
+    public Observable<Account> getAccount(String id) {
+        return foodtruckApiService.getAccount(id);
+    }
+
+    public Observable<Message> deleteAccountImage() {
+        return foodtruckApiService.deleteAccountImage();
+    }
+
+    public Observable<Message> uploadAccountImage(MultipartBody.Part image) {
+        return foodtruckApiService.uploadAccountImage(image);
+    }
+
     // Foodtrucks
 
     public Observable<List<Foodtruck>> getAllFoodtrucks() {
         return foodtruckApiService.getAllFoodtrucks();
+    }
+
+    public Observable<List<Foodtruck>> getFoodtrucks(String ownerId) {
+        return foodtruckApiService.getFoodtrucks(ownerId);
     }
 
     public Observable<Foodtruck> getFoodtruck(String id) {

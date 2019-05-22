@@ -23,6 +23,5 @@ public interface DashboardMVP {
     interface Presenter extends BaseMapMVP.Presenter<View> {
         void loadViewModel();
         void reloadFoodtrucks();
-        void viewFoodtruck(String id, String name);
     }
 }
