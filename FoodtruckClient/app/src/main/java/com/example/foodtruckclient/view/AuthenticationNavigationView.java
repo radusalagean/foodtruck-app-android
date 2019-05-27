@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
@@ -15,8 +16,6 @@ import com.bumptech.glide.signature.ObjectKey;
 import com.example.foodtruckclient.R;
 import com.example.foodtruckclient.network.foodtruckapi.model.Account;
 import com.google.android.material.navigation.NavigationView;
-
-import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -68,7 +67,7 @@ public class AuthenticationNavigationView extends NavigationView {
             clearAuthenticatedAccount();
             return;
         }
-        setAuthenticatedAccountImage(account.getThumbnailUrl(), account.getLastUpdate());
+        setAuthenticatedAccountImage(account.getThumbnailUrl(), account.getThumbnailSignature());
         usernameTextView.setText(account.getUsername());
         toggleUserVisibility(true);
     }
@@ -80,13 +79,13 @@ public class AuthenticationNavigationView extends NavigationView {
         toggleUserVisibility(false);
     }
 
-    public void setAuthenticatedAccountImage(@Nullable String imageUrl, Date lastUpdate) {
+    public void setAuthenticatedAccountImage(@Nullable String imageUrl, @NonNull String signature) {
         Glide.with(imageView)
                 .load(imageUrl)
                 .circleCrop()
                 .apply(RequestOptions.circleCropTransform())
                 .placeholder(R.drawable.ic_account_circle_white_24dp)
-                .signature(new ObjectKey(imageUrl + "@" + lastUpdate))
+                .signature(new ObjectKey(signature))
                 .into(imageView);
     }
 

@@ -5,29 +5,33 @@ import android.content.Context;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.foodtruckclient.authentication.AuthenticationRepository;
-import com.example.foodtruckclient.screens.dashboard.DashboardMVP;
-import com.example.foodtruckclient.screens.dashboard.DashboardModel;
-import com.example.foodtruckclient.screens.dashboard.DashboardPresenter;
-import com.example.foodtruckclient.screens.dashboard.DashboardViewModelRepository;
+import com.example.foodtruckclient.screen.dashboard.DashboardMVP;
+import com.example.foodtruckclient.screen.dashboard.DashboardModel;
+import com.example.foodtruckclient.screen.dashboard.DashboardPresenter;
+import com.example.foodtruckclient.screen.dashboard.DashboardViewModelRepository;
 import com.example.foodtruckclient.dialog.DialogManager;
 import com.example.foodtruckclient.generic.activity.ActivityContract;
 import com.example.foodtruckclient.location.LocationManager;
 import com.example.foodtruckclient.permission.PermissionManager;
 import com.example.foodtruckclient.network.NetworkRepository;
-import com.example.foodtruckclient.screens.foodtruckviewer.FoodtruckViewerMVP;
-import com.example.foodtruckclient.screens.foodtruckviewer.FoodtruckViewerModel;
-import com.example.foodtruckclient.screens.foodtruckviewer.FoodtruckViewerPresenter;
-import com.example.foodtruckclient.screens.foodtruckviewer.FoodtruckViewerViewModelRepository;
-import com.example.foodtruckclient.screens.login.LoginMVP;
-import com.example.foodtruckclient.screens.login.LoginModel;
-import com.example.foodtruckclient.screens.login.LoginPresenter;
-import com.example.foodtruckclient.screens.profile.ProfileMVP;
-import com.example.foodtruckclient.screens.profile.ProfileModel;
-import com.example.foodtruckclient.screens.profile.ProfilePresenter;
-import com.example.foodtruckclient.screens.profile.ProfileViewModelRepository;
-import com.example.foodtruckclient.screens.register.RegisterMVP;
-import com.example.foodtruckclient.screens.register.RegisterModel;
-import com.example.foodtruckclient.screens.register.RegisterPresenter;
+import com.example.foodtruckclient.screen.foodtruckeditor.FoodtruckEditorMVP;
+import com.example.foodtruckclient.screen.foodtruckeditor.FoodtruckEditorModel;
+import com.example.foodtruckclient.screen.foodtruckeditor.FoodtruckEditorPresenter;
+import com.example.foodtruckclient.screen.foodtruckeditor.FoodtruckEditorViewModelRepository;
+import com.example.foodtruckclient.screen.foodtruckviewer.FoodtruckViewerMVP;
+import com.example.foodtruckclient.screen.foodtruckviewer.FoodtruckViewerModel;
+import com.example.foodtruckclient.screen.foodtruckviewer.FoodtruckViewerPresenter;
+import com.example.foodtruckclient.screen.foodtruckviewer.FoodtruckViewerViewModelRepository;
+import com.example.foodtruckclient.screen.login.LoginMVP;
+import com.example.foodtruckclient.screen.login.LoginModel;
+import com.example.foodtruckclient.screen.login.LoginPresenter;
+import com.example.foodtruckclient.screen.profile.ProfileMVP;
+import com.example.foodtruckclient.screen.profile.ProfileModel;
+import com.example.foodtruckclient.screen.profile.ProfilePresenter;
+import com.example.foodtruckclient.screen.profile.ProfileViewModelRepository;
+import com.example.foodtruckclient.screen.register.RegisterMVP;
+import com.example.foodtruckclient.screen.register.RegisterModel;
+import com.example.foodtruckclient.screen.register.RegisterPresenter;
 
 import dagger.Module;
 import dagger.Provides;
@@ -141,5 +145,21 @@ public class ActivityModule {
                                                  DialogManager dialogManager,
                                                  Context context) {
         return new ProfilePresenter(model, permissionManager, dialogManager, context);
+    }
+
+    // Foodtruck Editor
+
+    @Provides
+    FoodtruckEditorMVP.Model provideFoodtruckEditorModel(NetworkRepository networkRepository,
+                                                         FoodtruckEditorViewModelRepository viewModelRepository) {
+        return new FoodtruckEditorModel(networkRepository, viewModelRepository);
+    }
+
+    @Provides
+    FoodtruckEditorMVP.Presenter provideFoodtruckEditorPresenter(FoodtruckEditorMVP.Model model,
+                                                                 LocationManager locationManager,
+                                                                 PermissionManager permissionManager,
+                                                                 DialogManager dialogManager) {
+        return new FoodtruckEditorPresenter(model, locationManager, permissionManager, dialogManager);
     }
 }

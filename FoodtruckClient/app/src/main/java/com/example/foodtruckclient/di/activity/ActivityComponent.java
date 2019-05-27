@@ -1,13 +1,14 @@
 package com.example.foodtruckclient.di.activity;
 
 import com.example.foodtruckclient.activity.MainActivity;
-import com.example.foodtruckclient.screens.dashboard.DashboardFragment;
+import com.example.foodtruckclient.screen.dashboard.DashboardFragment;
 import com.example.foodtruckclient.di.activity.location.LocationModule;
 import com.example.foodtruckclient.di.activity.permission.PermissionModule;
-import com.example.foodtruckclient.screens.foodtruckviewer.FoodtruckViewerFragment;
-import com.example.foodtruckclient.screens.login.LoginFragment;
-import com.example.foodtruckclient.screens.profile.ProfileFragment;
-import com.example.foodtruckclient.screens.register.RegisterFragment;
+import com.example.foodtruckclient.screen.foodtruckeditor.FoodtruckEditorFragment;
+import com.example.foodtruckclient.screen.foodtruckviewer.FoodtruckViewerFragment;
+import com.example.foodtruckclient.screen.login.LoginFragment;
+import com.example.foodtruckclient.screen.profile.ProfileFragment;
+import com.example.foodtruckclient.screen.register.RegisterFragment;
 
 import dagger.Subcomponent;
 
@@ -25,4 +26,5 @@ public interface ActivityComponent {
     void inject(LoginFragment loginFragment);
     void inject(RegisterFragment registerFragment);
     void inject(ProfileFragment profileFragment);
+    void inject(FoodtruckEditorFragment foodtruckEditorFragment);
 }

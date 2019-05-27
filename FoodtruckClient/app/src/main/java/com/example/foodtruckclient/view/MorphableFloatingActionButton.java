@@ -55,7 +55,6 @@ public class MorphableFloatingActionButton extends FloatingActionButton implemen
         AnimatedVectorDrawableCompat.registerAnimationCallback(transitionDrawable, new Animatable2Compat.AnimationCallback() {
             @Override
             public void onAnimationEnd(Drawable drawable) {
-                Timber.w("anim end");
                 setImageResource(targetDrawableResId);
                 AnimatedVectorDrawableCompat.unregisterAnimationCallback(drawable, this);
             }

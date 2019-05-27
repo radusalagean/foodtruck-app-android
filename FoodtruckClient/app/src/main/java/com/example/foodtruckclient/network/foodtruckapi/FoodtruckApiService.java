@@ -57,7 +57,7 @@ public interface FoodtruckApiService {
     // Foodtrucks
 
     @POST("foodtrucks/add")
-    Observable<Message> addFoodtruck(@Body Foodtruck foodtruck);
+    Observable<Foodtruck> addFoodtruck(@Body Foodtruck foodtruck);
 
     @GET("foodtrucks/get")
     Observable<List<Foodtruck>> getAllFoodtrucks();
@@ -75,10 +75,10 @@ public interface FoodtruckApiService {
     Observable<Message> deleteFoodtruck(@Path("id") String id);
 
     @Multipart
-    @POST("foodtruck/image/{id}")
-    Observable<Message> uploadFoodtruckImage(@Path("id") String id, @Part("image") RequestBody image);
+    @POST("foodtrucks/image/{id}")
+    Observable<Message> uploadFoodtruckImage(@Path("id") String id, @Part MultipartBody.Part image);
 
-    @DELETE("foodtruck/image/{id}")
+    @DELETE("foodtrucks/image/{id}")
     Observable<Message> deleteFoodtruckImage(@Path("id") String id);
 
     // Reviews
@@ -87,14 +87,14 @@ public interface FoodtruckApiService {
     Observable<Message> addFoodtruckReview(@Path("foodtruck_id") String foodtruckId, @Body Review review);
 
     @GET("foodtrucks/reviews/get/{foodtruck_id}")
-    Observable<List<Review>> getAllReviews(@Path("foodtruck_id") String foodtruckId);
+    Observable<List<Review>> getAllFoodtruckReviews(@Path("foodtruck_id") String foodtruckId);
 
     @GET("foodtrucks/reviews/get/my/{foodtruck_id}")
-    Observable<Review> getMyReview(@Path("foodtruck_id") String foodtruckId);
+    Observable<Review> getMyFoodtruckReview(@Path("foodtruck_id") String foodtruckId);
 
     @PUT("foodtrucks/reviews/update/{id}")
-    Observable<Message> updateReview(@Path("id") String id, @Body Review review);
+    Observable<Message> updateFoodtruckReview(@Path("id") String id, @Body Review review);
 
     @DELETE("foodtrucks/reviews/delete/{id}")
-    Observable<Message> deleteReview(@Path("id") String id);
+    Observable<Message> deleteFoodtruckReview(@Path("id") String id);
 }

@@ -5,6 +5,8 @@
     <string name="alert_dialog_action_ok">OK</string>
     <string name="alert_dialog_action_cancel">Cancel</string>
     <string name="alert_dialog_action_dismiss">Dismiss</string>
+    <string name="alert_dialog_action_remove">Remove</string>
+    <string name="alert_dialog_upload_picture_title">Upload picture</string>
 
     <!--Permission-->
     <string name="alert_dialog_permission_denied_title">Permission request denied</string>
@@ -43,6 +45,24 @@
     <string name="foodtruck_review_edited">edited</string>
     <string name="foodtruck_review_date_created_edited_pattern" translatable="false">%s (%s)</string>
     <string name="foodtruck_review_date_created_pattern" translatable="false">%s</string>
+    <string name="foodtruck_removed_message">Food truck successfully removed</string>
+    <string name="foodtruck_remove_dialog_title">Remove food truck</string>
+    <string name="foodtruck_remove_dialog_message">Are you sure that you want to remove this food truck?</string>
+
+    <!--Foodtruck editor-->
+    <string name="foodtruck_editor_toolbar_title_add_foodtruck">Add food truck</string>
+    <string name="foodtruck_editor_toolbar_title_edit_foodtruck">Edit food truck</string>
+    <string name="foodtruck_editor_name_hint">What is the food truck called?</string>
+    <string name="foodtruck_editor_name_hint_edit_text">Name</string>
+    <string name="foodtruck_editor_foodtypes_hint">What types of food are you selling?</string>
+    <string name="foodtruck_editor_foodtypes_hint_edit_text">Food type</string>
+    <string name="foodtruck_editor_location_hint">Where is the food truck currently located?</string>
+    <string name="foodtruck_editor_image_hint">Let people easily recognize your food truck by uploading a photo of it.\n(optional step)</string>
+    <string name="foodtruck_editor_select_image">Select image</string>
+    <string name="foodtruck_editor_remove_image">Remove image</string>
+    <string name="foodtruck_editor_foodtruck_added_message">Food truck successfully added</string>
+    <string name="foodtruck_editor_foodtruck_edited_message">Food truck successfully edited</string>
+    <string name="foodtruck_editor_menu_remove_foodtruck">Remove food truck</string>
 
     <!--Authentication-->
     <string name="username_hint">Username</string>
@@ -61,16 +81,13 @@
     <string name="profile_joined_date">Joined: %s</string>
     <string name="profile_upload_profile_picture">Upload profile picture</string>
     <string name="profile_remove_profile_picture">Remove profile picture</string>
-    <string name="profile_dialog_upload_profile_picture_title">Upload profile picture</string>
     <string name="profile_dialog_item_take_photo">Take Photo</string>
     <string name="profile_dialog_item_pick_from_gallery">Pick from Gallery</string>
     <string name="profile_dialog_remove_profile_picture_title">Remove profile picture</string>
     <string name="profile_dialog_remove_profile_picture_message">Are you sure that you want to remove your profile picture?</string>
-    <string name="profile_dialog_remove_profile_picture_positive_button">Remove</string>
-    <string name="profile_dialog_remove_profile_picture_negative_button">Cancel</string>
 
     <!--Messages-->
-    <string name="message_file_size_exceeded">The selected file exceeds the size limit of 10MB</string>
+    <string name="message_file_size_exceeded">The selected file exceeds the size limit</string>
     <string name="message_profile_image_uploaded">Profile image uploaded</string>
     <string name="message_profile_image_removed">Profile image removed</string>
 

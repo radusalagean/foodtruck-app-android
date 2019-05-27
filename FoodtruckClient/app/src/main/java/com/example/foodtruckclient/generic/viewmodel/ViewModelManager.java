@@ -4,10 +4,10 @@ import androidx.collection.ArrayMap;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.foodtruckclient.generic.fragment.BaseFragment;
-import com.example.foodtruckclient.screens.dashboard.DashboardFragment;
-import com.example.foodtruckclient.screens.dashboard.DashboardViewModelRepository;
-import com.example.foodtruckclient.screens.foodtruckviewer.FoodtruckViewerFragment;
-import com.example.foodtruckclient.screens.foodtruckviewer.FoodtruckViewerViewModelRepository;
+import com.example.foodtruckclient.screen.dashboard.DashboardFragment;
+import com.example.foodtruckclient.screen.dashboard.DashboardViewModelRepository;
+import com.example.foodtruckclient.screen.foodtruckviewer.FoodtruckViewerFragment;
+import com.example.foodtruckclient.screen.foodtruckviewer.FoodtruckViewerViewModelRepository;
 
 import java.util.Map;
 

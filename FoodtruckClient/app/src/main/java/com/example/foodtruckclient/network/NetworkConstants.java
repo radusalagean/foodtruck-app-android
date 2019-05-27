@@ -35,7 +35,7 @@ public class NetworkConstants {
     public static final String NAMED_BASE_URL = "base-url";
 
     // Limits
-    public static final int MAX_FILE_SIZE = 10 * 1024 * 1024;
+    public static final int MAX_FILE_SIZE = 6 * 1024 * 1024;
 
     // Helper methods
     public static String getAuthorizationHeader(String token) {

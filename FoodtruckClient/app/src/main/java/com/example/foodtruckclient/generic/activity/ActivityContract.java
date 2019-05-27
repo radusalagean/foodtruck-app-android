@@ -7,8 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.foodtruckclient.network.foodtruckapi.model.Account;
-
-import java.util.Date;
+import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
 
 public interface ActivityContract {
 
@@ -25,7 +24,7 @@ public interface ActivityContract {
 
     void clearAuthenticatedAccount();
 
-    void setAuthenticatedAccountImage(@Nullable String imageUrl, Date lastUpdate);
+    void setAuthenticatedAccountImage(@Nullable String imageUrl, @NonNull String signature);
 
     boolean isUserAuthenticated();
 
@@ -48,4 +47,8 @@ public interface ActivityContract {
     void showRegisterScreen();
 
     void showProfileScreen(String profileId, String profileName);
+
+    void showFoodtruckEditorScreen();
+
+    void showFoodtruckEditorScreen(Foodtruck foodtruck);
 }

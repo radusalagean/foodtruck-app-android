@@ -32,7 +32,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/login_text_input_layout_username"
                     android:layout_width="256dp"
-                    android:layout_height="56dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"

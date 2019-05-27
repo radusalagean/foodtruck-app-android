@@ -33,10 +33,6 @@ public class NetworkRepository {
         return foodtruckApiService.login(account);
     }
 
-    public Completable checkUsernameAvailability(String username) {
-        return foodtruckApiService.checkUsernameAvailability(username);
-    }
-
     public Observable<Account> me(@Nullable String token) {
         return foodtruckApiService.me(token);
     }
@@ -45,15 +41,23 @@ public class NetworkRepository {
         return foodtruckApiService.getAccount(id);
     }
 
-    public Observable<Message> deleteAccountImage() {
-        return foodtruckApiService.deleteAccountImage();
+    public Completable checkUsernameAvailability(String username) {
+        return foodtruckApiService.checkUsernameAvailability(username);
     }
 
     public Observable<Message> uploadAccountImage(MultipartBody.Part image) {
         return foodtruckApiService.uploadAccountImage(image);
     }
 
+    public Observable<Message> deleteAccountImage() {
+        return foodtruckApiService.deleteAccountImage();
+    }
+
     // Foodtrucks
+
+    public Observable<Foodtruck> addFoodtruck(Foodtruck foodtruck) {
+        return foodtruckApiService.addFoodtruck(foodtruck);
+    }
 
     public Observable<List<Foodtruck>> getAllFoodtrucks() {
         return foodtruckApiService.getAllFoodtrucks();
@@ -67,25 +71,41 @@ public class NetworkRepository {
         return foodtruckApiService.getFoodtruck(id);
     }
 
+    public Observable<Message> updateFoodtruck(String id, Foodtruck foodtruck) {
+        return foodtruckApiService.updateFoodtruck(id, foodtruck);
+    }
+
+    public Observable<Message> deleteFoodtruck(String id) {
+        return foodtruckApiService.deleteFoodtruck(id);
+    }
+
+    public Observable<Message> uploadFoodtruckImage(String id, MultipartBody.Part image) {
+        return foodtruckApiService.uploadFoodtruckImage(id, image);
+    }
+
+    public Observable<Message> deleteFoodtruckImage(String id) {
+        return foodtruckApiService.deleteFoodtruckImage(id);
+    }
+
     // Reviews
-
-    public Observable<List<Review>> getAllReviews(String foodtruckId) {
-        return foodtruckApiService.getAllReviews(foodtruckId);
-    }
-
-    public Observable<Review> getMyReview(String foodtruckId) {
-        return foodtruckApiService.getMyReview(foodtruckId);
-    }
 
     public Observable<Message> addFoodtruckReview(String foodtruckId, Review review) {
         return foodtruckApiService.addFoodtruckReview(foodtruckId, review);
     }
 
-    public Observable<Message> updateFoodtruckReview(String reviewId, Review review) {
-        return foodtruckApiService.updateReview(reviewId, review);
+    public Observable<List<Review>> getAllFoodtruckReviews(String foodtruckId) {
+        return foodtruckApiService.getAllFoodtruckReviews(foodtruckId);
     }
 
-    public Observable<Message> deleteReview(String id) {
-        return foodtruckApiService.deleteReview(id);
+    public Observable<Review> getMyFoodtruckReview(String foodtruckId) {
+        return foodtruckApiService.getMyFoodtruckReview(foodtruckId);
+    }
+
+    public Observable<Message> updateFoodtruckReview(String reviewId, Review review) {
+        return foodtruckApiService.updateFoodtruckReview(reviewId, review);
+    }
+
+    public Observable<Message> deleteFoodtruckReview(String id) {
+        return foodtruckApiService.deleteFoodtruckReview(id);
     }
 }

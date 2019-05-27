@@ -8,5 +8,6 @@
         app:showAsAction="always"/>
     <item android:id="@+id/menu_remove_profile_picture"
         android:title="@string/profile_remove_profile_picture"
+        android:icon="@drawable/ic_delete_forever_black_24dp"
         android:visible="false" />
 </menu>

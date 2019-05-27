@@ -44,7 +44,7 @@ public class FoodtruckViewHolder extends RecyclerView.ViewHolder {
                 .load(foodtruck.getThumbnailUrl())
                 .centerCrop()
                 .placeholder(R.drawable.ic_fastfood_24dp)
-                .signature(new ObjectKey(foodtruck.getImageUrl() + "@" + foodtruck.getLastUpdate()))
+                .signature(new ObjectKey(foodtruck.getThumbnailSignature()))
                 .into(imageView);
         titleTextView.setText(foodtruck.getName());
         ratingBar.setRating(foodtruck.getAverageRating());

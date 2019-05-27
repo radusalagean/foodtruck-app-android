@@ -12,24 +12,23 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.foodtruckclient.R;
 import com.example.foodtruckclient.authentication.AuthenticationRepository;
 import com.example.foodtruckclient.generic.viewmodel.ViewModelManager;
 import com.example.foodtruckclient.network.foodtruckapi.model.Account;
-import com.example.foodtruckclient.screens.dashboard.DashboardFragment;
+import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
+import com.example.foodtruckclient.screen.dashboard.DashboardFragment;
 import com.example.foodtruckclient.generic.fragment.BaseFragment;
 import com.example.foodtruckclient.generic.activity.BaseActivity;
-import com.example.foodtruckclient.screens.foodtruckviewer.FoodtruckViewerFragment;
-import com.example.foodtruckclient.screens.login.LoginFragment;
-import com.example.foodtruckclient.screens.profile.ProfileFragment;
-import com.example.foodtruckclient.screens.register.RegisterFragment;
+import com.example.foodtruckclient.screen.foodtruckeditor.FoodtruckEditorFragment;
+import com.example.foodtruckclient.screen.foodtruckviewer.FoodtruckViewerFragment;
+import com.example.foodtruckclient.screen.login.LoginFragment;
+import com.example.foodtruckclient.screen.profile.ProfileFragment;
+import com.example.foodtruckclient.screen.register.RegisterFragment;
 import com.example.foodtruckclient.view.AuthenticationNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
-
-import java.util.Date;
 
 import javax.inject.Inject;
 
@@ -118,8 +117,8 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void setAuthenticatedAccountImage(@Nullable String imageUrl, Date lastUpdate) {
-        authenticationNavigationView.setAuthenticatedAccountImage(imageUrl, lastUpdate);
+    public void setAuthenticatedAccountImage(@Nullable String imageUrl, @NonNull String signature) {
+        authenticationNavigationView.setAuthenticatedAccountImage(imageUrl, signature);
     }
 
     @Override
@@ -180,6 +179,16 @@ public class MainActivity extends BaseActivity
     @Override
     public void showProfileScreen(String profileId, String profileName) {
         showFragment(ProfileFragment.newInstance(profileId, profileName));
+    }
+
+    @Override
+    public void showFoodtruckEditorScreen() {
+        showFragment(FoodtruckEditorFragment.newInstance());
+    }
+
+    @Override
+    public void showFoodtruckEditorScreen(Foodtruck foodtruck) {
+        showFragment(FoodtruckEditorFragment.newInstance(foodtruck));
     }
 
     @Override

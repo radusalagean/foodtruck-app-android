@@ -5,12 +5,13 @@ import android.content.SharedPreferences;
 import com.example.foodtruckclient.authentication.AuthenticationRepository;
 import com.example.foodtruckclient.generic.viewmodel.ViewModelManager;
 import com.example.foodtruckclient.persistence.SharedPreferencesRepository;
-import com.example.foodtruckclient.screens.dashboard.DashboardViewModelRepository;
+import com.example.foodtruckclient.screen.dashboard.DashboardViewModelRepository;
 import com.example.foodtruckclient.di.application.ApplicationScope;
-import com.example.foodtruckclient.screens.foodtruckviewer.FoodtruckViewerViewModelRepository;
+import com.example.foodtruckclient.screen.foodtruckeditor.FoodtruckEditorViewModelRepository;
+import com.example.foodtruckclient.screen.foodtruckviewer.FoodtruckViewerViewModelRepository;
 import com.example.foodtruckclient.network.foodtruckapi.FoodtruckApiService;
 import com.example.foodtruckclient.network.NetworkRepository;
-import com.example.foodtruckclient.screens.profile.ProfileViewModelRepository;
+import com.example.foodtruckclient.screen.profile.ProfileViewModelRepository;
 
 import dagger.Module;
 import dagger.Provides;
@@ -63,5 +64,11 @@ public class RepositoryModule {
     @ApplicationScope
     ProfileViewModelRepository provideProfileViewModelRepository() {
         return new ProfileViewModelRepository();
+    }
+
+    @Provides
+    @ApplicationScope
+    FoodtruckEditorViewModelRepository provideFoodtruckEditorViewModelRepository() {
+        return new FoodtruckEditorViewModelRepository();
     }
 }

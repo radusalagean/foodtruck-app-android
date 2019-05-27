@@ -1,13 +1,18 @@
 package com.example.foodtruckclient.generic.mapmvp;
 
+import androidx.annotation.Nullable;
+
 import com.example.foodtruckclient.R;
 import com.example.foodtruckclient.dialog.DialogManager;
 import com.example.foodtruckclient.generic.mvp.BasePresenter;
 import com.example.foodtruckclient.location.LocationManager;
+import com.example.foodtruckclient.network.foodtruckapi.model.Coordinates;
 import com.example.foodtruckclient.permission.PermissionConstants;
 import com.example.foodtruckclient.permission.PermissionManager;
-import com.example.foodtruckclient.permission.PermissionRequestListener;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import timber.log.Timber;
 
@@ -37,6 +42,11 @@ public abstract class BaseMapPresenter<T extends BaseMapMVP.View, S extends Base
     }
 
     @Override
+    public void setOnMapClickListener(GoogleMap.OnMapClickListener onMapClickListener) {
+        locationManager.setOnMapClickListener(onMapClickListener);
+    }
+
+    @Override
     public void zoomOnCurrentDeviceLocation() {
         doOnPermissionGranted(
                 PermissionConstants.PERMISSION_ACCESS_FINE_LOCATION,
@@ -48,6 +58,19 @@ public abstract class BaseMapPresenter<T extends BaseMapMVP.View, S extends Base
     @Override
     public void zoomOnLocation(double latitude, double longitude) {
         locationManager.zoomOnLocation(latitude, longitude);
+    }
+
+    @Override
+    public void addManualMarker(Coordinates coordinates) {
+        MarkerOptions marker = new MarkerOptions()
+                .position(new LatLng(coordinates.getLatitude(), coordinates.getLongitude()));
+        locationManager.takeMarker(LocationManager.MANUAL_MARKER_ID, marker);
+    }
+
+    @Nullable
+    @Override
+    public Coordinates getManualMarkerCoordinates() {
+        return locationManager.getManualMarkerCoordinates();
     }
 
     @Override

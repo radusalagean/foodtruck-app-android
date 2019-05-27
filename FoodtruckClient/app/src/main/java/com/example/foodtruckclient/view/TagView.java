@@ -12,6 +12,8 @@ import com.example.foodtruckclient.R;
 
 public class TagView extends AppCompatTextView {
 
+    private boolean removable;
+
     public TagView(Context context) {
         super(context);
         init();
@@ -27,8 +29,10 @@ public class TagView extends AppCompatTextView {
         init();
     }
 
-    public TagView(Context context, String tag) {
-        this(context);
+    public TagView(Context context, String tag, boolean removable) {
+        super(context);
+        this.removable = removable;
+        init();
         setText(tag);
     }
 
@@ -39,5 +43,13 @@ public class TagView extends AppCompatTextView {
         int padding = getResources().getDimensionPixelSize(R.dimen.tag_view_padding);
         setPadding(padding, padding, padding, padding);
         setGravity(Gravity.CENTER);
+        if (removable) {
+            setCompoundDrawablesWithIntrinsicBounds(
+                    0, 0, R.drawable.ic_close_black_16dp, 0
+            );
+            setCompoundDrawablePadding(
+                    getResources().getDimensionPixelSize(R.dimen.general_layout_margin)
+            );
+        }
     }
 }

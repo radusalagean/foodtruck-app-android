@@ -12,6 +12,10 @@
     <!--Tag View-->
     <dimen name="tag_view_padding">8dp</dimen>
 
+    <!--DotsView-->
+    <dimen name="dots_view_default_dot_radius">4dp</dimen>
+    <dimen name="dots_view_default_dot_separation">4dp</dimen>
+
     <!--Rating Count-->
     <dimen name="rating_count_horizontal_padding">16dp</dimen>
     <dimen name="rating_count_vertical_padding">8dp</dimen>

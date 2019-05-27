@@ -2,8 +2,10 @@ package com.example.foodtruckclient.location;
 
 import android.location.Location;
 
+import androidx.annotation.Nullable;
 import androidx.collection.ArrayMap;
 
+import com.example.foodtruckclient.network.foodtruckapi.model.Coordinates;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -22,6 +24,7 @@ import timber.log.Timber;
 
 public class LocationManager implements OnMapReadyCallback {
 
+    public static final String MANUAL_MARKER_ID = "manual_marker";
     private static final float DEFAULT_ZOOM = 18.0f;
 
     private FusedLocationProviderClient fusedLocationProviderClient;
@@ -122,11 +125,11 @@ public class LocationManager implements OnMapReadyCallback {
         }
     }
 
-    public void takeMarker(String foodtruckId, MarkerOptions marker) {
+    public void takeMarker(String markerId, MarkerOptions marker) {
         if (googleMap == null) {
-            pendingMarkers.put(foodtruckId, marker);
+            pendingMarkers.put(markerId, marker);
         } else {
-            addMarkerToMap(foodtruckId, marker);
+            addMarkerToMap(markerId, marker);
         }
     }
 
@@ -138,18 +141,30 @@ public class LocationManager implements OnMapReadyCallback {
         }
     }
 
-    private void addMarkerToMap(String foodtruckId, MarkerOptions marker) {
+    private void addMarkerToMap(String markerId, MarkerOptions marker) {
         if (googleMap != null) {
+            if (addedMarkers.get(markerId) != null) {
+                clearMarker(markerId);
+            }
             Marker m = googleMap.addMarker(marker);
-            addedMarkers.put(foodtruckId, m);
+            addedMarkers.put(markerId, m);
         }
+    }
+
+    @Nullable
+    public Coordinates getManualMarkerCoordinates() {
+        Marker marker = addedMarkers.get(MANUAL_MARKER_ID);
+        Coordinates coordinates = null;
+        if (marker != null) {
+            coordinates = new Coordinates(marker.getPosition().latitude, marker.getPosition().longitude);
+        }
+        return coordinates;
     }
 
     private void addMarkersToMap(Map<String, MarkerOptions> markers) {
         if (googleMap != null) {
             for (String id : markers.keySet()) {
-                Marker marker = googleMap.addMarker(markers.get(id));
-                addedMarkers.put(id, marker);
+                addMarkerToMap(id, markers.get(id));
             }
         }
     }
@@ -161,6 +176,15 @@ public class LocationManager implements OnMapReadyCallback {
     public void clearAllMarkers() {
         for (Marker marker : addedMarkers.values()) {
             marker.remove();
+        }
+    }
+
+    public void setOnMapClickListener(@Nullable GoogleMap.OnMapClickListener onMapClickListener) {
+        Runnable runnable = () -> googleMap.setOnMapClickListener(onMapClickListener);
+        if (googleMap == null) {
+            pendingRunnables.offer(runnable);
+        } else {
+            runnable.run();
         }
     }
 }

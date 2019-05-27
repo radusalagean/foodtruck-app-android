@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_foodtruck_editor_image"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/foodtruck_editor_image_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/general_layout_margin"
+            android:text="@string/foodtruck_editor_image_hint"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:gravity="center_horizontal"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/foodtruck_editor_button_select_image"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:text="@string/foodtruck_editor_select_image"
+            android:drawableLeft="@drawable/ic_photo_camera_black_24dp"
+            android:drawableStart="@drawable/ic_photo_camera_black_24dp"
+            android:drawablePadding="@dimen/general_layout_margin"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/foodtruck_editor_image_hint"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/foodtruck_editor_button_remove_image"
+            style="@style/Widget.AppCompat.Button.Colored"
+            app:backgroundTint="@drawable/remove_image_button_background_tint"
+            android:text="@string/foodtruck_editor_remove_image"
+            android:drawableLeft="@drawable/ic_delete_forever_black_24dp"
+            android:drawableStart="@drawable/ic_delete_forever_black_24dp"
+            android:drawablePadding="@dimen/general_layout_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/foodtruck_editor_image_hint"
+            android:enabled="false"/>
+
+        <ImageView
+            android:layout_width="240dp"
+            android:layout_height="240dp"
+            android:id="@+id/foodtruck_editor_image_view_preview"
+            android:layout_marginTop="@dimen/general_layout_margin"
+            tools:ignore="ContentDescription"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/foodtruck_editor_button_select_image"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

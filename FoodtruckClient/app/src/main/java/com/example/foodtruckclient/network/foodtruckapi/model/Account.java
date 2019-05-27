@@ -93,6 +93,14 @@ public class Account {
         return image != null ? NetworkConstants.FOODTRUCK_API_PROFILE_THUMBNAILS_BASE_URL + image : null;
     }
 
+    public String getImageSignature() {
+        return getImageUrl() + "@" + lastUpdate;
+    }
+
+    public String getThumbnailSignature() {
+        return getThumbnailUrl() + "@" + lastUpdate;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

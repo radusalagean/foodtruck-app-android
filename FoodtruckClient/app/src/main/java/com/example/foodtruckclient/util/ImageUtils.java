@@ -3,22 +3,36 @@ package com.example.foodtruckclient.util;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 
-import java.io.ByteArrayOutputStream;
+import com.example.foodtruckclient.network.NetworkConstants;
+
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.IOException;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import timber.log.Timber;
 
 public class ImageUtils {
 
-    public static final String KEY_INTENT_EXTRA_CAMERA_PHOTO_DATA = "data";
-    public static final String TEMP_PHOTO_FILE_NAME = "tmp_camera_photo.jpg";
+    public static final String TEMP_PHOTO_DIR = "tmp_photo";
+    public static final String TEMP_PHOTO_FILE_NAME = "tmp_photo.jpg";
+    public static final String FILE_PROVIDER_AUTHORITY = "com.example.foodtruckclient.fileprovider";
+
+    public static MultipartBody.Part createPartFromImageFile(@NonNull File imageFile) {
+        RequestBody requestBody = RequestBody
+                .create(MediaType.parse(NetworkConstants.MIME_TYPE_IMAGE), imageFile);
+        return MultipartBody.Part.createFormData(
+                NetworkConstants.MULTIPART_IMAGE_FIELD, imageFile.getName(), requestBody
+        );
+    }
 
     public static @Nullable File getFileFromGalleryIntent(Context context, Intent data) {
         File file = null;
@@ -42,40 +56,31 @@ public class ImageUtils {
         return file;
     }
 
-    public static @Nullable File getFileFromCameraIntent(Context context, Intent data) {
-        File file = null;
+    public static @Nullable Uri getTempUriForCamera(Context context) {
+        Uri uri = null;
         try {
-            Bitmap bitmap = (Bitmap) data.getExtras().get(KEY_INTENT_EXTRA_CAMERA_PHOTO_DATA);
-            // create a file to write bitmap data
-            file = getTempCameraFile(context);
-            file.createNewFile();
-            // Convert bitmap to byte array
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 0, bos);
-            byte[] bitmapData = bos.toByteArray();
-            // write the bytes to file
-            FileOutputStream fos = new FileOutputStream(file);
-            fos.write(bitmapData);
-            fos.flush();
-            fos.close();
-        } catch (Exception e) {
-            Timber.e(e);
-        }
-        return file;
-    }
-
-    public static void removeTmpFile(Context context) {
-        try {
-            File file = getTempCameraFile(context);
-            if (file.exists()) {
-                file.delete();
+            File photoDir = new File(context.getCacheDir(), TEMP_PHOTO_DIR);
+            if (!photoDir.exists()) {
+                photoDir.mkdirs();
             }
-        } catch (Exception e) {
-            Timber.e(e);
+            File photoFile = new File(photoDir, TEMP_PHOTO_FILE_NAME);
+            if (!photoFile.exists()) {
+                photoFile.createNewFile();
+            }
+            photoFile.deleteOnExit();
+            uri = FileProvider.getUriForFile(
+                    context,
+                    FILE_PROVIDER_AUTHORITY,
+                    photoFile
+            );
+        } catch (IOException ioe) {
+            Timber.e(ioe);
         }
+        return uri;
     }
 
-    private static File getTempCameraFile(Context context) {
-        return new File(context.getCacheDir(), TEMP_PHOTO_FILE_NAME);
+    public static File getTempCameraFile(Context context) {
+        File photoDir = new File(context.getCacheDir(), TEMP_PHOTO_DIR);
+        return new File(photoDir, TEMP_PHOTO_FILE_NAME);
     }
 }

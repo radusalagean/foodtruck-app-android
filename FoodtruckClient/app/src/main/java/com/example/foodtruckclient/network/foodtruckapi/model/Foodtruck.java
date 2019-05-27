@@ -1,13 +1,29 @@
 package com.example.foodtruckclient.network.foodtruckapi.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.example.foodtruckclient.network.NetworkConstants;
 import com.google.common.base.Objects;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Foodtruck {
+public class Foodtruck implements Parcelable {
+
+    public Foodtruck() {}
+
+    public Foodtruck(Parcel in) {
+        id = in.readString();
+        name = in.readString();
+        foodtypes = new ArrayList<>();
+        in.readStringList(foodtypes);
+        coordinates = in.readParcelable(Coordinates.class.getClassLoader());
+        image = in.readString();
+        lastUpdate = (Date) in.readSerializable();
+    }
 
     @SerializedName("_id")
     private String id;
@@ -127,6 +143,14 @@ public class Foodtruck {
         return image != null ? NetworkConstants.FOODTRUCK_API_FOODTRUCK_THUMBNAILS_BASE_URL + image : null;
     }
 
+    public String getImageSignature() {
+        return getImageUrl() + "@" + lastUpdate;
+    }
+
+    public String getThumbnailSignature() {
+        return getThumbnailUrl() + "@" + lastUpdate;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -148,4 +172,31 @@ public class Foodtruck {
     public int hashCode() {
         return Objects.hashCode(id, name, foodtypes, coordinates, image, owner, created, lastUpdate, averageRating, ratingCount);
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(name);
+        dest.writeStringList(foodtypes);
+        dest.writeParcelable(coordinates, 0);
+        dest.writeString(image);
+        dest.writeSerializable(lastUpdate);
+    }
+
+    public static final Parcelable.Creator<Foodtruck> CREATOR = new Parcelable.Creator<Foodtruck>() {
+        @Override
+        public Foodtruck createFromParcel(Parcel source) {
+            return new Foodtruck(source);
+        }
+
+        @Override
+        public Foodtruck[] newArray(int size) {
+            return new Foodtruck[size];
+        }
+    };
 }
