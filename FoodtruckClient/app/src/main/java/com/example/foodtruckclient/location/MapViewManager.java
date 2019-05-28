@@ -25,12 +25,16 @@ public class MapViewManager {
     private Bundle mapViewBundle;
     private int state;
     private OnMapReadyCallback onMapReadyCallback;
+    private DisposeMapCallback disposeMapCallback;
 
-    public MapViewManager(@NonNull OnMapReadyCallback onMapReadyCallback) {
+    public MapViewManager(@NonNull OnMapReadyCallback onMapReadyCallback,
+                          @NonNull DisposeMapCallback disposeMapCallback) {
         this.onMapReadyCallback = onMapReadyCallback;
+        this.disposeMapCallback = disposeMapCallback;
     }
 
     public void takeMapView(MapView mapView) {
+        Timber.d("takeMapView(%s)", mapView);
         if (this.mapView != mapView) {
             this.mapView = mapView;
             syncLifecycle();
@@ -41,10 +45,12 @@ public class MapViewManager {
         return mapView;
     }
 
-    public void dropMapView() {
-        if (mapView != null) {
+    public void dropMapView(MapView mapView) {
+        Timber.d("dropMapView(%s)", mapView);
+        if (this.mapView != null && this.mapView == mapView) {
             disposeMapView();
-            mapView = null;
+            disposeMapCallback.disposeMap();
+            this.mapView = null;
             mapViewBundle = null;
         }
     }

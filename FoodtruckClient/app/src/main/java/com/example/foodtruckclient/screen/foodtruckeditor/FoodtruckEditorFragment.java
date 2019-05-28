@@ -35,7 +35,6 @@ import com.example.foodtruckclient.util.ImageUtils;
 import com.example.foodtruckclient.util.ViewUtils;
 import com.example.foodtruckclient.view.DotsView;
 import com.example.foodtruckclient.view.TagLayout;
-import com.google.android.gms.maps.MapView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.common.base.Strings;
 
@@ -160,7 +159,7 @@ public class FoodtruckEditorFragment extends BaseMapFragment
                     tagLayout.setTags(presenter.getAddedFoodtypes());
                     break;
                 case R.id.layout_foodtruck_editor_location:
-                    MapView mapView = view.findViewById(R.id.foodtruck_editor_map_view);
+                    mapView = view.findViewById(R.id.foodtruck_editor_map_view);
                     FoodtruckEditorFragment.this.mapViewManager.takeMapView(mapView);
                     presenter.setOnMapClickListener(latLng -> {
                         presenter.addManualMarker(
@@ -211,7 +210,7 @@ public class FoodtruckEditorFragment extends BaseMapFragment
                 case R.id.layout_foodtruck_editor_location:
                     presenter.setCoordinates(presenter.getManualMarkerCoordinates());
                     presenter.setOnMapClickListener(null);
-                    FoodtruckEditorFragment.this.mapViewManager.dropMapView();
+                    FoodtruckEditorFragment.this.mapViewManager.dropMapView(mapView);
                     break;
                 case R.id.layout_foodtruck_editor_image:
                     Glide.with(previewImageView).clear(previewImageView);
@@ -286,8 +285,8 @@ public class FoodtruckEditorFragment extends BaseMapFragment
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
         viewPager.setAdapter(null);
+        super.onDestroyView();
     }
 
     @Override
@@ -306,16 +305,6 @@ public class FoodtruckEditorFragment extends BaseMapFragment
                     break;
             }
         }
-    }
-
-    @Override
-    public void initMapViewManager() {
-        initMapViewManager(presenter.getOnMapReadyCallback());
-    }
-
-    @Override
-    public void disposeMap() {
-        presenter.disposeMap();
     }
 
     @Override

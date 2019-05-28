@@ -8,6 +8,7 @@ import com.google.android.gms.maps.MapView;
 public interface FoodtruckViewerContract {
 
     void takeMapView(MapView mapView);
+    void dropMapView(MapView mapView);
     boolean isUserAuthenticated();
     @Nullable String getAuthenticatedUserId();
     void submitReview(String title, String content, float rating);

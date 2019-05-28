@@ -100,10 +100,10 @@ public class FoodtruckViewerHeaderViewHolder extends RecyclerView.ViewHolder {
         contract.takeMapView(mapView);
     }
 
-    public void recycle() {
+    public void recycle(FoodtruckViewerContract contract) {
         Timber.d("recycle()");
         tagLayout.clearTags();
-        Glide.with(ownerImageView).clear(ownerImageView);
+        Glide.with(ownerImageView.getContext().getApplicationContext()).clear(ownerImageView);
         ownerImageView.setImageDrawable(null);
         ownerImageView.setOnClickListener(null);
         ownerUsernameTextView.setText(null);
@@ -113,5 +113,6 @@ public class FoodtruckViewerHeaderViewHolder extends RecyclerView.ViewHolder {
         ratingAverageTextView.setText(null);
         averageRatingBar.setRating(0.0f);
         ratingCountTextView.setText(null);
+        contract.dropMapView(mapView);
     }
 }

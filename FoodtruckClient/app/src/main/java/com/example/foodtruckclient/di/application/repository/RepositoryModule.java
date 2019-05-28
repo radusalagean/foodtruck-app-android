@@ -44,8 +44,13 @@ public class RepositoryModule {
     @Provides
     @ApplicationScope
     ViewModelManager provideViewModelManager(DashboardViewModelRepository dashboardViewModelRepository,
-                                             FoodtruckViewerViewModelRepository foodtruckViewerViewModelRepository) {
-        return new ViewModelManager(dashboardViewModelRepository, foodtruckViewerViewModelRepository);
+                                             FoodtruckViewerViewModelRepository foodtruckViewerViewModelRepository,
+                                             ProfileViewModelRepository profileViewModelRepository,
+                                             FoodtruckEditorViewModelRepository foodtruckEditorViewModelRepository) {
+        return new ViewModelManager(dashboardViewModelRepository,
+                foodtruckViewerViewModelRepository,
+                profileViewModelRepository,
+                foodtruckEditorViewModelRepository);
     }
 
     @Provides

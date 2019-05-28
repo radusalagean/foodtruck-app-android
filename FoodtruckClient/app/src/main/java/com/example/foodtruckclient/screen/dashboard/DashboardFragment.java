@@ -94,8 +94,15 @@ public class DashboardFragment extends BaseMapFragment
                     recyclerView.setAdapter(listAdapter);
                     break;
                 case R.id.layout_dashboard_map:
-                    MapView mapView = view.findViewById(R.id.map_view);
+                    mapView = view.findViewById(R.id.map_view);
                     DashboardFragment.this.mapViewManager.takeMapView(mapView);
+                    presenter.setOnInfoWindowClickListener(marker -> {
+                        String foodtruckId = presenter.getFoodtruckIdByMarker(marker);
+                        String foodtruckName = marker.getTitle();
+                        if (foodtruckId != null) {
+                            activityContract.showFoodtruckViewerScreen(foodtruckId, foodtruckName);
+                        }
+                    });
                     break;
             }
         }
@@ -105,10 +112,12 @@ public class DashboardFragment extends BaseMapFragment
             switch (view.getId()) {
                 case R.id.layout_dashboard_list:
                     swipeRefreshLayout = null;
+                    recyclerView.setAdapter(null);
                     recyclerView = null;
                     break;
                 case R.id.layout_dashboard_map:
-                    DashboardFragment.this.mapViewManager.dropMapView();
+                    DashboardFragment.this.mapViewManager.dropMapView(mapView);
+                    presenter.setOnInfoWindowClickListener(null);
                     break;
             }
         }
@@ -187,8 +196,8 @@ public class DashboardFragment extends BaseMapFragment
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
         viewPager.setAdapter(null);
+        super.onDestroyView();
     }
 
     @Override
@@ -239,16 +248,6 @@ public class DashboardFragment extends BaseMapFragment
         if (viewPager.getCurrentItem() != DashboardPagerMapper.POSITION_MAP) {
             viewPager.setCurrentItem(DashboardPagerMapper.POSITION_MAP);
         }
-    }
-
-    @Override
-    public void initMapViewManager() {
-        initMapViewManager(presenter.getOnMapReadyCallback());
-    }
-
-    @Override
-    public void disposeMap() {
-        presenter.disposeMap();
     }
 
     @Override

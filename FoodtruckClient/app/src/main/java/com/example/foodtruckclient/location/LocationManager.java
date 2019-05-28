@@ -15,6 +15,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 
 import java.util.LinkedList;
 import java.util.Map;
@@ -31,18 +33,22 @@ public class LocationManager implements OnMapReadyCallback {
     private GoogleMap googleMap;
     private Location lastKnownLocation;
     private ArrayMap<String, MarkerOptions> pendingMarkers;
-    private ArrayMap<String, Marker> addedMarkers;
+    private BiMap<String, Marker> addedMarkers;
     private Queue<Runnable> pendingRunnables;
 
     public LocationManager(FusedLocationProviderClient fusedLocationProviderClient) {
         this.fusedLocationProviderClient = fusedLocationProviderClient;
         pendingMarkers = new ArrayMap<>();
-        addedMarkers = new ArrayMap<>();
+        addedMarkers = HashBiMap.create();
         pendingRunnables = new LinkedList<>();
     }
 
     public void disposeMap() {
+        Timber.d("disposeMap()");
         googleMap = null;
+        pendingMarkers.clear();
+        addedMarkers.clear();
+        pendingRunnables.clear();
     }
 
     @Override
@@ -125,6 +131,20 @@ public class LocationManager implements OnMapReadyCallback {
         }
     }
 
+    public @Nullable Coordinates getMarkerCoordinates(String markerId) {
+        Coordinates coordinates = null;
+        LatLng latLng = null;
+        if (addedMarkers.get(markerId) != null) {
+            latLng = addedMarkers.get(markerId).getPosition();
+        } else if (pendingMarkers.get(markerId) != null) {
+            latLng = pendingMarkers.get(markerId).getPosition();
+        }
+        if (latLng != null) {
+            coordinates = new Coordinates(latLng.latitude, latLng.longitude);
+        }
+        return coordinates;
+    }
+
     public void takeMarker(String markerId, MarkerOptions marker) {
         if (googleMap == null) {
             pendingMarkers.put(markerId, marker);
@@ -161,6 +181,11 @@ public class LocationManager implements OnMapReadyCallback {
         return coordinates;
     }
 
+    @Nullable
+    public String getFoodtruckIdByMarker(Marker marker) {
+        return addedMarkers.inverse().get(marker);
+    }
+
     private void addMarkersToMap(Map<String, MarkerOptions> markers) {
         if (googleMap != null) {
             for (String id : markers.keySet()) {
@@ -181,6 +206,15 @@ public class LocationManager implements OnMapReadyCallback {
 
     public void setOnMapClickListener(@Nullable GoogleMap.OnMapClickListener onMapClickListener) {
         Runnable runnable = () -> googleMap.setOnMapClickListener(onMapClickListener);
+        if (googleMap == null) {
+            pendingRunnables.offer(runnable);
+        } else {
+            runnable.run();
+        }
+    }
+
+    public void setOnInfoWindowClickListener(@Nullable GoogleMap.OnInfoWindowClickListener onInfoWindowClickListener) {
+        Runnable runnable = () -> googleMap.setOnInfoWindowClickListener(onInfoWindowClickListener);
         if (googleMap == null) {
             pendingRunnables.offer(runnable);
         } else {

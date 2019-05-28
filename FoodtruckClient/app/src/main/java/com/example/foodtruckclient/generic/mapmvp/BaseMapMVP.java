@@ -7,6 +7,7 @@ import com.example.foodtruckclient.generic.viewmodel.BaseViewModel;
 import com.example.foodtruckclient.network.foodtruckapi.model.Coordinates;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.Marker;
 
 public interface BaseMapMVP {
 
@@ -16,17 +17,18 @@ public interface BaseMapMVP {
 
     interface View extends BaseMVP.View {
         void initMapViewManager();
-        void disposeMap();
     }
 
     interface Presenter<T extends View> extends BaseMVP.Presenter<T> {
         void disposeMap();
         OnMapReadyCallback getOnMapReadyCallback();
         void setOnMapClickListener(GoogleMap.OnMapClickListener onMapClickListener);
+        void setOnInfoWindowClickListener(GoogleMap.OnInfoWindowClickListener onInfoWindowClickListener);
         void zoomOnCurrentDeviceLocation();
         void zoomOnLocation(double latitude, double longitude);
         void addManualMarker(Coordinates coordinates);
         @Nullable Coordinates getManualMarkerCoordinates();
+        @Nullable String getFoodtruckIdByMarker(Marker marker);
         void setGesturesEnabled(boolean enabled);
         void setZoomButtonsEnabled(boolean enabled);
     }

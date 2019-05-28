@@ -54,6 +54,9 @@ public class DashboardListAdapter extends RecyclerView.Adapter<FoodtruckViewHold
     }
 
     public void setFoodtrucks(List<Foodtruck> foodtrucks) {
+        if (this.foodtrucks == foodtrucks) {
+            return;
+        }
         this.foodtrucks = foodtrucks;
         notifyDataSetChanged();
     }

@@ -6,8 +6,12 @@ import androidx.fragment.app.FragmentManager;
 import com.example.foodtruckclient.generic.fragment.BaseFragment;
 import com.example.foodtruckclient.screen.dashboard.DashboardFragment;
 import com.example.foodtruckclient.screen.dashboard.DashboardViewModelRepository;
+import com.example.foodtruckclient.screen.foodtruckeditor.FoodtruckEditorFragment;
+import com.example.foodtruckclient.screen.foodtruckeditor.FoodtruckEditorViewModelRepository;
 import com.example.foodtruckclient.screen.foodtruckviewer.FoodtruckViewerFragment;
 import com.example.foodtruckclient.screen.foodtruckviewer.FoodtruckViewerViewModelRepository;
+import com.example.foodtruckclient.screen.profile.ProfileFragment;
+import com.example.foodtruckclient.screen.profile.ProfileViewModelRepository;
 
 import java.util.Map;
 
@@ -19,10 +23,14 @@ public class ViewModelManager {
     private FragmentManager.OnBackStackChangedListener onBackStackChangedListener;
 
     public ViewModelManager(DashboardViewModelRepository dashboardViewModelRepository,
-                            FoodtruckViewerViewModelRepository foodtruckViewerViewModelRepository) {
+                            FoodtruckViewerViewModelRepository foodtruckViewerViewModelRepository,
+                            ProfileViewModelRepository profileViewModelRepository,
+                            FoodtruckEditorViewModelRepository foodtruckEditorViewModelRepository) {
         viewModelRepositoryMap = new ArrayMap<>();
         viewModelRepositoryMap.put(DashboardFragment.class, dashboardViewModelRepository);
         viewModelRepositoryMap.put(FoodtruckViewerFragment.class, foodtruckViewerViewModelRepository);
+        viewModelRepositoryMap.put(ProfileFragment.class, profileViewModelRepository);
+        viewModelRepositoryMap.put(FoodtruckEditorFragment.class, foodtruckEditorViewModelRepository);
     }
 
     public void registerListener(FragmentManager fragmentManager) {

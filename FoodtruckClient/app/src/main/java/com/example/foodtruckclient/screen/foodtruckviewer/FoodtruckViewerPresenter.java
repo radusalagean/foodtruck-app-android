@@ -183,9 +183,14 @@ public class FoodtruckViewerPresenter extends BaseMapPresenter<FoodtruckViewerMV
             view.updateMyReview(viewModel.getMyReview());
         });
         Coordinates coordinates = viewModel.getFoodtruck().getCoordinates();
-        MarkerOptions marker = new MarkerOptions()
-                .position(new LatLng(coordinates.getLatitude(), coordinates.getLongitude()));
-        locationManager.takeMarker(viewModel.getFoodtruck().getId(), marker);
-        zoomOnLocation(coordinates.getLatitude(), coordinates.getLongitude());
+        Coordinates oldCoordinates = locationManager
+                .getMarkerCoordinates(viewModel.getFoodtruck().getId());
+        // Check if old coordinates are different the new ones
+        if (!coordinates.equals(oldCoordinates)) {
+            MarkerOptions marker = new MarkerOptions()
+                    .position(new LatLng(coordinates.getLatitude(), coordinates.getLongitude()));
+            locationManager.takeMarker(viewModel.getFoodtruck().getId(), marker);
+            zoomOnLocation(coordinates.getLatitude(), coordinates.getLongitude());
+        }
     }
 }

@@ -119,6 +119,12 @@ public class ProfileFragment extends BaseFragment
     }
 
     @Override
+    public void onDestroyView() {
+        recyclerView.setAdapter(null);
+        super.onDestroyView();
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_profile, menu);
         // Handle menu item visibility

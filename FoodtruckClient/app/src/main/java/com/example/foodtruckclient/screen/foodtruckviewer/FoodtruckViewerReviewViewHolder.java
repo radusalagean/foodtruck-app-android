@@ -80,7 +80,8 @@ public class FoodtruckViewerReviewViewHolder extends RecyclerView.ViewHolder {
 
     public void recycle() {
         Timber.d("recycle()");
-        Glide.with(profilePictureImageView).clear(profilePictureImageView);
+        Glide.with(profilePictureImageView.getContext().getApplicationContext())
+                .clear(profilePictureImageView);
         profilePictureImageView.setImageDrawable(null);
         profilePictureImageView.setOnClickListener(null);
         authorUsernameTextView.setText(null);

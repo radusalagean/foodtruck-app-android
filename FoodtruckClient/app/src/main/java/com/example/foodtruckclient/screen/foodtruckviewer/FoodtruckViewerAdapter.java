@@ -68,7 +68,7 @@ public class FoodtruckViewerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         if (holder instanceof FoodtruckViewerHeaderViewHolder) {
-            ((FoodtruckViewerHeaderViewHolder) holder).recycle();
+            ((FoodtruckViewerHeaderViewHolder) holder).recycle(contract);
         } else if (holder instanceof FoodtruckViewerMyReviewViewHolder) {
             ((FoodtruckViewerMyReviewViewHolder) holder).recycle();
         } else if (holder instanceof FoodtruckViewerReviewViewHolder){
@@ -105,16 +105,25 @@ public class FoodtruckViewerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     public void setFoodtruck(Foodtruck foodtruck) {
+        if (this.foodtruck == foodtruck) {
+            return;
+        }
         this.foodtruck = foodtruck;
         notifyDataSetChanged();
     }
 
     public void setMyReview(Review myReview) {
+        if (this.myReview == myReview) {
+            return;
+        }
         this.myReview = myReview;
         notifyDataSetChanged();
     }
 
     public void setReviews(List<Review> reviews) {
+        if (this.reviews == reviews) {
+            return;
+        }
         this.reviews = reviews;
         notifyDataSetChanged();
     }

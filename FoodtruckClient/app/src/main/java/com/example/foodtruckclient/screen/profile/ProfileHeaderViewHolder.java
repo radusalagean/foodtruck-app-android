@@ -62,7 +62,7 @@ public class ProfileHeaderViewHolder extends RecyclerView.ViewHolder {
 
     public void recycle() {
         Timber.d("recycle()");
-        Glide.with(imageView).clear(imageView);
+        Glide.with(imageView.getContext().getApplicationContext()).clear(imageView);
         imageView.setImageDrawable(null);
         usernameTextView.setText(null);
         joinedDateTextView.setText(null);

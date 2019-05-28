@@ -106,7 +106,6 @@ public class FoodtruckViewerFragment extends BaseMapFragment
             foodtruckName = getArguments().getString(ARG_FOODTRUCK_NAME);
         }
         adapter = new FoodtruckViewerAdapter(this);
-        presenter.loadViewModel(foodtruckId, false);
         setHasOptionsMenu(true);
     }
 
@@ -128,6 +127,12 @@ public class FoodtruckViewerFragment extends BaseMapFragment
     public void onStop() {
         presenter.dropView();
         super.onStop();
+    }
+
+    @Override
+    public void onDestroyView() {
+        recyclerView.setAdapter(null);
+        super.onDestroyView();
     }
 
     @Override
@@ -156,16 +161,6 @@ public class FoodtruckViewerFragment extends BaseMapFragment
     }
 
     @Override
-    public void initMapViewManager() {
-        initMapViewManager(presenter.getOnMapReadyCallback());
-    }
-
-    @Override
-    public void disposeMap() {
-        presenter.disposeMap();
-    }
-
-    @Override
     protected void initViews() {
         toolbar.setTitle(foodtruckName);
         activityContract.setActionBar(toolbar);
@@ -178,6 +173,7 @@ public class FoodtruckViewerFragment extends BaseMapFragment
         recyclerView.setAdapter(adapter);
         presenter.setGesturesEnabled(false);
         presenter.setZoomButtonsEnabled(true);
+        presenter.loadViewModel(foodtruckId, false);
     }
 
     @Override
@@ -252,6 +248,11 @@ public class FoodtruckViewerFragment extends BaseMapFragment
     @Override
     public void takeMapView(MapView mapView) {
         mapViewManager.takeMapView(mapView);
+    }
+
+    @Override
+    public void dropMapView(MapView mapView) {
+        mapViewManager.dropMapView(mapView);
     }
 
     @Override

@@ -12,6 +12,7 @@ import com.example.foodtruckclient.permission.PermissionManager;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import timber.log.Timber;
@@ -47,6 +48,11 @@ public abstract class BaseMapPresenter<T extends BaseMapMVP.View, S extends Base
     }
 
     @Override
+    public void setOnInfoWindowClickListener(GoogleMap.OnInfoWindowClickListener onInfoWindowClickListener) {
+        locationManager.setOnInfoWindowClickListener(onInfoWindowClickListener);
+    }
+
+    @Override
     public void zoomOnCurrentDeviceLocation() {
         doOnPermissionGranted(
                 PermissionConstants.PERMISSION_ACCESS_FINE_LOCATION,
@@ -71,6 +77,12 @@ public abstract class BaseMapPresenter<T extends BaseMapMVP.View, S extends Base
     @Override
     public Coordinates getManualMarkerCoordinates() {
         return locationManager.getManualMarkerCoordinates();
+    }
+
+    @Nullable
+    @Override
+    public String getFoodtruckIdByMarker(Marker marker) {
+        return locationManager.getFoodtruckIdByMarker(marker);
     }
 
     @Override
