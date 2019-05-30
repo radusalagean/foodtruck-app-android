@@ -37,10 +37,12 @@
 
         <TextView
             android:id="@+id/review_text_view_author_username"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/general_layout_margin"
             android:layout_marginLeft="@dimen/general_layout_margin"
+            android:layout_marginRight="@dimen/general_layout_margin"
+            android:layout_marginEnd="@dimen/general_layout_margin"
             android:layout_marginTop="@dimen/general_layout_margin"
             android:textStyle="bold"
             android:maxLines="1"
@@ -48,6 +50,7 @@
             android:textColor="@color/colorBlack"
             app:layout_constraintStart_toEndOf="@id/review_image_view_profile_picture"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/review_rating_bar"
             tools:text="Username"
             android:background="?selectableItemBackgroundBorderless" />
 
