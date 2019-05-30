@@ -83,7 +83,6 @@ public class AuthenticationNavigationView extends NavigationView {
         Glide.with(imageView)
                 .load(imageUrl)
                 .circleCrop()
-                .apply(RequestOptions.circleCropTransform())
                 .placeholder(R.drawable.ic_account_circle_white_24dp)
                 .signature(new ObjectKey(signature))
                 .into(imageView);

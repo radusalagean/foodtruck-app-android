@@ -22,6 +22,7 @@ import com.example.foodtruckclient.generic.list.foodtruck.FoodtruckContract;
 import com.example.foodtruckclient.generic.mapmvp.BaseMapFragment;
 import com.example.foodtruckclient.generic.mvp.BaseMVP;
 import com.example.foodtruckclient.generic.view.OnViewInflatedListener;
+import com.example.foodtruckclient.network.foodtruckapi.model.Account;
 import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
 import com.example.foodtruckclient.view.MorphableFloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
@@ -239,5 +240,10 @@ public class DashboardFragment extends BaseMapFragment
     public void onFoodtruckLocationButtonClicked(Foodtruck foodtruck) {
         presenter.zoomOnLocation(foodtruck.getCoordinates().getLatitude(),
                 foodtruck.getCoordinates().getLongitude(), false);
+    }
+
+    @Override
+    public void onOwnerSelected(Account owner) {
+        activityContract.showProfileScreen(owner.getId(), owner.getUsername());
     }
 }

@@ -31,6 +31,12 @@ public class FoodtruckViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.text_view_rating_count)
     TextView ratingCountTextView;
 
+    @BindView(R.id.image_view_owner)
+    ImageView ownerImageView;
+
+    @BindView(R.id.text_view_owner)
+    TextView ownerTextView;
+
     @BindView(R.id.image_button_show_on_map)
     ImageButton showOnMapButton;
 
@@ -40,6 +46,8 @@ public class FoodtruckViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(Foodtruck foodtruck, FoodtruckContract listener) {
+        View.OnClickListener onOwnerClickListener = v ->
+                listener.onOwnerSelected(foodtruck.getOwner());
         Glide.with(imageView)
                 .load(foodtruck.getThumbnailUrl())
                 .centerCrop()
@@ -53,6 +61,15 @@ public class FoodtruckViewHolder extends RecyclerView.ViewHolder {
                         R.string.rating_count;
         ratingCountTextView.setText(ratingCountTextView.getResources()
                 .getString(ratingCountResId, foodtruck.getRatingCount()));
+        Glide.with(ownerImageView)
+                .load(foodtruck.getOwner().getThumbnailUrl())
+                .circleCrop()
+                .placeholder(R.drawable.ic_account_circle_black_24dp)
+                .signature(new ObjectKey(foodtruck.getOwner().getThumbnailSignature()))
+                .into(ownerImageView);
+        ownerImageView.setOnClickListener(onOwnerClickListener);
+        ownerTextView.setText(foodtruck.getOwner().getUsername());
+        ownerTextView.setOnClickListener(onOwnerClickListener);
         showOnMapButton.setOnClickListener((view) -> {
             listener.onFoodtruckLocationButtonClicked(foodtruck);
         });
@@ -66,6 +83,11 @@ public class FoodtruckViewHolder extends RecyclerView.ViewHolder {
         imageView.setImageDrawable(null);
         titleTextView.setText(null);
         ratingBar.setRating(0.0f);
+        Glide.with(ownerImageView.getContext().getApplicationContext()).clear(ownerImageView);
+        ownerImageView.setImageDrawable(null);
+        ownerImageView.setOnClickListener(null);
+        ownerTextView.setText(null);
+        ownerTextView.setOnClickListener(null);
         showOnMapButton.setOnClickListener(null);
     }
 

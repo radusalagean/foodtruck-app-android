@@ -32,7 +32,8 @@
             android:layout_marginEnd="@dimen/general_layout_margin"
             tools:ignore="ContentDescription"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            android:background="?selectableItemBackgroundBorderless"/>
 
         <TextView
             android:id="@+id/review_text_view_author_username"
@@ -42,12 +43,13 @@
             android:layout_marginLeft="@dimen/general_layout_margin"
             android:layout_marginTop="@dimen/general_layout_margin"
             android:textStyle="bold"
+            android:maxLines="1"
             android:ellipsize="end"
             android:textColor="@color/colorBlack"
             app:layout_constraintStart_toEndOf="@id/review_image_view_profile_picture"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Username"
-            android:background="?selectableItemBackgroundBorderless"/>
+            android:background="?selectableItemBackgroundBorderless" />
 
         <TextView
             android:id="@+id/review_text_view_last_update"
@@ -74,6 +76,8 @@
             android:layout_marginRight="@dimen/general_layout_margin"
             android:layout_marginBottom="@dimen/general_layout_margin"
             app:layout_constraintBottom_toBottomOf="@+id/review_image_view_profile_picture"
+            android:numStars="5"
+            android:stepSize="0.1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

@@ -234,4 +234,9 @@ public class ProfileFragment extends BaseFragment
     public void onFoodtruckLocationButtonClicked(Foodtruck foodtruck) {
         // nothing to do here
     }
+
+    @Override
+    public void onOwnerSelected(Account owner) {
+        // nothing to do here
+    }
 }

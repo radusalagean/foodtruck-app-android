@@ -4,6 +4,7 @@
 
     <!--Dashboard List Item-->
     <dimen name="item_thumbnail_image_size">75dp</dimen>
+    <dimen name="foodtruck_item_owner_image_size">20dp</dimen>
     <dimen name="item_dashboard_list_offset">8dp</dimen>
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="fab_margin">16dp</dimen>

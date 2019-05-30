@@ -74,8 +74,7 @@ public class FoodtruckViewerHeaderViewHolder extends RecyclerView.ViewHolder {
         tagLayout.setTags(foodtruck.getFoodtypes());
         Glide.with(ownerImageView)
                 .load(foodtruck.getOwner().getThumbnailUrl())
-                .centerCrop()
-                .apply(RequestOptions.circleCropTransform())
+                .circleCrop()
                 .placeholder(R.drawable.ic_account_circle_black_24dp)
                 .signature(new ObjectKey(foodtruck.getOwner().getImageSignature()))
                 .into(ownerImageView);

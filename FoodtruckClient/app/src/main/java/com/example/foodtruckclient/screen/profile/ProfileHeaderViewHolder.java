@@ -49,7 +49,7 @@ public class ProfileHeaderViewHolder extends RecyclerView.ViewHolder {
         rootLayout.setVisibility(View.VISIBLE);
         Glide.with(imageView)
                 .load(account.getImageUrl())
-                .apply(RequestOptions.circleCropTransform())
+                .circleCrop()
                 .placeholder(R.drawable.ic_account_circle_black_24dp)
                 .signature(new ObjectKey(account.getImageSignature()))
                 .into(imageView);

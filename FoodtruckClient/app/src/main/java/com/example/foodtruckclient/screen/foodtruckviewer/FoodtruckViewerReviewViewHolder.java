@@ -48,16 +48,17 @@ public class FoodtruckViewerReviewViewHolder extends RecyclerView.ViewHolder {
 
     public void bind(Review review, FoodtruckViewerContract contract) {
         Timber.d("bind(%s)", review);
+        View.OnClickListener onAuthorClickListener = v ->
+                contract.onAccountSelected(review.getAuthor());
         Glide.with(profilePictureImageView)
                 .load(review.getAuthor().getThumbnailUrl())
                 .circleCrop()
-                .apply(RequestOptions.circleCropTransform())
                 .placeholder(R.drawable.ic_account_circle_black_24dp)
                 .signature(new ObjectKey(review.getAuthor().getThumbnailSignature()))
                 .into(profilePictureImageView);
-        profilePictureImageView.setOnClickListener(v -> contract.onAccountSelected(review.getAuthor()));
+        profilePictureImageView.setOnClickListener(onAuthorClickListener);
         authorUsernameTextView.setText(review.getAuthor().getUsername());
-        authorUsernameTextView.setOnClickListener(v -> contract.onAccountSelected(review.getAuthor()));
+        authorUsernameTextView.setOnClickListener(onAuthorClickListener);
         boolean edited = !review.getCreated().equals(review.getLastUpdate());
         String lastUpdateString = (String) DateFormat.format(DateConstants.DATE_FORMAT, review.getLastUpdate());
         String editedString = lastUpdateTextView.getResources().getString(R.string.foodtruck_review_edited);
