@@ -3,11 +3,13 @@ package com.example.foodtruckclient.screen.dashboard;
 import androidx.annotation.NonNull;
 import androidx.collection.ArrayMap;
 
+import com.example.foodtruckclient.generic.contentinvalidation.InvalidationEffect;
 import com.example.foodtruckclient.generic.mapmvp.BaseMapPresenter;
 import com.example.foodtruckclient.dialog.DialogManager;
 import com.example.foodtruckclient.location.LocationManager;
 import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
 import com.example.foodtruckclient.permission.PermissionManager;
+import com.example.foodtruckclient.util.NumberUtils;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -55,7 +57,6 @@ public class DashboardPresenter extends BaseMapPresenter<DashboardMVP.View, Dash
 
     @Override
     public void reloadFoodtrucks() {
-        clearFoodtrucks();
         setRefreshing(true);
         compositeDisposable.add(model.getFoodtrucks()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -79,13 +80,9 @@ public class DashboardPresenter extends BaseMapPresenter<DashboardMVP.View, Dash
                 }));
     }
 
-    private void clearFoodtrucks() {
-        locationManager.clearAllMarkers();
-        postOnView(() -> view.clearFoodtrucks());
-    }
-
     private void processFoodtrucks(@NonNull List<Foodtruck> foodtrucks) {
         // Add markers on the map
+        locationManager.clearAllMarkers();
         ArrayMap<String, MarkerOptions> markers = new ArrayMap<>();
         for (Foodtruck foodtruck : foodtrucks) {
             MarkerOptions marker = new MarkerOptions()
@@ -101,8 +98,31 @@ public class DashboardPresenter extends BaseMapPresenter<DashboardMVP.View, Dash
     }
 
     @Override
-    public void zoomOnLocation(double latitude, double longitude) {
-        super.zoomOnLocation(latitude, longitude);
+    public void zoomOnLocation(double latitude, double longitude, boolean instant) {
+        super.zoomOnLocation(latitude, longitude, instant);
         postOnView(() -> view.switchToMapTab());
+    }
+
+    @Override
+    public void handleInvalidationEffects() {
+        if (model.getCachedViewModel() != null) {
+            int invalidationEffects = model.getCachedViewModel().getInvalidationEffects();
+            Timber.d("handleInvalidationEffects: %s",
+                    NumberUtils.convertIntToBinaryString(invalidationEffects, 4));
+            if ((invalidationEffects & InvalidationEffect.FOODTRUCK_RELOAD) != 0) {
+                reloadFoodtrucks();
+            }
+            model.getCachedViewModel().clearInvalidationEffects();
+        }
+    }
+
+    @Override
+    public boolean restoreDataFromCache() {
+        if (model.getCachedViewModel() == null) {
+            return false;
+        }
+        processFoodtrucks(model.getCachedViewModel().getFoodtrucks());
+        handleInvalidationEffects();
+        return true;
     }
 }

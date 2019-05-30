@@ -32,6 +32,7 @@ public interface FoodtruckEditorMVP {
 
     interface Presenter extends BaseMapMVP.Presenter<View> {
         boolean isInEditMode();
+        Foodtruck getFoodtruck();
         void setFoodtruck(Foodtruck foodtruck);
         String getTypedName();
         void setTypedName(String typedName);

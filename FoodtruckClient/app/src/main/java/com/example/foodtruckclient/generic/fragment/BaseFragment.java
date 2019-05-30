@@ -72,9 +72,11 @@ public abstract class BaseFragment extends Fragment
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         Timber.tag(tag).v("-F-> onViewCreated(%s, %s)", view, savedInstanceState);
+        super.onViewCreated(view, savedInstanceState);
         initViews();
         registerListeners();
-        super.onViewCreated(view, savedInstanceState);
+        getPresenter().takeView(this);
+        loadData();
     }
 
     @Override
@@ -92,10 +94,10 @@ public abstract class BaseFragment extends Fragment
     @Override
     public void onResume() {
         Timber.tag(tag).v("-F-> onResume()");
+        super.onResume();
         if (getSwipeRefreshLayout() != null) {
             getSwipeRefreshLayout().setRefreshing(getPresenter().isRefreshing());
         }
-        super.onResume();
     }
 
     @Override
@@ -113,13 +115,16 @@ public abstract class BaseFragment extends Fragment
     @Override
     public void onStop() {
         Timber.tag(tag).v("-F-> onStop()");
+        getPresenter().clearCompositeDisposable();
         super.onStop();
     }
 
     @Override
     public void onDestroyView() {
         Timber.tag(tag).v("-F-> onDestroyView()");
+        getPresenter().dropView();
         unregisterListeners();
+        disposeViews();
         super.onDestroyView();
     }
 
@@ -178,8 +183,8 @@ public abstract class BaseFragment extends Fragment
     }
 
     @Override
-    public void onBackPressed() {
-        getActivity().onBackPressed();
+    public void popFragment() {
+        getFragmentManager().popBackStack();
     }
 
     @UiThread
@@ -268,6 +273,12 @@ public abstract class BaseFragment extends Fragment
     protected abstract void initViews();
 
     /**
+     * Called during the {@link Fragment#onDestroyView()} lifecycle method,
+     * override to dispose resources associated to views
+     */
+    protected abstract void disposeViews();
+
+    /**
      * Called during the {@link Fragment#onViewCreated(View, Bundle)} lifecycle method,
      * override to register view listeners
      */
@@ -280,7 +291,13 @@ public abstract class BaseFragment extends Fragment
     protected abstract void unregisterListeners();
 
     /**
+     * Called during the {@link Fragment#onViewCreated(View, Bundle)} lifecycle method,
+     * override to load data from the view model cache or from the network
+     */
+    protected abstract void loadData();
+
+    /**
      * Override to return the presenter
      */
-    protected abstract BaseMVP.Presenter getPresenter();
+    protected abstract <T extends BaseMVP.View> BaseMVP.Presenter<T> getPresenter();
 }

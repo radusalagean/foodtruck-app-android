@@ -3,6 +3,7 @@ package com.example.foodtruckclient.generic.activity;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 
@@ -11,7 +12,9 @@ import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
 
 public interface ActivityContract {
 
-    void setActionBar(@NonNull Toolbar toolbar);
+    @Nullable ActionBar getToolbar();
+
+    void setToolbar(@NonNull Toolbar toolbar);
 
     /**
      * Override to specify the container id for Fragments
@@ -34,11 +37,7 @@ public interface ActivityContract {
 
     void popAllFragments();
 
-    void invalidateDashboard();
-
-    void validateDashboard();
-
-    boolean isDashboardInvalidated();
+    void showDashboardScreen();
 
     void showFoodtruckViewerScreen(String foodtruckId, String foodtruckName);
 

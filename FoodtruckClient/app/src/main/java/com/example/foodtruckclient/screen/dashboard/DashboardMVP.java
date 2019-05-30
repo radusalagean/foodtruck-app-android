@@ -16,7 +16,6 @@ public interface DashboardMVP {
 
     interface View extends BaseMapMVP.View {
         void updateFoodtrucks(List<Foodtruck> foodtrucks);
-        void clearFoodtrucks();
         void switchToMapTab();
     }
 

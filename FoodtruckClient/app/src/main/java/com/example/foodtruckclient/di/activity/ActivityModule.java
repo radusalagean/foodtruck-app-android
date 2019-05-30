@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.foodtruckclient.authentication.AuthenticationRepository;
+import com.example.foodtruckclient.generic.viewmodel.ViewModelManager;
 import com.example.foodtruckclient.screen.dashboard.DashboardMVP;
 import com.example.foodtruckclient.screen.dashboard.DashboardModel;
 import com.example.foodtruckclient.screen.dashboard.DashboardPresenter;
@@ -63,6 +64,22 @@ public class ActivityModule {
         return (ActivityContract) activity;
     }
 
+    // View Model Manager
+
+    @Provides
+    @ActivityScope
+    ViewModelManager provideViewModelManager(DashboardViewModelRepository dashboardViewModelRepository,
+                                             FoodtruckViewerViewModelRepository foodtruckViewerViewModelRepository,
+                                             ProfileViewModelRepository profileViewModelRepository,
+                                             FoodtruckEditorViewModelRepository foodtruckEditorViewModelRepository) {
+        return new ViewModelManager(
+                dashboardViewModelRepository,
+                foodtruckViewerViewModelRepository,
+                profileViewModelRepository,
+                foodtruckEditorViewModelRepository
+        );
+    }
+
     // Dialog
 
     @Provides
@@ -101,8 +118,11 @@ public class ActivityModule {
     FoodtruckViewerMVP.Presenter provideFoodtruckViewerPresenter(FoodtruckViewerMVP.Model model,
                                                                  LocationManager locationManager,
                                                                  PermissionManager permissionManager,
-                                                                 DialogManager dialogManager) {
-        return new FoodtruckViewerPresenter(model, locationManager, permissionManager, dialogManager);
+                                                                 DialogManager dialogManager,
+                                                                 ViewModelManager viewModelManager) {
+        return new FoodtruckViewerPresenter(
+                model, locationManager, permissionManager, dialogManager, viewModelManager
+        );
     }
 
     // Login
@@ -143,8 +163,11 @@ public class ActivityModule {
     ProfileMVP.Presenter provideProfilePresenter(ProfileMVP.Model model,
                                                  PermissionManager permissionManager,
                                                  DialogManager dialogManager,
+                                                 ViewModelManager viewModelManager,
                                                  Context context) {
-        return new ProfilePresenter(model, permissionManager, dialogManager, context);
+        return new ProfilePresenter(
+                model, permissionManager, dialogManager, viewModelManager, context
+        );
     }
 
     // Foodtruck Editor
@@ -159,7 +182,10 @@ public class ActivityModule {
     FoodtruckEditorMVP.Presenter provideFoodtruckEditorPresenter(FoodtruckEditorMVP.Model model,
                                                                  LocationManager locationManager,
                                                                  PermissionManager permissionManager,
-                                                                 DialogManager dialogManager) {
-        return new FoodtruckEditorPresenter(model, locationManager, permissionManager, dialogManager);
+                                                                 DialogManager dialogManager,
+                                                                 ViewModelManager viewModelManager) {
+        return new FoodtruckEditorPresenter(
+                model, locationManager, permissionManager, dialogManager, viewModelManager
+        );
     }
 }

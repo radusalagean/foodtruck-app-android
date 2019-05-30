@@ -2,6 +2,7 @@ package com.example.foodtruckclient.generic.mvp;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
+import androidx.fragment.app.Fragment;
 
 import com.example.foodtruckclient.generic.viewmodel.BaseViewModel;
 import com.example.foodtruckclient.permission.PermissionRequestDelegate;
@@ -12,6 +13,7 @@ public interface BaseMVP {
 
     interface Model<T extends BaseViewModel> {
         void setUuid(UUID uuid);
+        UUID getUuid();
         T getCachedViewModel();
     }
 
@@ -21,7 +23,7 @@ public interface BaseMVP {
         void showSnackBar(int stringResId);
         void showSnackBar(int stringResId, Object... formatArgs);
         PermissionRequestDelegate getPermissionRequestDelegate();
-        void onBackPressed();
+        void popFragment();
     }
 
     interface Presenter<T extends View> {
@@ -41,6 +43,12 @@ public interface BaseMVP {
          * Drops the reference to the view when destroyed
          */
         void dropView();
+
+        /**
+         * Should be called in the {@link Fragment#onStop()} callback, in order to dispose
+         * all RxJava disposables
+         */
+        void clearCompositeDisposable();
 
         /**
          * Callback method to pass the result of the permission request to the appropriate handler
@@ -71,5 +79,17 @@ public interface BaseMVP {
                                    @StringRes int permissionDeniedMessage,
                                    PermissionRequestDelegate delegate,
                                    Runnable payload);
+
+        /**
+         * Override to implement the handling logic of view model invalidation effects
+         */
+        void handleInvalidationEffects();
+
+        /**
+         * Attempt to restore cached view model data to the view
+         *
+         * @return true if cached data is available, false otherwise
+         */
+        boolean restoreDataFromCache();
     }
 }

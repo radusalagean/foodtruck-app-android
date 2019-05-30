@@ -18,7 +18,6 @@ public interface ProfileMVP {
 
     interface Model extends BaseMVP.Model<ProfileViewModel> {
         Observable<ProfileViewModel> getViewModel(String profileId);
-        Observable<ProfileViewModel> getFreshViewModel(String profileId);
         Observable<Account> getAccount(String profileId);
         Observable<List<Foodtruck>> getFoodtrucks(String profileId);
         Observable<Message> removeProfilePicture();
@@ -28,16 +27,14 @@ public interface ProfileMVP {
     interface View extends BaseMVP.View {
         void updateAccount(Account account);
         void updateFoodtrucks(List<Foodtruck> foodtrucks);
-        void triggerDataRefresh();
-        void triggerAccountRefresh();
         void setAuthenticatedAccountImage(@Nullable String imageUrl, @NonNull String signature);
     }
 
     interface Presenter extends BaseMVP.Presenter<View> {
-        void loadViewModel(String profileId, boolean refresh);
-        void reloadData(String profileId);
+        void loadViewModel(String profileId);
         void removeProfilePicture();
         void reloadAccount(String profileId);
+        void reloadFoodtrucks(String profileId);
         void uploadProfilePicture(File file);
     }
 }

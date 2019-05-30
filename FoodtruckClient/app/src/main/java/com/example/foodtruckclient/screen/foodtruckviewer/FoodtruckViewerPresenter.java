@@ -4,16 +4,24 @@ import androidx.annotation.NonNull;
 
 import com.example.foodtruckclient.R;
 import com.example.foodtruckclient.dialog.DialogManager;
+import com.example.foodtruckclient.generic.contentinvalidation.ContentType;
+import com.example.foodtruckclient.generic.contentinvalidation.InvalidationBundle;
+import com.example.foodtruckclient.generic.contentinvalidation.InvalidationEffect;
+import com.example.foodtruckclient.generic.contentinvalidation.InvalidationType;
 import com.example.foodtruckclient.generic.mapmvp.BaseMapPresenter;
+import com.example.foodtruckclient.generic.viewmodel.ViewModelManager;
 import com.example.foodtruckclient.location.LocationManager;
 import com.example.foodtruckclient.network.foodtruckapi.model.Coordinates;
+import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
 import com.example.foodtruckclient.network.foodtruckapi.model.Message;
 import com.example.foodtruckclient.network.foodtruckapi.model.Review;
 import com.example.foodtruckclient.permission.PermissionManager;
+import com.example.foodtruckclient.util.NumberUtils;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import io.reactivex.Observable;
+import java.util.List;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import timber.log.Timber;
@@ -24,21 +32,25 @@ public class FoodtruckViewerPresenter extends BaseMapPresenter<FoodtruckViewerMV
     public FoodtruckViewerPresenter(FoodtruckViewerMVP.Model model,
                                     LocationManager locationManager,
                                     PermissionManager permissionManager,
-                                    DialogManager dialogManager) {
+                                    DialogManager dialogManager,
+                                    ViewModelManager viewModelManager) {
         super(model, locationManager, permissionManager, dialogManager);
+        this.viewModelManager = viewModelManager;
     }
 
     @Override
-    public void loadViewModel(String foodtruckId, boolean refresh) {
+    public void loadViewModel(String foodtruckId) {
         setRefreshing(true);
-        Observable<FoodtruckViewerViewModel> observable = refresh ?
-                model.getFreshViewModel(foodtruckId) : model.getViewModel(foodtruckId);
-        compositeDisposable.add(observable
+        compositeDisposable.add(model.getViewModel(foodtruckId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableObserver<FoodtruckViewerViewModel>() {
                     @Override
                     public void onNext(FoodtruckViewerViewModel foodtruckViewerViewModel) {
-                        processData(foodtruckViewerViewModel);
+                        processFoodtruck(foodtruckViewerViewModel.getFoodtruck(), false);
+                        postOnView(() -> {
+                            view.updateMyReview(foodtruckViewerViewModel.getMyReview());
+                            view.updateReviews(foodtruckViewerViewModel.getReviews());
+                        });
                     }
 
                     @Override
@@ -56,9 +68,80 @@ public class FoodtruckViewerPresenter extends BaseMapPresenter<FoodtruckViewerMV
     }
 
     @Override
-    public void reloadData(String foodtruckId) {
-        loadViewModel(foodtruckId, true);
+    public void reloadFoodtruck(String foodtruckId) {
+        setRefreshing(true);
+        compositeDisposable.add(model.getFoodtruck(foodtruckId)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableObserver<Foodtruck>() {
+                    @Override
+                    public void onNext(Foodtruck foodtruck) {
+                        processFoodtruck(foodtruck, false);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Timber.e(e);
+                        postOnView(() -> view.toast(e.getMessage()));
+                        setRefreshing(false);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        setRefreshing(false);
+                    }
+                }));
     }
+
+    @Override
+    public void reloadAllReviews(String foodtruckId) {
+        setRefreshing(true);
+        compositeDisposable.add(model.getAllReviews(foodtruckId)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableObserver<List<Review>>() {
+                    @Override
+                    public void onNext(List<Review> reviews) {
+                        postOnView(() -> view.updateReviews(reviews));
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Timber.e(e);
+                        postOnView(() -> view.toast(e.getMessage()));
+                        setRefreshing(false);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        setRefreshing(false);
+                    }
+                }));
+    }
+
+    @Override
+    public void reloadMyReview(String foodtruckId) {
+        setRefreshing(false);
+        compositeDisposable.add(model.getMyReview(foodtruckId)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableObserver<Review>() {
+                    @Override
+                    public void onNext(Review review) {
+                        postOnView(() -> view.updateMyReview(review));
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Timber.e(e);
+                        postOnView(() -> view.toast(e.getMessage()));
+                        setRefreshing(false);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        setRefreshing(false);
+                    }
+                }));
+    }
+
 
     @Override
     public void submitReview(String foodtruckId, String title, String content, float rating) {
@@ -80,13 +163,17 @@ public class FoodtruckViewerPresenter extends BaseMapPresenter<FoodtruckViewerMV
                         Timber.e(e);
                         postOnView(() -> view.toast(e.getMessage()));
                         setRefreshing(false);
-                        view.triggerDataRefresh();
                     }
 
                     @Override
                     public void onComplete() {
                         setRefreshing(false);
-                        view.triggerDataRefresh();
+                        loadViewModel(foodtruckId);
+                        viewModelManager.sendInvalidationBundle(new InvalidationBundle(
+                                foodtruckId,
+                                ContentType.REVIEW,
+                                InvalidationType.RELOAD
+                        ), model.getUuid());
                     }
                 }));
     }
@@ -111,13 +198,17 @@ public class FoodtruckViewerPresenter extends BaseMapPresenter<FoodtruckViewerMV
                         Timber.e(e);
                         postOnView(() -> view.toast(e.getMessage()));
                         setRefreshing(false);
-                        view.triggerDataRefresh();
                     }
 
                     @Override
                     public void onComplete() {
                         setRefreshing(false);
-                        view.triggerDataRefresh();
+                        loadViewModel(model.getCachedViewModel().getFoodtruck().getId());
+                        viewModelManager.sendInvalidationBundle(new InvalidationBundle(
+                                model.getCachedViewModel().getFoodtruck().getId(),
+                                ContentType.REVIEW,
+                                InvalidationType.RELOAD
+                        ), model.getUuid());
                     }
                 }));
     }
@@ -139,13 +230,17 @@ public class FoodtruckViewerPresenter extends BaseMapPresenter<FoodtruckViewerMV
                         Timber.e(e);
                         postOnView(() -> view.toast(e.getMessage()));
                         setRefreshing(false);
-                        view.triggerDataRefresh();
                     }
 
                     @Override
                     public void onComplete() {
                         setRefreshing(false);
-                        view.triggerDataRefresh();
+                        loadViewModel(model.getCachedViewModel().getFoodtruck().getId());
+                        viewModelManager.sendInvalidationBundle(new InvalidationBundle(
+                                model.getCachedViewModel().getFoodtruck().getId(),
+                                ContentType.REVIEW,
+                                InvalidationType.RELOAD
+                        ), model.getUuid());
                     }
                 }));
     }
@@ -171,26 +266,62 @@ public class FoodtruckViewerPresenter extends BaseMapPresenter<FoodtruckViewerMV
                     @Override
                     public void onComplete() {
                         setRefreshing(false);
-                        postOnView(() -> view.onBackPressed());
+                        postOnView(() -> view.popFragment());
+                        viewModelManager.sendInvalidationBundle(new InvalidationBundle(
+                                foodtruckId,
+                                ContentType.FOODTRUCK,
+                                InvalidationType.REMOVE
+                        ), model.getUuid());
                     }
                 }));
     }
 
-    private void processData(@NonNull FoodtruckViewerViewModel viewModel) {
-        postOnView(() -> {
-            view.updateFoodtruck(viewModel.getFoodtruck());
-            view.updateReviews(viewModel.getReviews());
-            view.updateMyReview(viewModel.getMyReview());
-        });
-        Coordinates coordinates = viewModel.getFoodtruck().getCoordinates();
+    private void processFoodtruck(@NonNull Foodtruck foodtruck, boolean restoredFromCache) {
+        postOnView(() ->
+            view.updateFoodtruck(foodtruck));
+        Coordinates coordinates = foodtruck.getCoordinates();
         Coordinates oldCoordinates = locationManager
-                .getMarkerCoordinates(viewModel.getFoodtruck().getId());
+                .getMarkerCoordinates(foodtruck.getId());
         // Check if old coordinates are different the new ones
         if (!coordinates.equals(oldCoordinates)) {
             MarkerOptions marker = new MarkerOptions()
                     .position(new LatLng(coordinates.getLatitude(), coordinates.getLongitude()));
-            locationManager.takeMarker(viewModel.getFoodtruck().getId(), marker);
-            zoomOnLocation(coordinates.getLatitude(), coordinates.getLongitude());
+            locationManager.takeMarker(foodtruck.getId(), marker);
+            zoomOnLocation(coordinates.getLatitude(), coordinates.getLongitude(), restoredFromCache);
         }
+    }
+
+    @Override
+    public void handleInvalidationEffects() {
+        if (model.getCachedViewModel() != null) {
+            int invalidationEffects = model.getCachedViewModel().getInvalidationEffects();
+            Timber.d("handleInvalidationEffects: %s",
+                    NumberUtils.convertIntToBinaryString(invalidationEffects));
+            if ((invalidationEffects & InvalidationEffect.POP_FRAGMENT) != 0) {
+                view.popFragment();
+                return;
+            }
+            if ((invalidationEffects & InvalidationEffect.FOODTRUCK_RELOAD) != 0) {
+                reloadFoodtruck(model.getCachedViewModel().getFoodtruck().getId());
+            }
+            if ((invalidationEffects & InvalidationEffect.REVIEW_RELOAD) != 0) {
+                loadViewModel(model.getCachedViewModel().getFoodtruck().getId());
+            }
+            model.getCachedViewModel().clearInvalidationEffects();
+        }
+    }
+
+    @Override
+    public boolean restoreDataFromCache() {
+        if (model.getCachedViewModel() == null) {
+            return false;
+        }
+        processFoodtruck(model.getCachedViewModel().getFoodtruck(), true);
+        postOnView(() -> {
+            view.updateReviews(model.getCachedViewModel().getReviews());
+            view.updateMyReview(model.getCachedViewModel().getMyReview());
+        });
+        handleInvalidationEffects();
+        return true;
     }
 }

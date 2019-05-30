@@ -93,7 +93,6 @@ public class ProfileFragment extends BaseFragment
             profileName = getArguments().getString(ARG_PROFILE_NAME);
         }
         adapter = new ProfileAdapter(this);
-        presenter.loadViewModel(profileId, false);
         setHasOptionsMenu(true);
     }
 
@@ -101,27 +100,10 @@ public class ProfileFragment extends BaseFragment
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState); // called for logging purposes
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         ButterKnife.bind(this, view);
         return view;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        presenter.takeView(this);
-    }
-
-    @Override
-    public void onStop() {
-        presenter.dropView();
-        super.onStop();
-    }
-
-    @Override
-    public void onDestroyView() {
-        recyclerView.setAdapter(null);
-        super.onDestroyView();
     }
 
     @Override
@@ -176,7 +158,7 @@ public class ProfileFragment extends BaseFragment
     @Override
     protected void initViews() {
         toolbar.setTitle(profileName);
-        activityContract.setActionBar(toolbar);
+        activityContract.setToolbar(toolbar);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new ListItemDecoration(
@@ -187,8 +169,13 @@ public class ProfileFragment extends BaseFragment
     }
 
     @Override
+    protected void disposeViews() {
+        recyclerView.setAdapter(null);
+    }
+
+    @Override
     protected void registerListeners() {
-        swipeRefreshLayout.setOnRefreshListener(() -> presenter.reloadData(profileId));
+        swipeRefreshLayout.setOnRefreshListener(() -> presenter.loadViewModel(profileId));
     }
 
     @Override
@@ -197,8 +184,16 @@ public class ProfileFragment extends BaseFragment
     }
 
     @Override
-    protected BaseMVP.Presenter getPresenter() {
-        return presenter;
+    protected void loadData() {
+        if (!presenter.restoreDataFromCache()) {
+            presenter.loadViewModel(profileId);
+        }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    protected <T extends BaseMVP.View> BaseMVP.Presenter<T> getPresenter() {
+        return (BaseMVP.Presenter<T>) presenter;
     }
 
     @Nullable
@@ -228,16 +223,6 @@ public class ProfileFragment extends BaseFragment
     @Override
     public void updateFoodtrucks(List<Foodtruck> foodtrucks) {
         adapter.setFoodtrucks(foodtrucks);
-    }
-
-    @Override
-    public void triggerDataRefresh() {
-        presenter.reloadData(profileId);
-    }
-
-    @Override
-    public void triggerAccountRefresh() {
-        presenter.reloadAccount(profileId);
     }
 
     @Override

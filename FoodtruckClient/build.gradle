@@ -43,7 +43,7 @@ ext {
     legacySupportVersion = '1.0.0'
     playServicesMapsVersion = '16.1.0'
     playServicesLocationVersion = '16.0.0'
-    okhttpVersion = '3.14.1'
+    okhttpVersion = '3.12.1'
     retrofitVersion = '2.5.0'
     guavaVersion = '27.1-android'
     gsonVersion = '2.8.5'

@@ -83,9 +83,18 @@ public class LocationManager implements OnMapReadyCallback {
         handleRunnable(runnable);
     }
 
-    public void zoomOnLocation(double latitude, double longitude) {
-        Runnable runnable = () -> googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                    new LatLng(latitude, longitude), DEFAULT_ZOOM));
+    public void zoomOnLocation(double latitude, double longitude, boolean instant) {
+        Runnable runnable = () -> {
+            if (instant) {
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                        new LatLng(latitude, longitude), DEFAULT_ZOOM
+                ));
+            } else {
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                        new LatLng(latitude, longitude), DEFAULT_ZOOM
+                ));
+            }
+        };
         handleRunnable(runnable);
     }
 
@@ -95,7 +104,7 @@ public class LocationManager implements OnMapReadyCallback {
                     task.isSuccessful(), task.getResult());
             if (task.isSuccessful() && task.getResult() != null) {
                 lastKnownLocation = task.getResult();
-                zoomOnLocation(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+                zoomOnLocation(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude(), false);
             }
         });
     }

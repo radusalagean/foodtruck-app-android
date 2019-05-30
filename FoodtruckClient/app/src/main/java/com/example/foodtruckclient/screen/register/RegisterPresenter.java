@@ -43,7 +43,7 @@ public class RegisterPresenter extends BasePresenter<RegisterMVP.View, RegisterM
                         setRefreshing(false);
                         postOnView(() -> {
                             view.showSnackBar(R.string.registered_message, userName);
-                            view.onBackPressed();
+                            view.popFragment();
                         });
                     }
                 }));
@@ -65,5 +65,11 @@ public class RegisterPresenter extends BasePresenter<RegisterMVP.View, RegisterM
                         postOnView(() -> view.setUsernameAvailability(false));
                     }
                 }));
+    }
+
+    @Override
+    public boolean restoreDataFromCache() {
+        // nothing to do here
+        return false;
     }
 }

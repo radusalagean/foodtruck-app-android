@@ -87,28 +87,22 @@ public class LoginFragment extends BaseFragment implements LoginMVP.View {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState); // called for logging purposes
         View view = inflater.inflate(R.layout.fragment_login, container, false);
         ButterKnife.bind(this, view);
         return view;
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        presenter.takeView(this);
-    }
-
-    @Override
-    public void onStop() {
-        presenter.dropView();
-        super.onStop();
-    }
-
-    @Override
     protected void initViews() {
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
         toolbar.setTitle(getString(R.string.login));
-        activityContract.setActionBar(toolbar);
+        activityContract.setToolbar(toolbar);
+    }
+
+    @Override
+    protected void disposeViews() {
+        // nothing to do here
     }
 
     @Override
@@ -139,8 +133,14 @@ public class LoginFragment extends BaseFragment implements LoginMVP.View {
     }
 
     @Override
-    protected BaseMVP.Presenter getPresenter() {
-        return presenter;
+    protected void loadData() {
+        // nothing to do here
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    protected <T extends BaseMVP.View> BaseMVP.Presenter<T> getPresenter() {
+        return (BaseMVP.Presenter<T>) presenter;
     }
 
     @Nullable

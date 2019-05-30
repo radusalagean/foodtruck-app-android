@@ -24,7 +24,6 @@ import com.example.foodtruckclient.generic.mvp.BaseMVP;
 import com.example.foodtruckclient.generic.view.OnViewInflatedListener;
 import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
 import com.example.foodtruckclient.view.MorphableFloatingActionButton;
-import com.google.android.gms.maps.MapView;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.List;
@@ -162,52 +161,30 @@ public class DashboardFragment extends BaseMapFragment
         super.onCreate(savedInstanceState);
         pagerAdapter = new DashboardPagerAdapter(getContext(), onViewInflatedListener);
         listAdapter = new DashboardListAdapter(this);
-        presenter.loadViewModel();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState); // called for logging purposes
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
         ButterKnife.bind(this, view);
         return view;
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        if (activityContract.isDashboardInvalidated()) {
-            presenter.reloadFoodtrucks();
-            activityContract.validateDashboard();
-        }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        presenter.takeView(this);
-    }
-
-    @Override
-    public void onStop() {
-        presenter.dropView();
-        super.onStop();
-    }
-
-    @Override
-    public void onDestroyView() {
-        viewPager.setAdapter(null);
-        super.onDestroyView();
-    }
-
-    @Override
     protected void initViews() {
         toolbar.setTitle(R.string.dashboard_toolbar_title);
-        activityContract.setActionBar(toolbar);
+        activityContract.setToolbar(toolbar);
         fab.setImageResource(R.drawable.ic_add_circle_outline_white_24dp);
         viewPager.setAdapter(pagerAdapter);
         viewPager.setOffscreenPageLimit(DashboardPagerMapper.getCount());
         tabLayout.setupWithViewPager(viewPager);
+    }
+
+    @Override
+    protected void disposeViews() {
+        viewPager.setAdapter(null);
     }
 
     @Override
@@ -223,8 +200,16 @@ public class DashboardFragment extends BaseMapFragment
     }
 
     @Override
-    protected BaseMVP.Presenter getPresenter() {
-        return presenter;
+    protected void loadData() {
+        if (!presenter.restoreDataFromCache()) {
+            presenter.loadViewModel();
+        }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    protected <T extends BaseMVP.View> BaseMVP.Presenter<T> getPresenter() {
+        return (BaseMVP.Presenter<T>) presenter;
     }
 
     @Nullable
@@ -236,11 +221,6 @@ public class DashboardFragment extends BaseMapFragment
     @Override
     public void updateFoodtrucks(List<Foodtruck> foodtrucks) {
         listAdapter.setFoodtrucks(foodtrucks);
-    }
-
-    @Override
-    public void clearFoodtrucks() {
-        listAdapter.clearFoodtrucks();
     }
 
     @Override
@@ -258,6 +238,6 @@ public class DashboardFragment extends BaseMapFragment
     @Override
     public void onFoodtruckLocationButtonClicked(Foodtruck foodtruck) {
         presenter.zoomOnLocation(foodtruck.getCoordinates().getLatitude(),
-                foodtruck.getCoordinates().getLongitude());
+                foodtruck.getCoordinates().getLongitude(), false);
     }
 }

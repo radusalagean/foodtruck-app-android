@@ -1,6 +1,6 @@
 package com.example.foodtruckclient.application;
 
-import android.app.Application;
+import androidx.multidex.MultiDexApplication;
 
 import com.example.foodtruckclient.di.application.ApplicationComponent;
 import com.example.foodtruckclient.di.application.ApplicationModule;
@@ -8,7 +8,7 @@ import com.example.foodtruckclient.di.application.DaggerApplicationComponent;
 import com.example.foodtruckclient.di.application.network.FoodtruckApiModule;
 import com.example.foodtruckclient.di.application.repository.RepositoryModule;
 
-public class FoodtruckApplication extends Application {
+public class FoodtruckApplication extends MultiDexApplication {
 
     private ApplicationComponent applicationComponent;
 

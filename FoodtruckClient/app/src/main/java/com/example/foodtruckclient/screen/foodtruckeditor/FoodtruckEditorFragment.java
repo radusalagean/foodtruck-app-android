@@ -171,7 +171,8 @@ public class FoodtruckEditorFragment extends BaseMapFragment
                     Coordinates coordinates = presenter.getCoordinates();
                     if (coordinates != null) {
                         presenter.addManualMarker(coordinates);
-                        presenter.zoomOnLocation(coordinates.getLatitude(), coordinates.getLongitude());
+                        presenter.zoomOnLocation(coordinates.getLatitude(),
+                                coordinates.getLongitude(), true);
                     }
                     break;
                 case R.id.layout_foodtruck_editor_image:
@@ -260,33 +261,10 @@ public class FoodtruckEditorFragment extends BaseMapFragment
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState); // called for logging purposes
         View view = inflater.inflate(R.layout.fragment_foodtruck_editor, container, false);
         ButterKnife.bind(this, view);
         return view;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        presenter.takeView(this);
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-    }
-
-    @Override
-    public void onStop() {
-        presenter.dropView();
-        super.onStop();
-    }
-
-    @Override
-    public void onDestroyView() {
-        viewPager.setAdapter(null);
-        super.onDestroyView();
     }
 
     @Override
@@ -314,12 +292,17 @@ public class FoodtruckEditorFragment extends BaseMapFragment
                         R.string.foodtruck_editor_toolbar_title_edit_foodtruck :
                         R.string.foodtruck_editor_toolbar_title_add_foodtruck
         );
-        activityContract.setActionBar(toolbar);
+        activityContract.setToolbar(toolbar);
         viewPager.setAdapter(pagerAdapter);
         viewPager.setOffscreenPageLimit(FoodtruckEditorPagerMapper.getCount());
         fab.setOnClickListener(fabOnClickListener);
         handleNavigationButtonsVisibility(viewPager.getCurrentItem());
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
+    }
+
+    @Override
+    protected void disposeViews() {
+        viewPager.setAdapter(null);
     }
 
     @Override
@@ -338,8 +321,14 @@ public class FoodtruckEditorFragment extends BaseMapFragment
     }
 
     @Override
-    protected BaseMVP.Presenter getPresenter() {
-        return presenter;
+    protected void loadData() {
+        presenter.handleInvalidationEffects();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    protected <T extends BaseMVP.View> BaseMVP.Presenter<T> getPresenter() {
+        return (BaseMVP.Presenter<T>) presenter;
     }
 
     @Nullable

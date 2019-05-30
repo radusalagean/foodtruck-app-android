@@ -38,8 +38,6 @@ import butterknife.ButterKnife;
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final String BUNDLE_DASHBOARD_INVALIDATED = "dashboard_invalidated";
-
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
 
@@ -56,7 +54,6 @@ public class MainActivity extends BaseActivity
     ViewModelManager viewModelManager;
 
     private ActionBarDrawerToggle actionBarDrawerToggle;
-    private boolean dashboardInvalidated;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,9 +61,6 @@ public class MainActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        if (savedInstanceState != null) {
-            dashboardInvalidated = savedInstanceState.getBoolean(BUNDLE_DASHBOARD_INVALIDATED, false);
-        }
         authenticationNavigationView.setNavigationItemSelectedListener(this);
         addDefaultFragmentIfNecessary();
     }
@@ -76,12 +70,6 @@ public class MainActivity extends BaseActivity
         super.onStart();
         authenticationNavigationView.setAuthenticatedAccount(authenticationRepository.getAuthenticatedAccount());
         viewModelManager.registerListener(getFragmentManagerCompat());
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean(BUNDLE_DASHBOARD_INVALIDATED, dashboardInvalidated);
     }
 
     @Override
@@ -147,18 +135,16 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void invalidateDashboard() {
-        dashboardInvalidated = true;
-    }
-
-    @Override
-    public void validateDashboard() {
-        dashboardInvalidated = false;
-    }
-
-    @Override
-    public boolean isDashboardInvalidated() {
-        return dashboardInvalidated;
+    public void showDashboardScreen() {
+        String dashboardTag = viewModelManager.getDashboardUuidString();
+        BaseFragment fragment;
+        if (dashboardTag != null) {
+            fragment = (DashboardFragment) getSupportFragmentManager()
+                    .findFragmentByTag(dashboardTag);
+        } else {
+            fragment = DashboardFragment.newInstance();
+        }
+        showFragment(fragment, dashboardTag != null, null);
     }
 
     @Override
@@ -192,7 +178,7 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void setActionBar(@NonNull Toolbar toolbar) {
+    public void setToolbar(@NonNull Toolbar toolbar) {
         if (actionBarDrawerToggle != null) {
             drawerLayout.removeDrawerListener(actionBarDrawerToggle);
         }
@@ -203,7 +189,7 @@ public class MainActivity extends BaseActivity
         );
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
-        super.setActionBar(toolbar);
+        super.setToolbar(toolbar);
     }
 
     @Override
@@ -219,7 +205,7 @@ public class MainActivity extends BaseActivity
         int id = menuItem.getItemId();
         switch (id) {
             case R.id.nav_dashboard:
-
+                showDashboardScreen();
                 break;
             case R.id.nav_my_profile:
                 String profileId = authenticationRepository.getAuthenticatedAccount().getId();

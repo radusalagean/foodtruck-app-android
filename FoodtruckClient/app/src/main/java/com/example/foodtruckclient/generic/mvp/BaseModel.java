@@ -30,6 +30,11 @@ public abstract class BaseModel<T extends BaseViewModel, S extends BaseViewModel
     }
 
     @Override
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    @Override
     @Nullable
     public T getCachedViewModel() {
         return viewModelRepository != null ? viewModelRepository.getViewModel(uuid) : null;

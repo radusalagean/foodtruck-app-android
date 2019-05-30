@@ -20,10 +20,6 @@ public class FoodtruckViewerModel extends BaseModel<FoodtruckViewerViewModel, Fo
 
     @Override
     public Observable<FoodtruckViewerViewModel> getViewModel(String foodtruckId) {
-        FoodtruckViewerViewModel cachedViewModel = getCachedViewModel();
-        if (cachedViewModel != null) {
-            return Observable.just(cachedViewModel);
-        }
         return getFreshViewModel(foodtruckId);
     }
 

@@ -18,10 +18,6 @@ public class DashboardModel extends BaseModel<DashboardViewModel, DashboardViewM
 
     @Override
     public Observable<DashboardViewModel> getViewModel() {
-        DashboardViewModel cachedViewModel = getCachedViewModel();
-        if (cachedViewModel != null) {
-            return Observable.just(cachedViewModel);
-        }
         return networkRepository.getAllFoodtrucks()
                 .map(DashboardViewModel::createFrom)
                 .doOnNext(viewModel -> viewModelRepository.addViewModel(uuid, viewModel));

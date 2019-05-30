@@ -3,6 +3,8 @@ package com.example.foodtruckclient.generic.viewmodel;
 import androidx.collection.ArrayMap;
 import androidx.fragment.app.FragmentManager;
 
+import com.example.foodtruckclient.generic.contentinvalidation.InvalidationBundle;
+
 import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
@@ -11,7 +13,7 @@ import timber.log.Timber;
 
 public abstract class BaseViewModelRepository<T extends BaseViewModel> {
 
-    private Map<UUID, T> viewModelMap;
+    protected Map<UUID, T> viewModelMap;
 
     public BaseViewModelRepository() {
         this.viewModelMap = new ArrayMap<>();
@@ -22,7 +24,7 @@ public abstract class BaseViewModelRepository<T extends BaseViewModel> {
     }
 
     public void addViewModel(UUID uuid, T viewModel) {
-        Timber.w("addViewModel(%s, %s)", uuid, viewModel);
+        Timber.d("addViewModel(%s, %s)", uuid, viewModel);
         viewModelMap.put(uuid, viewModel);
     }
 
@@ -32,8 +34,19 @@ public abstract class BaseViewModelRepository<T extends BaseViewModel> {
             if (fragmentManager.findFragmentByTag(iterator.next().getKey().toString()) == null) {
                 // No reference to the fragment found, so release the associated View Model
                 // reference from the map
-                Timber.w("Removing unused view model");
+                Timber.d("Removing unused view model");
                 iterator.remove();
+            }
+        }
+    }
+
+    /**
+     * Send the invalidation bundle to all screens, except the current one
+     */
+    public void sendInvalidationBundle(InvalidationBundle invalidationBundle, UUID currentScreenUuid) {
+        for (Map.Entry<UUID, T> entry : viewModelMap.entrySet()) {
+            if (!entry.getKey().equals(currentScreenUuid)) {
+                entry.getValue().processInvalidationBundle(invalidationBundle);
             }
         }
     }

@@ -27,12 +27,13 @@ public interface FoodtruckViewerMVP {
         void updateFoodtruck(Foodtruck foodtruck);
         void updateMyReview(Review myReview);
         void updateReviews(List<Review> reviews);
-        void triggerDataRefresh();
     }
 
     interface Presenter extends BaseMapMVP.Presenter<View> {
-        void loadViewModel(String foodtruckId, boolean refresh);
-        void reloadData(String foodtruckId);
+        void loadViewModel(String foodtruckId);
+        void reloadFoodtruck(String foodtruckId);
+        void reloadAllReviews(String foodtruckId);
+        void reloadMyReview(String foodtruckId);
         void submitReview(String foodtruckId, String title, String content, float rating);
         void updateReview(String reviewId, String title, String content, float rating);
         void removeReview(String reviewId);

@@ -1,8 +1,10 @@
 package com.example.foodtruckclient.generic.viewmodel;
 
+import androidx.annotation.Nullable;
 import androidx.collection.ArrayMap;
 import androidx.fragment.app.FragmentManager;
 
+import com.example.foodtruckclient.generic.contentinvalidation.InvalidationBundle;
 import com.example.foodtruckclient.generic.fragment.BaseFragment;
 import com.example.foodtruckclient.screen.dashboard.DashboardFragment;
 import com.example.foodtruckclient.screen.dashboard.DashboardViewModelRepository;
@@ -14,6 +16,7 @@ import com.example.foodtruckclient.screen.profile.ProfileFragment;
 import com.example.foodtruckclient.screen.profile.ProfileViewModelRepository;
 
 import java.util.Map;
+import java.util.UUID;
 
 public class ViewModelManager {
 
@@ -49,5 +52,21 @@ public class ViewModelManager {
     public void unregisterListener(FragmentManager fragmentManager) {
         fragmentManager.removeOnBackStackChangedListener(onBackStackChangedListener);
         onBackStackChangedListener = null;
+    }
+
+    @Nullable
+    public String getDashboardUuidString() {
+        BaseViewModelRepository repository = viewModelRepositoryMap.get(DashboardFragment.class);
+        if (repository instanceof DashboardViewModelRepository) {
+            return ((DashboardViewModelRepository) repository).getDashboardUuidString();
+        }
+        return null;
+    }
+
+    public void sendInvalidationBundle(InvalidationBundle invalidationBundle, UUID currentScreenUuid) {
+        for (BaseViewModelRepository<? extends BaseViewModel> repository :
+                viewModelRepositoryMap.values()) {
+            repository.sendInvalidationBundle(invalidationBundle, currentScreenUuid);
+        }
     }
 }

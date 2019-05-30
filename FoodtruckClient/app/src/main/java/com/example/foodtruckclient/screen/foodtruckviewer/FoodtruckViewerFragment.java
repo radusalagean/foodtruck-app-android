@@ -30,6 +30,7 @@ import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
 import com.example.foodtruckclient.network.foodtruckapi.model.Review;
 import com.example.foodtruckclient.view.StateAwareAppBarLayout;
 import com.google.android.gms.maps.MapView;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
@@ -47,6 +48,9 @@ public class FoodtruckViewerFragment extends BaseMapFragment
 
     private String foodtruckId;
     private String foodtruckName;
+
+    @BindView(R.id.toolbar_layout)
+    CollapsingToolbarLayout collapsingToolbarLayout;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -112,27 +116,10 @@ public class FoodtruckViewerFragment extends BaseMapFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState); // called for logging purposes
         View view = inflater.inflate(R.layout.fragment_foodtruck_viewer, container, false);
         ButterKnife.bind(this, view);
         return view;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        presenter.takeView(this);
-    }
-
-    @Override
-    public void onStop() {
-        presenter.dropView();
-        super.onStop();
-    }
-
-    @Override
-    public void onDestroyView() {
-        recyclerView.setAdapter(null);
-        super.onDestroyView();
     }
 
     @Override
@@ -162,8 +149,8 @@ public class FoodtruckViewerFragment extends BaseMapFragment
 
     @Override
     protected void initViews() {
-        toolbar.setTitle(foodtruckName);
-        activityContract.setActionBar(toolbar);
+        collapsingToolbarLayout.setTitle(foodtruckName);
+        activityContract.setToolbar(toolbar);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new ListItemDecoration(
@@ -173,12 +160,16 @@ public class FoodtruckViewerFragment extends BaseMapFragment
         recyclerView.setAdapter(adapter);
         presenter.setGesturesEnabled(false);
         presenter.setZoomButtonsEnabled(true);
-        presenter.loadViewModel(foodtruckId, false);
+    }
+
+    @Override
+    protected void disposeViews() {
+        recyclerView.setAdapter(null);
     }
 
     @Override
     protected void registerListeners() {
-        swipeRefreshLayout.setOnRefreshListener(() -> presenter.reloadData(foodtruckId));
+        swipeRefreshLayout.setOnRefreshListener(() -> presenter.loadViewModel(foodtruckId));
         appBarLayout.setOnStateChangedListener(appBarOnStateChangeListener);
     }
 
@@ -189,8 +180,16 @@ public class FoodtruckViewerFragment extends BaseMapFragment
     }
 
     @Override
-    protected BaseMVP.Presenter getPresenter() {
-        return presenter;
+    protected void loadData() {
+        if (!presenter.restoreDataFromCache()) {
+            presenter.loadViewModel(foodtruckId);
+        }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    protected <T extends BaseMVP.View> BaseMVP.Presenter<T> getPresenter() {
+        return (BaseMVP.Presenter<T>) presenter;
     }
 
     @Nullable
@@ -207,6 +206,9 @@ public class FoodtruckViewerFragment extends BaseMapFragment
 
     @Override
     public void updateFoodtruck(Foodtruck foodtruck) {
+        foodtruckName = foodtruck.getName();
+        getArguments().putString(ARG_FOODTRUCK_NAME, foodtruckName);
+        collapsingToolbarLayout.setTitle(foodtruckName);
         if (foodtruck.getImageUrl() != null) {
             Glide.with(topImageView)
                     .load(foodtruck.getImageUrl())
@@ -241,11 +243,6 @@ public class FoodtruckViewerFragment extends BaseMapFragment
     }
 
     @Override
-    public void triggerDataRefresh() {
-        presenter.reloadData(foodtruckId);
-    }
-
-    @Override
     public void takeMapView(MapView mapView) {
         mapViewManager.takeMapView(mapView);
     }
@@ -269,19 +266,16 @@ public class FoodtruckViewerFragment extends BaseMapFragment
     @Override
     public void submitReview(String title, String content, float rating) {
         presenter.submitReview(foodtruckId, title, content, rating);
-        activityContract.invalidateDashboard();
     }
 
     @Override
     public void updateReview(String reviewId, String title, String content, float rating) {
         presenter.updateReview(reviewId, title, content, rating);
-        activityContract.invalidateDashboard();
     }
 
     @Override
     public void removeReview(String reviewId) {
         presenter.removeReview(reviewId);
-        activityContract.invalidateDashboard();
     }
 
     @Override

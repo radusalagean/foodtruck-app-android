@@ -45,4 +45,10 @@ public class LoginPresenter extends BasePresenter<LoginMVP.View, LoginMVP.Model>
                     }
                 }));
     }
+
+    @Override
+    public boolean restoreDataFromCache() {
+        // nothing to do here
+        return false;
+    }
 }

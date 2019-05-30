@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 
 import com.example.foodtruckclient.R;
 import com.example.foodtruckclient.dialog.DialogManager;
+import com.example.foodtruckclient.generic.viewmodel.ViewModelManager;
 import com.example.foodtruckclient.permission.PermissionManager;
 import com.example.foodtruckclient.permission.PermissionRequestDelegate;
 import com.example.foodtruckclient.permission.PermissionRequestListener;
@@ -21,6 +22,7 @@ public abstract class BasePresenter<T extends BaseMVP.View, S extends BaseMVP.Mo
     protected CompositeDisposable compositeDisposable;
     protected PermissionManager permissionManager;
     protected DialogManager dialogManager;
+    protected ViewModelManager viewModelManager;
     protected T view;
     protected S model;
     private boolean refreshing;
@@ -44,8 +46,12 @@ public abstract class BasePresenter<T extends BaseMVP.View, S extends BaseMVP.Mo
 
     @Override
     public void dropView() {
-        compositeDisposable.clear();
         this.view = null;
+    }
+
+    @Override
+    public void clearCompositeDisposable() {
+        compositeDisposable.clear();
     }
 
     @Override
@@ -102,5 +108,11 @@ public abstract class BasePresenter<T extends BaseMVP.View, S extends BaseMVP.Mo
                 }
             });
         }
+    }
+
+    @Override
+    public void handleInvalidationEffects() {
+        // default empty implementation
+        // override for screen-specific behavior handling
     }
 }

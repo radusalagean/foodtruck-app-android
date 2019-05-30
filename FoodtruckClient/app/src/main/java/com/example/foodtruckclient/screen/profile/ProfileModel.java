@@ -22,15 +22,6 @@ public class ProfileModel extends BaseModel<ProfileViewModel, ProfileViewModelRe
 
     @Override
     public Observable<ProfileViewModel> getViewModel(String profileId) {
-        ProfileViewModel cachedViewModel = getCachedViewModel();
-        if (cachedViewModel != null) {
-            return Observable.just(cachedViewModel);
-        }
-        return getFreshViewModel(profileId);
-    }
-
-    @Override
-    public Observable<ProfileViewModel> getFreshViewModel(String profileId) {
         return Observable.zip(networkRepository.getAccount(profileId),
                 networkRepository.getFoodtrucks(profileId), ProfileViewModel::createFrom)
                 .doOnNext(viewModel -> viewModelRepository.addViewModel(uuid, viewModel));

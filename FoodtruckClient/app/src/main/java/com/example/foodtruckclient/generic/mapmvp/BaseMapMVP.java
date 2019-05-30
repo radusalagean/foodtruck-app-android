@@ -25,7 +25,7 @@ public interface BaseMapMVP {
         void setOnMapClickListener(GoogleMap.OnMapClickListener onMapClickListener);
         void setOnInfoWindowClickListener(GoogleMap.OnInfoWindowClickListener onInfoWindowClickListener);
         void zoomOnCurrentDeviceLocation();
-        void zoomOnLocation(double latitude, double longitude);
+        void zoomOnLocation(double latitude, double longitude, boolean instant);
         void addManualMarker(Coordinates coordinates);
         @Nullable Coordinates getManualMarkerCoordinates();
         @Nullable String getFoodtruckIdByMarker(Marker marker);

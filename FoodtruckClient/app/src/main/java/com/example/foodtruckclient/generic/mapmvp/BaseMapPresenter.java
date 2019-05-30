@@ -62,8 +62,8 @@ public abstract class BaseMapPresenter<T extends BaseMapMVP.View, S extends Base
     }
 
     @Override
-    public void zoomOnLocation(double latitude, double longitude) {
-        locationManager.zoomOnLocation(latitude, longitude);
+    public void zoomOnLocation(double latitude, double longitude, boolean instant) {
+        locationManager.zoomOnLocation(latitude, longitude, instant);
     }
 
     @Override

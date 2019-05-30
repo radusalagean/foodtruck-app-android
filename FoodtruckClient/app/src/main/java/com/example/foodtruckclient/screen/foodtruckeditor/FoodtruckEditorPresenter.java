@@ -2,13 +2,19 @@ package com.example.foodtruckclient.screen.foodtruckeditor;
 
 import com.example.foodtruckclient.R;
 import com.example.foodtruckclient.dialog.DialogManager;
+import com.example.foodtruckclient.generic.contentinvalidation.ContentType;
+import com.example.foodtruckclient.generic.contentinvalidation.InvalidationBundle;
+import com.example.foodtruckclient.generic.contentinvalidation.InvalidationEffect;
+import com.example.foodtruckclient.generic.contentinvalidation.InvalidationType;
 import com.example.foodtruckclient.generic.image.ImageBundle;
 import com.example.foodtruckclient.generic.mapmvp.BaseMapPresenter;
+import com.example.foodtruckclient.generic.viewmodel.ViewModelManager;
 import com.example.foodtruckclient.location.LocationManager;
 import com.example.foodtruckclient.network.foodtruckapi.model.Coordinates;
 import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
 import com.example.foodtruckclient.permission.PermissionManager;
 import com.example.foodtruckclient.util.ImageUtils;
+import com.example.foodtruckclient.util.StringUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -27,13 +33,20 @@ public class FoodtruckEditorPresenter extends BaseMapPresenter<FoodtruckEditorMV
     public FoodtruckEditorPresenter(FoodtruckEditorMVP.Model model,
                                     LocationManager locationManager,
                                     PermissionManager permissionManager,
-                                    DialogManager dialogManager) {
+                                    DialogManager dialogManager,
+                                    ViewModelManager viewModelManager) {
         super(model, locationManager, permissionManager, dialogManager);
+        this.viewModelManager = viewModelManager;
     }
 
     @Override
     public boolean isInEditMode() {
         return model.getOriginalFoodtruck() != null;
+    }
+
+    @Override
+    public Foodtruck getFoodtruck() {
+        return model.getOriginalFoodtruck();
     }
 
     @Override
@@ -149,13 +162,18 @@ public class FoodtruckEditorPresenter extends BaseMapPresenter<FoodtruckEditorMV
                     @Override
                     public void onComplete() {
                         setRefreshing(false);
+                        viewModelManager.sendInvalidationBundle(new InvalidationBundle(
+                                updateFoodtruck ? getFoodtruck().getId() : StringUtils.emptyString(),
+                                ContentType.FOODTRUCK,
+                                InvalidationType.RELOAD
+                        ), model.getUuid());
                         postOnView(() -> {
                             view.showSnackBar(
                                     updateFoodtruck ?
                                             R.string.foodtruck_editor_foodtruck_edited_message :
                                             R.string.foodtruck_editor_foodtruck_added_message
                             );
-                            view.onBackPressed();
+                            view.popFragment();
                         });
                     }
 
@@ -167,5 +185,22 @@ public class FoodtruckEditorPresenter extends BaseMapPresenter<FoodtruckEditorMV
                     }
                 })
         );
+    }
+
+    @Override
+    public void handleInvalidationEffects() {
+        if (model.getCachedViewModel() != null) {
+            int invalidationEffects = model.getCachedViewModel().getInvalidationEffects();
+            if ((invalidationEffects & InvalidationEffect.POP_FRAGMENT) != 0) {
+                view.popFragment();
+            }
+            model.getCachedViewModel().clearInvalidationEffects();
+        }
+    }
+
+    @Override
+    public boolean restoreDataFromCache() {
+        // nothing to do here
+        return false;
     }
 }

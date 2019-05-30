@@ -1,5 +1,9 @@
 package com.example.foodtruckclient.screen.foodtruckeditor;
 
+import com.example.foodtruckclient.generic.contentinvalidation.ContentType;
+import com.example.foodtruckclient.generic.contentinvalidation.InvalidationBundle;
+import com.example.foodtruckclient.generic.contentinvalidation.InvalidationEffect;
+import com.example.foodtruckclient.generic.contentinvalidation.InvalidationType;
 import com.example.foodtruckclient.generic.image.ImageBundle;
 import com.example.foodtruckclient.generic.viewmodel.BaseViewModel;
 import com.example.foodtruckclient.network.foodtruckapi.model.Coordinates;
@@ -10,12 +14,21 @@ import java.util.List;
 
 public class FoodtruckEditorViewModel extends BaseViewModel {
 
+    private String foodtruckId;
     private String typedName;
     private String typedFoodtype;
     private List<String> addedFoodtypes;
     private Coordinates coordinates;
     private ImageBundle imageBundle;
     private File imageFile;
+
+    public String getFoodtruckId() {
+        return foodtruckId;
+    }
+
+    public void setFoodtruckId(String foodtruckId) {
+        this.foodtruckId = foodtruckId;
+    }
 
     public String getTypedName() {
         return typedName;
@@ -67,11 +80,21 @@ public class FoodtruckEditorViewModel extends BaseViewModel {
 
     public static FoodtruckEditorViewModel createFrom(Foodtruck foodtruck) {
         FoodtruckEditorViewModel viewModel = new FoodtruckEditorViewModel();
+        viewModel.setFoodtruckId(foodtruck.getId());
         viewModel.setTypedName(foodtruck.getName());
         viewModel.setAddedFoodtypes(foodtruck.getFoodtypes());
         viewModel.setCoordinates(foodtruck.getCoordinates());
         viewModel.setImageBundle(new ImageBundle(foodtruck.getImageUrl(),
                 foodtruck.getImageSignature()));
         return viewModel;
+    }
+
+    @Override
+    public void processInvalidationBundle(InvalidationBundle invalidationBundle) {
+        if (invalidationBundle.getContentId().equals(foodtruckId) &&
+                invalidationBundle.getContentType() == ContentType.FOODTRUCK &&
+                invalidationBundle.getInvalidationType() == InvalidationType.REMOVE) {
+            invalidationEffects |= InvalidationEffect.POP_FRAGMENT;
+        }
     }
 }

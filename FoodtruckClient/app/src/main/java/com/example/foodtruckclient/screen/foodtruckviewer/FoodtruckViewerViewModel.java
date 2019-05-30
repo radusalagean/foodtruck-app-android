@@ -1,5 +1,9 @@
 package com.example.foodtruckclient.screen.foodtruckviewer;
 
+import com.example.foodtruckclient.generic.contentinvalidation.ContentType;
+import com.example.foodtruckclient.generic.contentinvalidation.InvalidationBundle;
+import com.example.foodtruckclient.generic.contentinvalidation.InvalidationEffect;
+import com.example.foodtruckclient.generic.contentinvalidation.InvalidationType;
 import com.example.foodtruckclient.generic.viewmodel.BaseViewModel;
 import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
 import com.example.foodtruckclient.network.foodtruckapi.model.Review;
@@ -46,5 +50,29 @@ public class FoodtruckViewerViewModel extends BaseViewModel {
                                                       List<Review> reviews,
                                                       Review myReview) {
         return new FoodtruckViewerViewModel(foodtruck, reviews, myReview);
+    }
+
+    @Override
+    public void processInvalidationBundle(InvalidationBundle invalidationBundle) {
+        // Check if the fragment needs to be popped or the foodtruck needs to be reloaded
+        if (invalidationBundle.getContentId().equals(foodtruck.getId()) &&
+                invalidationBundle.getContentType() == ContentType.FOODTRUCK) {
+            if (invalidationBundle.getInvalidationType() == InvalidationType.REMOVE) {
+                invalidationEffects |= InvalidationEffect.POP_FRAGMENT;
+            } else {
+                invalidationEffects |= InvalidationEffect.FOODTRUCK_RELOAD;
+            }
+        }
+        // Check if reviews need to be reloaded
+        if (invalidationBundle.getContentId().equals(foodtruck.getId()) &&
+                invalidationBundle.getContentType() == ContentType.REVIEW) {
+            invalidationEffects |= InvalidationEffect.REVIEW_RELOAD;
+        }
+        // Check if profile needs to be reloaded
+        if (invalidationBundle.getContentId().equals(foodtruck.getOwner().getId()) &&
+                invalidationBundle.getContentType() == ContentType.PROFILE) {
+            // Since the profile info comes with the foodtruck, we just reload it
+            invalidationEffects |= InvalidationEffect.FOODTRUCK_RELOAD;
+        }
     }
 }
