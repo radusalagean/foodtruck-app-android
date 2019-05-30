@@ -226,11 +226,6 @@ public class ProfileFragment extends BaseFragment
     }
 
     @Override
-    public void setAuthenticatedAccountImage(@Nullable String imageUrl, @NonNull String signature) {
-        activityContract.setAuthenticatedAccountImage(imageUrl, signature);
-    }
-
-    @Override
     public void onFoodtruckSelected(Foodtruck foodtruck) {
         activityContract.showFoodtruckViewerScreen(foodtruck.getId(), foodtruck.getName());
     }

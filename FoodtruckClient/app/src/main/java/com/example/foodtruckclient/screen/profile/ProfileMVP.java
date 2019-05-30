@@ -27,7 +27,6 @@ public interface ProfileMVP {
     interface View extends BaseMVP.View {
         void updateAccount(Account account);
         void updateFoodtrucks(List<Foodtruck> foodtrucks);
-        void setAuthenticatedAccountImage(@Nullable String imageUrl, @NonNull String signature);
     }
 
     interface Presenter extends BaseMVP.Presenter<View> {

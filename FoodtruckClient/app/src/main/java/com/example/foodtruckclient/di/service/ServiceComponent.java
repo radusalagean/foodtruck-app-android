@@ -1,11 +1,14 @@
 package com.example.foodtruckclient.di.service;
 
-import dagger.Component;
+import com.example.foodtruckclient.authentication.AuthenticationService;
 
-@Component(modules = {
+import dagger.Subcomponent;
+
+@ServiceScope
+@Subcomponent(modules = {
         ServiceModule.class
 })
 public interface ServiceComponent {
 
-    // TODO add inject statements
+    void inject(AuthenticationService authenticationService);
 }

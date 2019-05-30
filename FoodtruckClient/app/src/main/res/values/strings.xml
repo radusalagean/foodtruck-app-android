@@ -76,6 +76,7 @@
     <string name="username_available">Username available</string>
     <string name="username_unavailable">Username unavailable</string>
     <string name="registered_message">%s successfully registered</string>
+    <string name="user_info_sync_failed_message">Your user account data could not be refreshed at the moment</string>
 
     <!--Profile-->
     <string name="profile_joined_date">Joined: %s</string>

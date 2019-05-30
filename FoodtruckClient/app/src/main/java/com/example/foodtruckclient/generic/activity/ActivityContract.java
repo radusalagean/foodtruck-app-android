@@ -23,11 +23,9 @@ public interface ActivityContract {
 
     FragmentManager getFragmentManagerCompat();
 
-    void setAuthenticatedAccount(@NonNull Account account);
+    void setAuthenticatedAccount(@NonNull Account account, boolean notifyUser);
 
     void clearAuthenticatedAccount();
-
-    void setAuthenticatedAccountImage(@Nullable String imageUrl, @NonNull String signature);
 
     boolean isUserAuthenticated();
 

@@ -4,6 +4,8 @@ import com.example.foodtruckclient.di.application.network.FoodtruckApiModule;
 import com.example.foodtruckclient.di.application.repository.RepositoryModule;
 import com.example.foodtruckclient.di.activity.ActivityComponent;
 import com.example.foodtruckclient.di.activity.ActivityModule;
+import com.example.foodtruckclient.di.service.ServiceComponent;
+import com.example.foodtruckclient.di.service.ServiceModule;
 
 import dagger.Component;
 
@@ -16,4 +18,5 @@ import dagger.Component;
 public interface ApplicationComponent {
 
     ActivityComponent newActivityComponent(ActivityModule activityModule);
+    ServiceComponent newServiceComponent(ServiceModule serviceModule);
 }

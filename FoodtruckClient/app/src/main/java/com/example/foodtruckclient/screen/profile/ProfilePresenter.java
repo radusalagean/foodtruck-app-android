@@ -3,6 +3,8 @@ package com.example.foodtruckclient.screen.profile;
 import android.content.Context;
 
 import com.example.foodtruckclient.R;
+import com.example.foodtruckclient.authentication.AuthenticationConstants;
+import com.example.foodtruckclient.authentication.AuthenticationService;
 import com.example.foodtruckclient.dialog.DialogManager;
 import com.example.foodtruckclient.generic.contentinvalidation.ContentType;
 import com.example.foodtruckclient.generic.contentinvalidation.InvalidationBundle;
@@ -95,6 +97,8 @@ public class ProfilePresenter extends BasePresenter<ProfileMVP.View, ProfileMVP.
                                 ContentType.PROFILE,
                                 InvalidationType.RELOAD
                         ), model.getUuid());
+                        AuthenticationService.startService(context,
+                                AuthenticationConstants.ACTION_SYNC_USER_INFO);
                     }
                 }));
     }
@@ -184,6 +188,8 @@ public class ProfilePresenter extends BasePresenter<ProfileMVP.View, ProfileMVP.
                                 ContentType.PROFILE,
                                 InvalidationType.RELOAD
                         ), model.getUuid());
+                        AuthenticationService.startService(context,
+                                AuthenticationConstants.ACTION_SYNC_USER_INFO);
                     }
                 }));
     }

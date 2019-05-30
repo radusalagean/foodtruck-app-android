@@ -14,7 +14,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.foodtruckclient.R;
+import com.example.foodtruckclient.authentication.AuthenticationBroadcastReceiver;
+import com.example.foodtruckclient.authentication.AuthenticationConstants;
 import com.example.foodtruckclient.authentication.AuthenticationRepository;
+import com.example.foodtruckclient.authentication.AuthenticationService;
 import com.example.foodtruckclient.generic.viewmodel.ViewModelManager;
 import com.example.foodtruckclient.network.foodtruckapi.model.Account;
 import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
@@ -53,6 +56,9 @@ public class MainActivity extends BaseActivity
     @Inject
     ViewModelManager viewModelManager;
 
+    @Inject
+    AuthenticationBroadcastReceiver authenticationBroadcastReceiver;
+
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
     @Override
@@ -68,13 +74,17 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onStart() {
         super.onStart();
-        authenticationNavigationView.setAuthenticatedAccount(authenticationRepository.getAuthenticatedAccount());
+        setAuthenticatedAccount(authenticationRepository.getAuthenticatedAccount(), false);
+        authenticationBroadcastReceiver.register(this);
+        AuthenticationService.startService(getApplicationContext(),
+                AuthenticationConstants.ACTION_SYNC_USER_INFO);
         viewModelManager.registerListener(getFragmentManagerCompat());
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        authenticationBroadcastReceiver.unregister(this);
         viewModelManager.unregisterListener(getFragmentManagerCompat());
     }
 
@@ -91,10 +101,12 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void setAuthenticatedAccount(@NonNull Account account) {
+    public void setAuthenticatedAccount(@Nullable Account account, boolean notifyUser) {
         authenticationNavigationView.setAuthenticatedAccount(account);
-        showSnackBar(getResources().getString(R.string.logged_in_message, account.getUsername()));
-        popAllFragments();
+        if (account != null && notifyUser) {
+            showSnackBar(getResources().getString(R.string.logged_in_message, account.getUsername()));
+            popAllFragments();
+        }
     }
 
     @Override
@@ -102,11 +114,6 @@ public class MainActivity extends BaseActivity
         authenticationNavigationView.clearAuthenticatedAccount();
         showSnackBar(getResources().getString(R.string.logged_out_message));
         popAllFragments();
-    }
-
-    @Override
-    public void setAuthenticatedAccountImage(@Nullable String imageUrl, @NonNull String signature) {
-        authenticationNavigationView.setAuthenticatedAccountImage(imageUrl, signature);
     }
 
     @Override

@@ -177,6 +177,6 @@ public class LoginFragment extends BaseFragment implements LoginMVP.View {
 
     @Override
     public void setAuthenticatedAccount(@NonNull Account account) {
-        activityContract.setAuthenticatedAccount(account);
+        activityContract.setAuthenticatedAccount(account, true);
     }
 }
