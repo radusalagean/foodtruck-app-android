@@ -26,8 +26,8 @@ import butterknife.ViewCollections;
 
 public class FoodtruckViewerMyReviewViewHolder extends RecyclerView.ViewHolder {
 
-    @BindView(R.id.foodtruck_viewer_text_view_my_review_login_hint)
-    TextView loginHintTextView;
+    @BindView(R.id.foodtruck_viewer_text_view_my_review_hint)
+    TextView hintTextView;
 
     @BindView(R.id.foodtruck_viewer_constraint_layout_my_review)
     ConstraintLayout myReviewConstraintLayout;
@@ -100,7 +100,7 @@ public class FoodtruckViewerMyReviewViewHolder extends RecyclerView.ViewHolder {
 
     public void bind(@Nullable Review myReview, Foodtruck foodtruck, FoodtruckViewerContract contract) {
         if (currentState == FoodtruckViewerMyReviewState.UNKNOWN ||
-                currentState == FoodtruckViewerMyReviewState.HIDDEN) {
+                currentState == FoodtruckViewerMyReviewState.OWN_FOODTRUCK) {
             initCurrentState(myReview, foodtruck, contract);
         }
         syncViews();
@@ -159,6 +159,7 @@ public class FoodtruckViewerMyReviewViewHolder extends RecyclerView.ViewHolder {
         reviewTitleEditText.removeTextChangedListener(textWatcher);
         reviewContentEditText.removeTextChangedListener(textWatcher);
         ratingBar.setOnRatingBarChangeListener(null);
+        hintTextView.setText(null);
     }
 
     private void refreshSubmissionButtonsEnabledState() {
@@ -196,7 +197,7 @@ public class FoodtruckViewerMyReviewViewHolder extends RecyclerView.ViewHolder {
             currentState = FoodtruckViewerMyReviewState.NOT_AUTHENTICATED;
         } else if (foodtruck == null || foodtruck.getOwner() == null ||
                 foodtruck.getOwner().getId().equals(contract.getAuthenticatedUserId())) {
-            currentState = FoodtruckViewerMyReviewState.HIDDEN;
+            currentState = FoodtruckViewerMyReviewState.OWN_FOODTRUCK;
         } else if (myReview == null || myReview.getId() == null) {
             currentState = FoodtruckViewerMyReviewState.NO_REVIEW_SUBMITTED;
         } else if (myReview.getId() != null) {
@@ -211,7 +212,8 @@ public class FoodtruckViewerMyReviewViewHolder extends RecyclerView.ViewHolder {
 
     private void syncViews() {
         myReviewConstraintLayout.setVisibility(View.VISIBLE);
-        loginHintTextView.setVisibility(View.GONE);
+        hintTextView.setVisibility(View.GONE);
+        hintTextView.setText(null);
         ViewCollections.run(editTexts, ((view, index) -> {
             view.setVisibility(View.VISIBLE);
             view.setEnabled(true);
@@ -231,7 +233,8 @@ public class FoodtruckViewerMyReviewViewHolder extends RecyclerView.ViewHolder {
         switch (currentState) {
             case FoodtruckViewerMyReviewState.NOT_AUTHENTICATED:
                 myReviewConstraintLayout.setVisibility(View.GONE);
-                loginHintTextView.setVisibility(View.VISIBLE);
+                hintTextView.setText(R.string.foodtruck_my_review_login_hint);
+                hintTextView.setVisibility(View.VISIBLE);
                 break;
             case FoodtruckViewerMyReviewState.NO_REVIEW_SUBMITTED:
                 submitButton.setVisibility(View.VISIBLE);
@@ -251,8 +254,10 @@ public class FoodtruckViewerMyReviewViewHolder extends RecyclerView.ViewHolder {
                         view.setVisibility(View.VISIBLE)));
                 saveButton.setEnabled(areFieldsValid());
                 break;
-            case FoodtruckViewerMyReviewState.HIDDEN:
+            case FoodtruckViewerMyReviewState.OWN_FOODTRUCK:
                 myReviewConstraintLayout.setVisibility(View.GONE);
+                hintTextView.setText(R.string.foodtruck_my_review_own_foodtruck);
+                hintTextView.setVisibility(View.VISIBLE);
                 break;
         }
     }

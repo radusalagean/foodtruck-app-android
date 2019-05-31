@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.foodtruckclient.network.foodtruckapi.model.Account;
+import com.example.foodtruckclient.screen.dashboard.DashboardLayoutType;
 
 import java.util.Date;
 
@@ -16,6 +17,8 @@ public class SharedPreferencesRepository {
     public SharedPreferencesRepository(SharedPreferences sharedPreferences) {
         this.sharedPreferences = sharedPreferences;
     }
+
+    // Authenticated Account
 
     public void updateAuthenticatedAccount(@NonNull Account account) {
         sharedPreferences.edit()
@@ -50,5 +53,19 @@ public class SharedPreferencesRepository {
         account.setToken(sharedPreferences.getString(SharedPreferencesConstants.PREF_ACCOUNT_TOKEN, null));
         account.setLastUpdate(new Date(sharedPreferences.getLong(SharedPreferencesConstants.PREF_ACCOUNT_LAST_UPDATE, 0L)));
         return account;
+    }
+
+    // Dashboard Layout
+
+    public void updateDashboardLayoutType(int dashboardLayoutType) {
+        sharedPreferences.edit()
+                .putInt(SharedPreferencesConstants.PREF_DASHBOARD_LAYOUT_TYPE, dashboardLayoutType)
+                .apply();
+    }
+
+    @DashboardLayoutType
+    public int getDashboardLayoutType() {
+        return sharedPreferences.getInt(SharedPreferencesConstants.PREF_DASHBOARD_LAYOUT_TYPE,
+                DashboardLayoutType.GRID);
     }
 }

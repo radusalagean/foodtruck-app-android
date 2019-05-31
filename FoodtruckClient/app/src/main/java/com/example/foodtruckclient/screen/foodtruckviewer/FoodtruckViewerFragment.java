@@ -144,7 +144,7 @@ public class FoodtruckViewerFragment extends BaseMapFragment
                     ((dialog, which) -> presenter.removeFoodtruck(foodtruckId)));
             return true;
         }
-        return false;
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -154,7 +154,6 @@ public class FoodtruckViewerFragment extends BaseMapFragment
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new ListItemDecoration(
-                getResources().getDimensionPixelSize(R.dimen.general_layout_margin),
                 getResources().getDimensionPixelSize(R.dimen.general_layout_margin)
         ));
         recyclerView.setAdapter(adapter);

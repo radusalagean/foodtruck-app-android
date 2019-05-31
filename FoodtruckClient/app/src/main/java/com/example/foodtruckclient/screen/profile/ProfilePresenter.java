@@ -92,6 +92,7 @@ public class ProfilePresenter extends BasePresenter<ProfileMVP.View, ProfileMVP.
                     public void onComplete() {
                         setRefreshing(false);
                         reloadAccount(model.getCachedViewModel().getAccount().getId());
+                        reloadFoodtrucks(model.getCachedViewModel().getAccount().getId());
                         viewModelManager.sendInvalidationBundle(new InvalidationBundle(
                                 model.getCachedViewModel().getAccount().getId(),
                                 ContentType.PROFILE,
@@ -183,6 +184,7 @@ public class ProfilePresenter extends BasePresenter<ProfileMVP.View, ProfileMVP.
                     public void onComplete() {
                         setRefreshing(false);
                         reloadAccount(model.getCachedViewModel().getAccount().getId());
+                        reloadFoodtrucks(model.getCachedViewModel().getAccount().getId());
                         viewModelManager.sendInvalidationBundle(new InvalidationBundle(
                                 model.getCachedViewModel().getAccount().getId(),
                                 ContentType.PROFILE,

@@ -44,7 +44,7 @@ public class ProfileAdapter extends RecyclerView.Adapter {
             return new ProfileHeaderViewHolder(view);
         } else {
             view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_foodtruck, parent, false);
+                    .inflate(R.layout.item_foodtruck_list_style, parent, false);
             FoodtruckViewHolder viewHolder = new FoodtruckViewHolder(view);
             viewHolder.setLocationButtonVisible(false);
             return viewHolder;
@@ -56,7 +56,7 @@ public class ProfileAdapter extends RecyclerView.Adapter {
         if (holder instanceof ProfileHeaderViewHolder) {
             ((ProfileHeaderViewHolder) holder).bind(account);
         } else if (holder instanceof FoodtruckViewHolder) {
-            ((FoodtruckViewHolder) holder).bind(getFoodtruck(position), contract);
+            ((FoodtruckViewHolder) holder).bind(getFoodtruck(position), false, contract);
         }
     }
 

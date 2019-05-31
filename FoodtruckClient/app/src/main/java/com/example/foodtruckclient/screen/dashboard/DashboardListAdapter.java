@@ -19,24 +19,35 @@ public class DashboardListAdapter extends RecyclerView.Adapter<FoodtruckViewHold
 
     private List<Foodtruck> foodtrucks;
     private FoodtruckContract listener;
+    private @DashboardLayoutType int layoutType;
 
-    public DashboardListAdapter(FoodtruckContract listener) {
+    public DashboardListAdapter(FoodtruckContract listener, int layoutType) {
         this.listener = listener;
+        this.layoutType = layoutType;
         foodtrucks = new ArrayList<>();
         setHasStableIds(true);
+    }
+
+    public void setLayoutType(int layoutType) {
+        if (this.layoutType != layoutType) {
+            this.layoutType = layoutType;
+            notifyDataSetChanged();
+        }
     }
 
     @NonNull
     @Override
     public FoodtruckViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        int layoutId = layoutType == DashboardLayoutType.GRID ?
+                R.layout.item_foodtruck_card_style : R.layout.item_foodtruck_list_style;
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_foodtruck, parent, false);
+                .inflate(layoutId, parent, false);
         return new FoodtruckViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull FoodtruckViewHolder holder, int position) {
-        holder.bind(foodtrucks.get(position), listener);
+        holder.bind(foodtrucks.get(position), layoutType == DashboardLayoutType.GRID, listener);
     }
 
     @Override

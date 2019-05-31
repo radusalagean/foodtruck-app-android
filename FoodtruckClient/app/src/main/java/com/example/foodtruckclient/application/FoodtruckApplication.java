@@ -1,5 +1,6 @@
 package com.example.foodtruckclient.application;
 
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.multidex.MultiDexApplication;
 
 import com.example.foodtruckclient.di.application.ApplicationComponent;
@@ -11,6 +12,12 @@ import com.example.foodtruckclient.di.application.repository.RepositoryModule;
 public class FoodtruckApplication extends MultiDexApplication {
 
     private ApplicationComponent applicationComponent;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
 
     public ApplicationComponent getApplicationComponent() {
         if (applicationComponent == null) {

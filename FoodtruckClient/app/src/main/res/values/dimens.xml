@@ -2,13 +2,15 @@
     <!--Dashboard-->
     <dimen name="dashboard_fab_margin">16dp</dimen>
 
-    <!--Dashboard List Item-->
+    <!--Foodtruck Item-->
     <dimen name="item_thumbnail_image_size">75dp</dimen>
+    <dimen name="item_card_image_size">150dp</dimen>
     <dimen name="foodtruck_item_owner_image_size">20dp</dimen>
     <dimen name="item_dashboard_list_offset">8dp</dimen>
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+    <dimen name="card_style_title_text_size">18sp</dimen>
 
     <!--Tag View-->
     <dimen name="tag_view_padding">8dp</dimen>

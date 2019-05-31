@@ -17,10 +17,9 @@
     card_view:cardElevation="4dp">
 
     <TextView
-        android:id="@+id/foodtruck_viewer_text_view_my_review_login_hint"
+        android:id="@+id/foodtruck_viewer_text_view_my_review_hint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/foodtruck_my_review_login_hint"
         android:gravity="center_horizontal"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/general_layout_margin"

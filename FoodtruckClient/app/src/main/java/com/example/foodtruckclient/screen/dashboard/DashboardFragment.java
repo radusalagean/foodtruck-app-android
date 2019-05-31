@@ -6,16 +6,21 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.foodtruckclient.R;
+import com.example.foodtruckclient.generic.decoration.GridItemDecoration;
 import com.example.foodtruckclient.generic.decoration.ListItemDecoration;
 import com.example.foodtruckclient.generic.activity.ActivityContract;
 import com.example.foodtruckclient.generic.list.foodtruck.FoodtruckContract;
@@ -24,6 +29,8 @@ import com.example.foodtruckclient.generic.mvp.BaseMVP;
 import com.example.foodtruckclient.generic.view.OnViewInflatedListener;
 import com.example.foodtruckclient.network.foodtruckapi.model.Account;
 import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
+import com.example.foodtruckclient.persistence.SharedPreferencesRepository;
+import com.example.foodtruckclient.util.ViewUtils;
 import com.example.foodtruckclient.view.MorphableFloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
@@ -55,6 +62,9 @@ public class DashboardFragment extends BaseMapFragment
     @Inject
     ActivityContract activityContract;
 
+    @Inject
+    SharedPreferencesRepository sharedPreferencesRepository;
+
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private DashboardPagerAdapter pagerAdapter;
@@ -66,12 +76,19 @@ public class DashboardFragment extends BaseMapFragment
 
         @Override
         public void onPageSelected(int position) {
+            MenuItem menuItem = toolbar.getMenu().findItem(R.id.menu_toggle_layout);
             switch (position) {
                 case DashboardPagerMapper.POSITION_LIST:
                     fab.morph(R.drawable.avd_location_to_add, R.drawable.ic_add_circle_outline_white_24dp);
+                    if (menuItem != null) {
+                        menuItem.setVisible(true);
+                    }
                     break;
                 case DashboardPagerMapper.POSITION_MAP:
                     fab.morph(R.drawable.avd_add_to_location, R.drawable.ic_my_location_white_24dp);
+                    if (menuItem != null) {
+                        menuItem.setVisible(false);
+                    }
                     break;
             }
         }
@@ -86,11 +103,11 @@ public class DashboardFragment extends BaseMapFragment
             switch (view.getId()) {
                 case R.id.layout_dashboard_list:
                     swipeRefreshLayout = view.findViewById(R.id.dashboard_list_swipe_refresh_layout);
+                    swipeRefreshLayout.setRefreshing(presenter.isRefreshing());
                     recyclerView = view.findViewById(R.id.dashboard_list_recycler_view);
                     swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
                     swipeRefreshLayout.setOnRefreshListener(() -> presenter.reloadFoodtrucks());
-                    recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                    recyclerView.addItemDecoration(new ListItemDecoration(getResources().getDimensionPixelSize(R.dimen.item_dashboard_list_offset)));
+                    setLayoutType(sharedPreferencesRepository.getDashboardLayoutType());
                     recyclerView.setAdapter(listAdapter);
                     break;
                 case R.id.layout_dashboard_map:
@@ -151,6 +168,28 @@ public class DashboardFragment extends BaseMapFragment
         return fragment;
     }
 
+    private void setLayoutType(int layoutType) {
+        if (recyclerView.getItemDecorationCount() > 0) {
+            recyclerView.removeItemDecorationAt(0);
+        }
+        if (layoutType == DashboardLayoutType.GRID) {
+            int span = ViewUtils.computeGridLayoutSpan(getContext(),
+                    getResources().getDimensionPixelSize(R.dimen.item_card_image_size) +
+                            getResources().getDimensionPixelSize(R.dimen.general_layout_margin));
+            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), span));
+            recyclerView.addItemDecoration(new GridItemDecoration(
+                    getResources().getDimensionPixelSize(R.dimen.item_dashboard_list_offset),
+                    span
+            ));
+        } else if (layoutType == DashboardLayoutType.LIST) {
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            recyclerView.addItemDecoration(new ListItemDecoration(getResources()
+                    .getDimensionPixelSize(R.dimen.item_dashboard_list_offset)));
+        }
+        listAdapter.setLayoutType(layoutType);
+        recyclerView.setAdapter(listAdapter);
+    }
+
     @Override
     public void onAttach(Context context) {
         getControllerComponent().inject(this);
@@ -161,7 +200,9 @@ public class DashboardFragment extends BaseMapFragment
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         pagerAdapter = new DashboardPagerAdapter(getContext(), onViewInflatedListener);
-        listAdapter = new DashboardListAdapter(this);
+        listAdapter = new DashboardListAdapter(this,
+                sharedPreferencesRepository.getDashboardLayoutType());
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -171,6 +212,29 @@ public class DashboardFragment extends BaseMapFragment
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
         ButterKnife.bind(this, view);
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_dashboard, menu);
+        MenuItem item = menu.findItem(R.id.menu_toggle_layout);
+        item.setIcon(DashboardLayoutIconMapper
+                .getIconResId(sharedPreferencesRepository.getDashboardLayoutType() ^ 1));
+        item.setVisible(viewPager.getCurrentItem() == DashboardPagerMapper.POSITION_LIST);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_toggle_layout) {
+            int oldType = sharedPreferencesRepository.getDashboardLayoutType();
+            int newType = oldType ^ 1;
+            setLayoutType(newType);
+            sharedPreferencesRepository.updateDashboardLayoutType(newType);
+            toolbar.getMenu().findItem(R.id.menu_toggle_layout)
+                    .setIcon(DashboardLayoutIconMapper.getIconResId(oldType));
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

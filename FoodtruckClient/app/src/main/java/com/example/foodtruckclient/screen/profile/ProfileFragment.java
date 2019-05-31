@@ -113,7 +113,8 @@ public class ProfileFragment extends BaseFragment
         menu.findItem(R.id.menu_upload_profile_picture)
                 .setVisible(profileId.equals(activityContract.getAuthenticatedUserId()));
         menu.findItem(R.id.menu_remove_profile_picture)
-                .setVisible(adapter.hasProfilePicture());
+                .setVisible(profileId.equals(activityContract.getAuthenticatedUserId()) &&
+                        adapter.hasProfilePicture());
     }
 
     @Override
@@ -132,7 +133,7 @@ public class ProfileFragment extends BaseFragment
                 );
                 return true;
         }
-        return false;
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -162,7 +163,6 @@ public class ProfileFragment extends BaseFragment
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new ListItemDecoration(
-                getResources().getDimensionPixelSize(R.dimen.general_layout_margin),
                 getResources().getDimensionPixelSize(R.dimen.general_layout_margin)
         ));
         recyclerView.setAdapter(adapter);

@@ -45,14 +45,15 @@ public class FoodtruckViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, itemView);
     }
 
-    public void bind(Foodtruck foodtruck, FoodtruckContract listener) {
+    public void bind(Foodtruck foodtruck, boolean cardStyle, FoodtruckContract listener) {
         View.OnClickListener onOwnerClickListener = v ->
                 listener.onOwnerSelected(foodtruck.getOwner());
         Glide.with(imageView)
-                .load(foodtruck.getThumbnailUrl())
+                .load(cardStyle ? foodtruck.getImageUrl() : foodtruck.getThumbnailUrl())
                 .centerCrop()
                 .placeholder(R.drawable.ic_fastfood_24dp)
-                .signature(new ObjectKey(foodtruck.getThumbnailSignature()))
+                .signature(new ObjectKey(cardStyle ?
+                        foodtruck.getImageSignature() : foodtruck.getThumbnailSignature()))
                 .into(imageView);
         titleTextView.setText(foodtruck.getName());
         ratingBar.setRating(foodtruck.getAverageRating());

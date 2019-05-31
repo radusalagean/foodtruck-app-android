@@ -13,7 +13,7 @@
             android:id="@+id/dashboard_list_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:listitem="@layout/item_foodtruck" />
+            tools:listitem="@layout/item_foodtruck_list_style" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
