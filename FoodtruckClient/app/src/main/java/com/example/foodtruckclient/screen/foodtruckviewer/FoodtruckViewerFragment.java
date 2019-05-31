@@ -49,7 +49,7 @@ public class FoodtruckViewerFragment extends BaseMapFragment
     private String foodtruckId;
     private String foodtruckName;
 
-    @BindView(R.id.toolbar_layout)
+    @BindView(R.id.foodtruck_viewer_toolbar_layout)
     CollapsingToolbarLayout collapsingToolbarLayout;
 
     @BindView(R.id.toolbar)
@@ -58,7 +58,7 @@ public class FoodtruckViewerFragment extends BaseMapFragment
     @BindView(R.id.foodtruck_viewer_swipe_refresh_layout)
     SwipeRefreshLayout swipeRefreshLayout;
 
-    @BindView(R.id.app_bar)
+    @BindView(R.id.foodtruck_viewer_app_bar_layout)
     StateAwareAppBarLayout appBarLayout;
 
     @BindView(R.id.foodtruck_viewer_image_view_top)

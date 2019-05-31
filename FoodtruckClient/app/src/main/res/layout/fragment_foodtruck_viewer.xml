@@ -9,17 +9,18 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/foodtruck_viewer_coordinator_layout"
         tools:context=".activity.MainActivity">
 
         <com.example.foodtruckclient.view.StateAwareAppBarLayout
-            android:id="@+id/app_bar"
+            android:id="@+id/foodtruck_viewer_app_bar_layout"
             android:layout_width="match_parent"
             android:layout_height="@dimen/app_bar_height"
             android:fitsSystemWindows="true"
             android:theme="@style/AppTheme.AppBarOverlay">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
-                android:id="@+id/toolbar_layout"
+                android:id="@+id/foodtruck_viewer_toolbar_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
@@ -57,7 +58,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/fab_margin"
-            app:layout_anchor="@id/app_bar"
+            app:layout_anchor="@id/foodtruck_viewer_app_bar_layout"
             app:layout_anchorGravity="bottom|end"
             android:visibility="invisible"
             app:srcCompat="@drawable/ic_edit_white_24dp" />

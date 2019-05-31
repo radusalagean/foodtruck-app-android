@@ -93,11 +93,17 @@ public class ProfileAdapter extends RecyclerView.Adapter {
     }
 
     public void setAccount(Account account) {
+        if (this.account == account) {
+            return;
+        }
         this.account = account;
         notifyDataSetChanged();
     }
 
     public void setFoodtrucks(List<Foodtruck> foodtrucks) {
+        if (this.foodtrucks == foodtrucks) {
+            return;
+        }
         this.foodtrucks = foodtrucks;
         notifyDataSetChanged();
     }

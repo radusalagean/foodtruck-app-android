@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -44,6 +45,8 @@ import butterknife.ButterKnife;
 public class DashboardFragment extends BaseMapFragment
         implements DashboardMVP.View, FoodtruckContract {
 
+    private static final String ARG_RECYCLER_VIEW_LAYOUT_STATE = "recycler_view_layout_state";
+
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
@@ -69,6 +72,7 @@ public class DashboardFragment extends BaseMapFragment
     private RecyclerView recyclerView;
     private DashboardPagerAdapter pagerAdapter;
     private DashboardListAdapter listAdapter;
+    private Parcelable recyclerViewLayoutState;
 
     private ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
@@ -108,7 +112,10 @@ public class DashboardFragment extends BaseMapFragment
                     swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
                     swipeRefreshLayout.setOnRefreshListener(() -> presenter.reloadFoodtrucks());
                     setLayoutType(sharedPreferencesRepository.getDashboardLayoutType());
-                    recyclerView.setAdapter(listAdapter);
+                    if (recyclerView.getLayoutManager() != null && recyclerViewLayoutState != null) {
+                        recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewLayoutState);
+                    }
+                    recyclerViewLayoutState = null;
                     break;
                 case R.id.layout_dashboard_map:
                     mapView = view.findViewById(R.id.map_view);
@@ -215,6 +222,15 @@ public class DashboardFragment extends BaseMapFragment
     }
 
     @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (recyclerView != null && recyclerView.getLayoutManager() != null) {
+            recyclerViewLayoutState = recyclerView.getLayoutManager().onSaveInstanceState();
+            outState.putParcelable(ARG_RECYCLER_VIEW_LAYOUT_STATE, recyclerViewLayoutState);
+        }
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_dashboard, menu);
         MenuItem item = menu.findItem(R.id.menu_toggle_layout);
@@ -269,6 +285,11 @@ public class DashboardFragment extends BaseMapFragment
         if (!presenter.restoreDataFromCache()) {
             presenter.loadViewModel();
         }
+    }
+
+    @Override
+    protected void restoreInstanceState(Bundle savedInstanceState) {
+        recyclerViewLayoutState = savedInstanceState.getParcelable(ARG_RECYCLER_VIEW_LAYOUT_STATE);
     }
 
     @Override

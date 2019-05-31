@@ -77,6 +77,9 @@ public abstract class BaseFragment extends Fragment
         registerListeners();
         getPresenter().takeView(this);
         loadData();
+        if (savedInstanceState != null) {
+            restoreInstanceState(savedInstanceState);
+        }
     }
 
     @Override
@@ -295,6 +298,14 @@ public abstract class BaseFragment extends Fragment
      * override to load data from the view model cache or from the network
      */
     protected abstract void loadData();
+
+    /**
+     * Called during the {@link Fragment#onViewCreated(View, Bundle)} lifecycle method,
+     * override to restore data saved in the instance state bundle
+     */
+    protected void restoreInstanceState(Bundle savedInstanceState) {
+        // empty implementation
+    }
 
     /**
      * Override to return the presenter
