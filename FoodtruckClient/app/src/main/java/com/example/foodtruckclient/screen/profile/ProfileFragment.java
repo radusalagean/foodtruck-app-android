@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -166,6 +167,7 @@ public class ProfileFragment extends BaseFragment
                 getResources().getDimensionPixelSize(R.dimen.general_layout_margin)
         ));
         recyclerView.setAdapter(adapter);
+        ViewCompat.setNestedScrollingEnabled(recyclerView, false);
     }
 
     @Override

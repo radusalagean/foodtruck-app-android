@@ -46,8 +46,6 @@ public class FoodtruckViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(Foodtruck foodtruck, boolean cardStyle, FoodtruckContract listener) {
-        View.OnClickListener onOwnerClickListener = v ->
-                listener.onOwnerSelected(foodtruck.getOwner());
         Glide.with(imageView)
                 .load(cardStyle ? foodtruck.getImageUrl() : foodtruck.getThumbnailUrl())
                 .centerCrop()
@@ -68,9 +66,7 @@ public class FoodtruckViewHolder extends RecyclerView.ViewHolder {
                 .placeholder(R.drawable.ic_account_circle_black_24dp)
                 .signature(new ObjectKey(foodtruck.getOwner().getThumbnailSignature()))
                 .into(ownerImageView);
-        ownerImageView.setOnClickListener(onOwnerClickListener);
         ownerTextView.setText(foodtruck.getOwner().getUsername());
-        ownerTextView.setOnClickListener(onOwnerClickListener);
         showOnMapButton.setOnClickListener((view) -> {
             listener.onFoodtruckLocationButtonClicked(foodtruck);
         });
@@ -86,10 +82,9 @@ public class FoodtruckViewHolder extends RecyclerView.ViewHolder {
         ratingBar.setRating(0.0f);
         Glide.with(ownerImageView.getContext().getApplicationContext()).clear(ownerImageView);
         ownerImageView.setImageDrawable(null);
-        ownerImageView.setOnClickListener(null);
         ownerTextView.setText(null);
-        ownerTextView.setOnClickListener(null);
         showOnMapButton.setOnClickListener(null);
+        itemView.setOnClickListener(null);
     }
 
     public void setLocationButtonVisible(boolean visible) {

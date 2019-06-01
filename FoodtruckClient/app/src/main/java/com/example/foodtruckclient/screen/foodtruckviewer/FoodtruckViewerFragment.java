@@ -11,8 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.ViewCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -63,6 +66,9 @@ public class FoodtruckViewerFragment extends BaseMapFragment
 
     @BindView(R.id.foodtruck_viewer_image_view_top)
     ImageView topImageView;
+
+    @BindView(R.id.foodtruck_viewer_nested_scroll_view)
+    NestedScrollView nestedScrollView;
 
     @BindView(R.id.foodtruck_viewer_recycler_view)
     RecyclerView recyclerView;
@@ -157,6 +163,7 @@ public class FoodtruckViewerFragment extends BaseMapFragment
                 getResources().getDimensionPixelSize(R.dimen.general_layout_margin)
         ));
         recyclerView.setAdapter(adapter);
+        ViewCompat.setNestedScrollingEnabled(recyclerView, false);
         presenter.setGesturesEnabled(false);
         presenter.setZoomButtonsEnabled(true);
     }
