@@ -12,14 +12,12 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.signature.ObjectKey;
 import com.example.foodtruckclient.R;
 import com.example.foodtruckclient.generic.date.DateConstants;
 import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
 import com.example.foodtruckclient.util.NumberUtils;
 import com.example.foodtruckclient.view.TagLayout;
-import com.google.android.gms.maps.MapView;
 
 import java.util.Locale;
 
@@ -34,9 +32,6 @@ public class FoodtruckViewerHeaderViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.foodtruck_viewer_tag_layout)
     TagLayout tagLayout;
-
-    @BindView(R.id.foodtruck_viewer_map_view)
-    MapView mapView;
 
     @BindView(R.id.layout_foodtruck_owner_image_view)
     ImageView ownerImageView;
@@ -96,10 +91,9 @@ public class FoodtruckViewerHeaderViewHolder extends RecyclerView.ViewHolder {
                         R.string.rating_count;
         ratingCountTextView.setText(ratingCountTextView.getResources()
                 .getString(ratingCountResId, foodtruck.getRatingCount()));
-        contract.takeMapView(mapView);
     }
 
-    public void recycle(FoodtruckViewerContract contract) {
+    public void recycle() {
         Timber.d("recycle()");
         tagLayout.clearTags();
         Glide.with(ownerImageView.getContext().getApplicationContext()).clear(ownerImageView);
@@ -110,8 +104,7 @@ public class FoodtruckViewerHeaderViewHolder extends RecyclerView.ViewHolder {
         createDateTextView.setText(null);
         lastUpdateDateTextView.setText(null);
         ratingAverageTextView.setText(null);
-        averageRatingBar.setRating(0.0f);
+        averageRatingBar.setRating(0f);
         ratingCountTextView.setText(null);
-        contract.dropMapView(mapView);
     }
 }

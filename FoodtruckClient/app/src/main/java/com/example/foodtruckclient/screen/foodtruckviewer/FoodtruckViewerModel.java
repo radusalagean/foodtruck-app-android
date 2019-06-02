@@ -20,11 +20,6 @@ public class FoodtruckViewerModel extends BaseModel<FoodtruckViewerViewModel, Fo
 
     @Override
     public Observable<FoodtruckViewerViewModel> getViewModel(String foodtruckId) {
-        return getFreshViewModel(foodtruckId);
-    }
-
-    @Override
-    public Observable<FoodtruckViewerViewModel> getFreshViewModel(String foodtruckId) {
         return Observable.zip(networkRepository.getFoodtruck(foodtruckId),
                 networkRepository.getAllFoodtruckReviews(foodtruckId),
                 networkRepository.getMyFoodtruckReview(foodtruckId).onErrorReturnItem(new Review()),

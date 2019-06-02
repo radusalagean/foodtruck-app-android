@@ -10,12 +10,14 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.foodtruckclient.R;
 import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
 import com.example.foodtruckclient.network.foodtruckapi.model.Review;
+import com.example.foodtruckclient.util.ViewUtils;
 
 import java.util.List;
 
@@ -23,8 +25,12 @@ import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.ViewCollections;
+import timber.log.Timber;
 
 public class FoodtruckViewerMyReviewViewHolder extends RecyclerView.ViewHolder {
+
+    @BindView(R.id.foodtruck_viewer_card_view_my_review)
+    CardView rootView;
 
     @BindView(R.id.foodtruck_viewer_text_view_my_review_hint)
     TextView hintTextView;
@@ -75,9 +81,7 @@ public class FoodtruckViewerMyReviewViewHolder extends RecyclerView.ViewHolder {
     List<Button> editSubmittedReviewButtons;
 
     private int currentState;
-    private String tmpTitle;
-    private String tmpContent;
-    private float tmpRating;
+    private FoodtruckViewerContract contract;
 
     private TextWatcher textWatcher = new TextWatcher() {
         @Override
@@ -99,11 +103,68 @@ public class FoodtruckViewerMyReviewViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(@Nullable Review myReview, Foodtruck foodtruck, FoodtruckViewerContract contract) {
-        if (currentState == FoodtruckViewerMyReviewState.UNKNOWN ||
-                currentState == FoodtruckViewerMyReviewState.OWN_FOODTRUCK) {
+        Timber.d("bind()");
+        this.contract = contract;
+        registerListeners(myReview);
+        boolean isDataRestored = restoreViewModel();
+        if (!isDataRestored || currentState == FoodtruckViewerMyReviewState.UNKNOWN ||
+                currentState == FoodtruckViewerMyReviewState.HIDDEN) {
             initCurrentState(myReview, foodtruck, contract);
         }
         syncViews();
+        if (myReview != null &&  myReview.getId() != null && !isDataRestored) {
+            reviewTitleEditText.setText(myReview.getTitle());
+            reviewContentEditText.setText(myReview.getText());
+            ratingBar.setRating(myReview.getRating());
+        }
+    }
+
+    public void recycle() {
+        Timber.d("recycle()");
+        saveViewModel();
+        unregisterListeners();
+        reviewTitleEditText.setText(null);
+        reviewContentEditText.setText(null);
+        ratingBar.setRating(0f);
+        hintTextView.setText(null);
+        contract = null;
+    }
+
+    public void onViewDetachedFromWindow() {
+        View currentFocus = itemView.findFocus();
+        if (currentFocus instanceof EditText) {
+            currentFocus.clearFocus();
+        }
+    }
+
+    private void refreshSubmissionButtonsEnabledState() {
+        boolean valid = areFieldsValid();
+        submitButton.setEnabled(valid);
+        saveButton.setEnabled(valid);
+    }
+
+    private void saveViewModel() {
+        contract.setMyReviewViewModel(
+                currentState,
+                reviewTitleEditText.getText().toString().trim(),
+                reviewContentEditText.getText().toString().trim(),
+                ratingBar.getRating()
+        );
+    }
+
+    private boolean restoreViewModel() {
+        if (contract.getMyReviewViewModel() != null) {
+            FoodtruckViewerMyReviewViewModel myReviewViewModel = contract.getMyReviewViewModel();
+            currentState = myReviewViewModel.getState();
+            ViewUtils.setText(reviewTitleEditText, myReviewViewModel.getTitle());
+            ViewUtils.setText(reviewContentEditText, myReviewViewModel.getContent());
+            ratingBar.setRating(myReviewViewModel.getRating());
+            return true;
+        }
+        return false;
+    }
+
+    private void registerListeners(Review myReview) {
         reviewTitleEditText.addTextChangedListener(textWatcher);
         reviewContentEditText.addTextChangedListener(textWatcher);
         ratingBar.setOnRatingBarChangeListener(((ratingBar1, rating, fromUser) ->
@@ -114,76 +175,49 @@ public class FoodtruckViewerMyReviewViewHolder extends RecyclerView.ViewHolder {
                     reviewTitleEditText.getText().toString().trim(),
                     reviewContentEditText.getText().toString().trim(),
                     ratingBar.getRating());
-            ViewCollections.run(editTexts, ((view, index) -> view.setEnabled(false)));
+            ViewCollections.run(editTexts, ((view, index) ->
+                view.setEnabled(false)));
         });
         editButton.setOnClickListener(v -> {
-            assignTmpFields();
             setCurrentState(FoodtruckViewerMyReviewState.EDIT_SUBMITTED_REVIEW);
         });
         cancelButton.setOnClickListener(v -> {
-            restoreTmpFields();
-            clearTmpFields();
+            restoreFields();
             setCurrentState(FoodtruckViewerMyReviewState.REVIEW_SUBMITTED);
         });
-        if (myReview != null) {
-            reviewTitleEditText.setText(myReview.getTitle());
-            reviewContentEditText.setText(myReview.getText());
-            ratingBar.setRating(myReview.getRating());
-            saveButton.setOnClickListener(v -> {
-                clearTmpFields();
-                setCurrentState(FoodtruckViewerMyReviewState.UNKNOWN);
-                contract.updateReview(
-                        myReview.getId(),
-                        reviewTitleEditText.getText().toString().trim(),
-                        reviewContentEditText.getText().toString().trim(),
-                        ratingBar.getRating()
-                );
-                ViewCollections.run(editTexts, ((view, index) -> view.setEnabled(false)));
-            });
-            removeButton.setOnClickListener((v -> {
-                setCurrentState(FoodtruckViewerMyReviewState.UNKNOWN);
-                contract.removeReview(myReview.getId());
-            }));
-        }
+        saveButton.setOnClickListener(v -> {
+            setCurrentState(FoodtruckViewerMyReviewState.UNKNOWN);
+            contract.updateReview(
+                    myReview.getId(),
+                    reviewTitleEditText.getText().toString().trim(),
+                    reviewContentEditText.getText().toString().trim(),
+                    ratingBar.getRating()
+            );
+            ViewCollections.run(editTexts, ((view, index) ->
+                view.setEnabled(false)));
+        });
+        removeButton.setOnClickListener((v -> {
+            setCurrentState(FoodtruckViewerMyReviewState.UNKNOWN);
+            contract.removeReview(myReview.getId());
+        }));
     }
 
-    public void recycle() {
-        reviewTitleEditText.setText(null);
-        reviewContentEditText.setText(null);
-        ratingBar.setRating(0.0f);
-        submitButton.setOnClickListener(null);
-        saveButton.setOnClickListener(null);
-        removeButton.setOnClickListener(null);
-        cancelButton.setOnClickListener(null);
-        editButton.setOnClickListener(null);
+    private void unregisterListeners() {
         reviewTitleEditText.removeTextChangedListener(textWatcher);
         reviewContentEditText.removeTextChangedListener(textWatcher);
         ratingBar.setOnRatingBarChangeListener(null);
-        hintTextView.setText(null);
+        submitButton.setOnClickListener(null);
+        editButton.setOnClickListener(null);
+        cancelButton.setOnClickListener(null);
+        saveButton.setOnClickListener(null);
+        removeButton.setOnClickListener(null);
     }
 
-    private void refreshSubmissionButtonsEnabledState() {
-        boolean valid = areFieldsValid();
-        submitButton.setEnabled(valid);
-        saveButton.setEnabled(valid);
-    }
-
-    private void assignTmpFields() {
-        tmpTitle = reviewTitleEditText.getText().toString();
-        tmpContent = reviewContentEditText.getText().toString();
-        tmpRating = ratingBar.getRating();
-    }
-
-    private void restoreTmpFields() {
-        reviewTitleEditText.setText(tmpTitle);
-        reviewContentEditText.setText(tmpContent);
-        ratingBar.setRating(tmpRating);
-    }
-
-    private void clearTmpFields() {
-        tmpTitle = null;
-        tmpContent = null;
-        tmpRating = 0.0f;
+    private void restoreFields() {
+        Review myReview = contract.getMyReview();
+        reviewTitleEditText.setText(myReview.getTitle());
+        reviewContentEditText.setText(myReview.getText());
+        ratingBar.setRating(myReview.getRating());
     }
 
     private boolean areFieldsValid() {
@@ -193,10 +227,11 @@ public class FoodtruckViewerMyReviewViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void initCurrentState(Review myReview, Foodtruck foodtruck, FoodtruckViewerContract contract) {
-        if (!contract.isUserAuthenticated()) {
+        if (foodtruck == null || foodtruck.getOwner() == null) {
+            currentState = FoodtruckViewerMyReviewState.HIDDEN;
+        } else if (!contract.isUserAuthenticated()) {
             currentState = FoodtruckViewerMyReviewState.NOT_AUTHENTICATED;
-        } else if (foodtruck == null || foodtruck.getOwner() == null ||
-                foodtruck.getOwner().getId().equals(contract.getAuthenticatedUserId())) {
+        } else if (foodtruck.getOwner().getId().equals(contract.getAuthenticatedUserId())) {
             currentState = FoodtruckViewerMyReviewState.OWN_FOODTRUCK;
         } else if (myReview == null || myReview.getId() == null) {
             currentState = FoodtruckViewerMyReviewState.NO_REVIEW_SUBMITTED;
@@ -211,12 +246,14 @@ public class FoodtruckViewerMyReviewViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void syncViews() {
+        Timber.d("syncViews, currentState = %d", currentState);
+        rootView.setVisibility(View.VISIBLE);
         myReviewConstraintLayout.setVisibility(View.VISIBLE);
         hintTextView.setVisibility(View.GONE);
         hintTextView.setText(null);
         ViewCollections.run(editTexts, ((view, index) -> {
             view.setVisibility(View.VISIBLE);
-            view.setEnabled(true);
+            view.setEnabled(false);
         }));
         ratingBar.setVisibility(View.VISIBLE);
         ratingBar.setIsIndicator(false);
@@ -237,12 +274,14 @@ public class FoodtruckViewerMyReviewViewHolder extends RecyclerView.ViewHolder {
                 hintTextView.setVisibility(View.VISIBLE);
                 break;
             case FoodtruckViewerMyReviewState.NO_REVIEW_SUBMITTED:
+                ViewCollections.run(editTexts, ((view, index) ->
+                        view.setEnabled(true)));
                 submitButton.setVisibility(View.VISIBLE);
                 submitButton.setEnabled(areFieldsValid());
                 break;
             case FoodtruckViewerMyReviewState.REVIEW_SUBMITTED:
                 ViewCollections.run(editTexts, ((view, index) ->
-                        view.setEnabled(false)));
+                    view.setEnabled(false)));
                 ratingBar.setIsIndicator(true);
                 ViewCollections.run(reviewSubmittedButtons, ((view, index) ->
                         view.setVisibility(View.VISIBLE)));
@@ -258,6 +297,9 @@ public class FoodtruckViewerMyReviewViewHolder extends RecyclerView.ViewHolder {
                 myReviewConstraintLayout.setVisibility(View.GONE);
                 hintTextView.setText(R.string.foodtruck_my_review_own_foodtruck);
                 hintTextView.setVisibility(View.VISIBLE);
+                break;
+            case FoodtruckViewerMyReviewState.HIDDEN:
+                rootView.setVisibility(View.GONE);
                 break;
         }
     }

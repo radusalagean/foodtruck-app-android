@@ -15,6 +15,8 @@ import com.example.foodtruckclient.network.foodtruckapi.model.Review;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 public class FoodtruckViewerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int REVIEW_POSITION_OFFSET = 2;
@@ -55,6 +57,7 @@ public class FoodtruckViewerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        Timber.d("onBindViewHolder(%s, %d)", holder.getClass().getSimpleName(), position);
         if (holder instanceof FoodtruckViewerHeaderViewHolder) {
             ((FoodtruckViewerHeaderViewHolder) holder).bind(foodtruck, contract);
         } else if (holder instanceof FoodtruckViewerMyReviewViewHolder) {
@@ -66,9 +69,18 @@ public class FoodtruckViewerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     @Override
+    public void onViewDetachedFromWindow(@NonNull RecyclerView.ViewHolder holder) {
+        Timber.d("onViewDetachedFromWindow(%s)", holder.getClass().getSimpleName());
+        if (holder instanceof FoodtruckViewerMyReviewViewHolder) {
+            ((FoodtruckViewerMyReviewViewHolder) holder).onViewDetachedFromWindow();
+        }
+    }
+
+    @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
+        Timber.d("onViewRecycled(%s)", holder.getClass().getSimpleName());
         if (holder instanceof FoodtruckViewerHeaderViewHolder) {
-            ((FoodtruckViewerHeaderViewHolder) holder).recycle(contract);
+            ((FoodtruckViewerHeaderViewHolder) holder).recycle();
         } else if (holder instanceof FoodtruckViewerMyReviewViewHolder) {
             ((FoodtruckViewerMyReviewViewHolder) holder).recycle();
         } else if (holder instanceof FoodtruckViewerReviewViewHolder){

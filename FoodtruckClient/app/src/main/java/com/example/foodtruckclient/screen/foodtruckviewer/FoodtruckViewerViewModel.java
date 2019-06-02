@@ -15,6 +15,7 @@ public class FoodtruckViewerViewModel extends BaseViewModel {
     private Foodtruck foodtruck;
     private List<Review> reviews;
     private Review myReview;
+    private FoodtruckViewerMyReviewViewModel myReviewViewModel;
 
     private FoodtruckViewerViewModel(Foodtruck foodtruck, List<Review> reviews, Review myReview) {
         this.foodtruck = foodtruck;
@@ -44,6 +45,14 @@ public class FoodtruckViewerViewModel extends BaseViewModel {
 
     public void setMyReview(Review myReview) {
         this.myReview = myReview;
+    }
+
+    public FoodtruckViewerMyReviewViewModel getMyReviewViewModel() {
+        return myReviewViewModel;
+    }
+
+    public void setMyReviewViewModel(FoodtruckViewerMyReviewViewModel myReviewViewModel) {
+        this.myReviewViewModel = myReviewViewModel;
     }
 
     public static FoodtruckViewerViewModel createFrom(Foodtruck foodtruck,

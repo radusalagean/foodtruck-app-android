@@ -88,7 +88,7 @@ public class FoodtruckViewerReviewViewHolder extends RecyclerView.ViewHolder {
         authorUsernameTextView.setText(null);
         authorUsernameTextView.setOnClickListener(null);
         lastUpdateTextView.setText(null);
-        ratingBar.setRating(0.0f);
+        ratingBar.setRating(0f);
         titleTextView.setText(null);
         contentTextView.setText(null);
     }

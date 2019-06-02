@@ -79,7 +79,7 @@ public class FoodtruckViewHolder extends RecyclerView.ViewHolder {
         Glide.with(imageView.getContext().getApplicationContext()).clear(imageView);
         imageView.setImageDrawable(null);
         titleTextView.setText(null);
-        ratingBar.setRating(0.0f);
+        ratingBar.setRating(0f);
         Glide.with(ownerImageView.getContext().getApplicationContext()).clear(ownerImageView);
         ownerImageView.setImageDrawable(null);
         ownerTextView.setText(null);

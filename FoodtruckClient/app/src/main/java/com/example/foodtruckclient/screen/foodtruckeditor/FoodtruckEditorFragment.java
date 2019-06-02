@@ -8,6 +8,9 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -108,6 +111,10 @@ public class FoodtruckEditorFragment extends BaseMapFragment
         public void onPageSelected(int position) {
             dotsView.selectDot(position);
             handleNavigationButtonsVisibility(position);
+            if (toolbar.getMenu().findItem(R.id.menu_show_my_location) != null) {
+                toolbar.getMenu().findItem(R.id.menu_show_my_location)
+                        .setVisible(position == FoodtruckEditorPagerMapper.POSITION_LOCATION);
+            }
         }
 
         @Override
@@ -220,9 +227,8 @@ public class FoodtruckEditorFragment extends BaseMapFragment
         }
     };
 
-    private View.OnClickListener fabOnClickListener = v -> {
+    private View.OnClickListener fabOnClickListener = v ->
         presenter.onSaveButtonClicked();
-    };
 
     public FoodtruckEditorFragment() {}
 
@@ -255,6 +261,7 @@ public class FoodtruckEditorFragment extends BaseMapFragment
             presenter.setFoodtruck(foodtruck);
         }
         pagerAdapter = new FoodtruckEditorPagerAdapter(getContext(), onViewInflatedListener);
+        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -283,6 +290,22 @@ public class FoodtruckEditorFragment extends BaseMapFragment
                     break;
             }
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_foodtruck_editor, menu);
+        menu.findItem(R.id.menu_show_my_location)
+                .setVisible(viewPager.getCurrentItem() == FoodtruckEditorPagerMapper.POSITION_LOCATION);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.menu_show_my_location) {
+            presenter.zoomOnCurrentDeviceLocation();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -367,6 +390,8 @@ public class FoodtruckEditorFragment extends BaseMapFragment
         } else {
             handleSaveButtonVisibility();
         }
+        nameEditText.setEnabled(!refreshing);
+        foodtypeEditText.setEnabled(!refreshing);
     }
 
     private void onImageAdded(@Nullable String imageUrl, @NonNull String signature) {

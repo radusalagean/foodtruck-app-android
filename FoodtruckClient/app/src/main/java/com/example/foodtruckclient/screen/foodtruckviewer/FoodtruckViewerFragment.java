@@ -1,5 +1,6 @@
 package com.example.foodtruckclient.screen.foodtruckviewer;
 
+import android.animation.Animator;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -9,13 +10,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.ViewCompat;
-import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -46,8 +47,13 @@ import butterknife.ButterKnife;
 public class FoodtruckViewerFragment extends BaseMapFragment
         implements FoodtruckViewerMVP.View, FoodtruckViewerContract {
 
+    // Fragment Args
     private static final String ARG_FOODTRUCK_ID = "foodtruck_id";
     private static final String ARG_FOODTRUCK_NAME = "foodtruck_name";
+
+    // Instance State Args
+    private static final String ARG_MAP_POPUP_VISIBLE = "map_popup_visible";
+    private static final String ARG_INSTANT_ZOOM_ON_MAP = "instant_zoom_on_map";
 
     private String foodtruckId;
     private String foodtruckName;
@@ -67,14 +73,17 @@ public class FoodtruckViewerFragment extends BaseMapFragment
     @BindView(R.id.foodtruck_viewer_image_view_top)
     ImageView topImageView;
 
-    @BindView(R.id.foodtruck_viewer_nested_scroll_view)
-    NestedScrollView nestedScrollView;
-
     @BindView(R.id.foodtruck_viewer_recycler_view)
     RecyclerView recyclerView;
 
     @BindView(R.id.fab)
     FloatingActionButton fab;
+
+    @BindView(R.id.foodtruck_viewer_frame_layout_map_popup)
+    FrameLayout mapPopupRootView;
+
+    @BindView(R.id.foodtruck_viewer_map_view)
+    MapView mapView;
 
     @Inject
     FoodtruckViewerMVP.Presenter presenter;
@@ -86,6 +95,7 @@ public class FoodtruckViewerFragment extends BaseMapFragment
     DialogManager dialogManager;
 
     private FoodtruckViewerAdapter adapter;
+    private boolean instantZoomOnMap;
 
     private StateAwareAppBarLayout.OnStateChangedListener appBarOnStateChangeListener = state ->
         swipeRefreshLayout.setEnabled(state == StateAwareAppBarLayout.STATE_EXPANDED);
@@ -100,6 +110,48 @@ public class FoodtruckViewerFragment extends BaseMapFragment
         args.putString(ARG_FOODTRUCK_NAME, foodtruckName);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    private void openMapPopup() {
+        mapPopupRootView.setAlpha(0f);
+        mapPopupRootView.setVisibility(View.VISIBLE);
+        mapPopupRootView.animate().alpha(1f)
+                .setDuration(getResources().getInteger(
+                        android.R.integer.config_shortAnimTime))
+                .setListener(null);
+        presenter.zoomOnFoodtruck(instantZoomOnMap);
+        instantZoomOnMap = true;
+        View currentFocus = getView().findFocus();
+        if (currentFocus instanceof EditText) {
+            currentFocus.clearFocus();
+        }
+    }
+
+    private void closeMapPopup() {
+        mapPopupRootView.setAlpha(1f);
+        mapPopupRootView.animate()
+                .alpha(0f)
+                .setDuration(getResources().getInteger(
+                        android.R.integer.config_shortAnimTime))
+                .setListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) { }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        mapPopupRootView.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) { }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) { }
+                });
+    }
+
+    private boolean isMapPopupOpen() {
+        return mapPopupRootView.getVisibility() == View.VISIBLE;
     }
 
     @Override
@@ -129,6 +181,13 @@ public class FoodtruckViewerFragment extends BaseMapFragment
     }
 
     @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(ARG_MAP_POPUP_VISIBLE, mapPopupRootView.getVisibility() == View.VISIBLE);
+        outState.putBoolean(ARG_INSTANT_ZOOM_ON_MAP, instantZoomOnMap);
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_foodtruck_viewer, menu);
         // Handle menu item visibility
@@ -149,6 +208,8 @@ public class FoodtruckViewerFragment extends BaseMapFragment
                     R.string.alert_dialog_action_cancel,
                     ((dialog, which) -> presenter.removeFoodtruck(foodtruckId)));
             return true;
+        } else if (item.getItemId() == R.id.menu_show_on_map) {
+            openMapPopup();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -163,14 +224,13 @@ public class FoodtruckViewerFragment extends BaseMapFragment
                 getResources().getDimensionPixelSize(R.dimen.general_layout_margin)
         ));
         recyclerView.setAdapter(adapter);
-        ViewCompat.setNestedScrollingEnabled(recyclerView, false);
-        presenter.setGesturesEnabled(false);
-        presenter.setZoomButtonsEnabled(true);
+        mapViewManager.takeMapView(mapView);
     }
 
     @Override
     protected void disposeViews() {
         recyclerView.setAdapter(null);
+        mapViewManager.dropMapView(mapView);
     }
 
     @Override
@@ -193,9 +253,25 @@ public class FoodtruckViewerFragment extends BaseMapFragment
     }
 
     @Override
+    protected void restoreInstanceState(Bundle savedInstanceState) {
+        boolean popupMapVisible = savedInstanceState.getBoolean(ARG_MAP_POPUP_VISIBLE, false);
+        mapPopupRootView.setVisibility(popupMapVisible ? View.VISIBLE : View.GONE);
+        instantZoomOnMap = savedInstanceState.getBoolean(ARG_INSTANT_ZOOM_ON_MAP, false);
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
     protected <T extends BaseMVP.View> BaseMVP.Presenter<T> getPresenter() {
         return (BaseMVP.Presenter<T>) presenter;
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        if (isMapPopupOpen()) {
+            closeMapPopup();
+            return true;
+        }
+        return super.onBackPressed();
     }
 
     @Nullable
@@ -249,16 +325,6 @@ public class FoodtruckViewerFragment extends BaseMapFragment
     }
 
     @Override
-    public void takeMapView(MapView mapView) {
-        mapViewManager.takeMapView(mapView);
-    }
-
-    @Override
-    public void dropMapView(MapView mapView) {
-        mapViewManager.dropMapView(mapView);
-    }
-
-    @Override
     public boolean isUserAuthenticated() {
         return activityContract.isUserAuthenticated();
     }
@@ -287,5 +353,23 @@ public class FoodtruckViewerFragment extends BaseMapFragment
     @Override
     public void onAccountSelected(Account account) {
         activityContract.showProfileScreen(account.getId(), account.getUsername());
+    }
+
+    @Nullable
+    @Override
+    public Review getMyReview() {
+        return presenter.getMyReview();
+    }
+
+    @Override
+    public void setMyReviewViewModel(int myReviewState, String title, String content, float rating) {
+        presenter.setMyReviewViewModel(new FoodtruckViewerMyReviewViewModel(
+                myReviewState, title, content, rating
+        ));
+    }
+
+    @Override
+    public FoodtruckViewerMyReviewViewModel getMyReviewViewModel() {
+        return presenter.getMyReviewViewModel();
     }
 }

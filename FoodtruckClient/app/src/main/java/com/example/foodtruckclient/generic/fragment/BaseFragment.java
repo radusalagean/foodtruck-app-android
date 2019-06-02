@@ -311,4 +311,13 @@ public abstract class BaseFragment extends Fragment
      * Override to return the presenter
      */
     protected abstract <T extends BaseMVP.View> BaseMVP.Presenter<T> getPresenter();
+
+    /**
+     * Override to implement fragment-specific behavior on back press
+     *
+     * @return true if the event was consumed, false otherwise
+     */
+    public boolean onBackPressed() {
+        return false;
+    }
 }

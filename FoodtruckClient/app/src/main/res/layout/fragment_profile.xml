@@ -15,7 +15,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include layout="@layout/fragment_profile_content" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/profile_recycler_view"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:context=".activity.MainActivity"
+            tools:showIn="@layout/fragment_profile"/>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

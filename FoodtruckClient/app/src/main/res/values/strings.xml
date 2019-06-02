@@ -50,6 +50,8 @@
     <string name="foodtruck_removed_message">Food truck successfully removed</string>
     <string name="foodtruck_remove_dialog_title">Remove food truck</string>
     <string name="foodtruck_remove_dialog_message">Are you sure that you want to remove this food truck?</string>
+    <string name="foodtruck_menu_show_on_map">Show on map</string>
+    <string name="foodtruck_menu_remove_foodtruck">Remove food truck</string>
 
     <!--Foodtruck editor-->
     <string name="foodtruck_editor_toolbar_title_add_foodtruck">Add food truck</string>
@@ -64,7 +66,7 @@
     <string name="foodtruck_editor_remove_image">Remove</string>
     <string name="foodtruck_editor_foodtruck_added_message">Food truck successfully added</string>
     <string name="foodtruck_editor_foodtruck_edited_message">Food truck successfully edited</string>
-    <string name="foodtruck_editor_menu_remove_foodtruck">Remove food truck</string>
+    <string name="foodtruck_editor_menu_show_my_location">Show my location</string>
 
     <!--Authentication-->
     <string name="username_hint">Username</string>

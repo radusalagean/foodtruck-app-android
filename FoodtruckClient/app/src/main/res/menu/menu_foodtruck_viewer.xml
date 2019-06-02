@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/menu_show_on_map"
+        android:title="@string/foodtruck_menu_show_on_map"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_location_searching_white_24dp" />
     <item android:id="@+id/menu_remove_foodtruck"
-        android:title="@string/foodtruck_editor_menu_remove_foodtruck"
+        android:title="@string/foodtruck_menu_remove_foodtruck"
         android:visible="false"
         android:icon="@drawable/ic_delete_forever_black_24dp" />
 </menu>

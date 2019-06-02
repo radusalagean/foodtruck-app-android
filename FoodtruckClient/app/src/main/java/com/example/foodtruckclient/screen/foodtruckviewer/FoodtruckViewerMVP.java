@@ -1,5 +1,7 @@
 package com.example.foodtruckclient.screen.foodtruckviewer;
 
+import androidx.annotation.Nullable;
+
 import com.example.foodtruckclient.generic.mapmvp.BaseMapMVP;
 import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
 import com.example.foodtruckclient.network.foodtruckapi.model.Message;
@@ -13,7 +15,6 @@ public interface FoodtruckViewerMVP {
 
     interface Model extends BaseMapMVP.Model<FoodtruckViewerViewModel> {
         Observable<FoodtruckViewerViewModel> getViewModel(String foodtruckId);
-        Observable<FoodtruckViewerViewModel> getFreshViewModel(String foodtruckId);
         Observable<Foodtruck> getFoodtruck(String id);
         Observable<List<Review>> getAllReviews(String foodtruckId);
         Observable<Review> getMyReview(String foodtruckId);
@@ -38,5 +39,9 @@ public interface FoodtruckViewerMVP {
         void updateReview(String reviewId, String title, String content, float rating);
         void removeReview(String reviewId);
         void removeFoodtruck(String foodtruckId);
+        void zoomOnFoodtruck(boolean instant);
+        @Nullable Review getMyReview();
+        void setMyReviewViewModel(FoodtruckViewerMyReviewViewModel myReviewViewModel);
+        @Nullable FoodtruckViewerMyReviewViewModel getMyReviewViewModel();
     }
 }

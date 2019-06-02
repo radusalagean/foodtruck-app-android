@@ -11,6 +11,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.foodtruckclient.R;
@@ -236,8 +237,13 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onBackPressed() {
+        Fragment currentFragment = getSupportFragmentManager()
+                .findFragmentById(getFragmentContainerId());
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
+        } else if (currentFragment instanceof BaseFragment &&
+                ((BaseFragment) currentFragment).onBackPressed()) {
+            return;
         } else {
             super.onBackPressed();
         }

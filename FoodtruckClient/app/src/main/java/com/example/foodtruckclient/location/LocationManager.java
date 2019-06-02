@@ -27,7 +27,7 @@ import timber.log.Timber;
 public class LocationManager implements OnMapReadyCallback {
 
     public static final String MANUAL_MARKER_ID = "manual_marker";
-    private static final float DEFAULT_ZOOM = 18.0f;
+    public static final float DEFAULT_ZOOM = 18.0f;
 
     private FusedLocationProviderClient fusedLocationProviderClient;
     private GoogleMap googleMap;

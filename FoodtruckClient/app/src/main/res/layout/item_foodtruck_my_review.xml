@@ -2,7 +2,6 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/foodtruck_viewer_card_view_my_review"
@@ -14,7 +13,7 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/foodtruck_viewer_map_view"
-    card_view:cardElevation="4dp">
+    app:cardElevation="4dp">
 
     <TextView
         android:id="@+id/foodtruck_viewer_text_view_my_review_hint"
@@ -35,7 +34,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/foodtruck_viewer_constraint_layout_my_review"
-        android:visibility="visible">
+        android:visibility="visible"
+        android:focusableInTouchMode="true">
 
         <TextView
             android:id="@+id/foodtruck_viewer_text_view_my_review_header"

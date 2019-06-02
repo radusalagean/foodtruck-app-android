@@ -167,7 +167,6 @@ public class ProfileFragment extends BaseFragment
                 getResources().getDimensionPixelSize(R.dimen.general_layout_margin)
         ));
         recyclerView.setAdapter(adapter);
-        ViewCompat.setNestedScrollingEnabled(recyclerView, false);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.example.foodtruckclient.screen.foodtruckviewer;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.example.foodtruckclient.R;
 import com.example.foodtruckclient.dialog.DialogManager;
@@ -46,7 +47,7 @@ public class FoodtruckViewerPresenter extends BaseMapPresenter<FoodtruckViewerMV
                 .subscribeWith(new DisposableObserver<FoodtruckViewerViewModel>() {
                     @Override
                     public void onNext(FoodtruckViewerViewModel foodtruckViewerViewModel) {
-                        processFoodtruck(foodtruckViewerViewModel.getFoodtruck(), false);
+                        processFoodtruck(foodtruckViewerViewModel.getFoodtruck());
                         postOnView(() -> {
                             view.updateMyReview(foodtruckViewerViewModel.getMyReview());
                             view.updateReviews(foodtruckViewerViewModel.getReviews());
@@ -75,7 +76,7 @@ public class FoodtruckViewerPresenter extends BaseMapPresenter<FoodtruckViewerMV
                 .subscribeWith(new DisposableObserver<Foodtruck>() {
                     @Override
                     public void onNext(Foodtruck foodtruck) {
-                        processFoodtruck(foodtruck, false);
+                        processFoodtruck(foodtruck);
                     }
 
                     @Override
@@ -276,7 +277,42 @@ public class FoodtruckViewerPresenter extends BaseMapPresenter<FoodtruckViewerMV
                 }));
     }
 
-    private void processFoodtruck(@NonNull Foodtruck foodtruck, boolean restoredFromCache) {
+    @Override
+    public void zoomOnFoodtruck(boolean instant) {
+        if (model.getCachedViewModel() != null && model.getCachedViewModel().getFoodtruck() != null) {
+            Coordinates coordinates = model.getCachedViewModel().getFoodtruck().getCoordinates();
+            zoomOnLocation(coordinates.getLatitude(), coordinates.getLongitude(), instant);
+        }
+    }
+
+    @Nullable
+    @Override
+    public Review getMyReview() {
+        Review myReview = null;
+        if (model.getCachedViewModel() != null) {
+            myReview = model.getCachedViewModel().getMyReview();
+        }
+        return myReview;
+    }
+
+    @Override
+    public void setMyReviewViewModel(FoodtruckViewerMyReviewViewModel myReviewViewModel) {
+        if (model.getCachedViewModel() != null) {
+            model.getCachedViewModel().setMyReviewViewModel(myReviewViewModel);
+        }
+    }
+
+    @Nullable
+    @Override
+    public FoodtruckViewerMyReviewViewModel getMyReviewViewModel() {
+        FoodtruckViewerMyReviewViewModel myReviewViewModel = null;
+        if (model.getCachedViewModel() != null) {
+            myReviewViewModel =  model.getCachedViewModel().getMyReviewViewModel();
+        }
+        return myReviewViewModel;
+    }
+
+    private void processFoodtruck(@NonNull Foodtruck foodtruck) {
         postOnView(() ->
             view.updateFoodtruck(foodtruck));
         Coordinates coordinates = foodtruck.getCoordinates();
@@ -287,7 +323,6 @@ public class FoodtruckViewerPresenter extends BaseMapPresenter<FoodtruckViewerMV
             MarkerOptions marker = new MarkerOptions()
                     .position(new LatLng(coordinates.getLatitude(), coordinates.getLongitude()));
             locationManager.takeMarker(foodtruck.getId(), marker);
-            zoomOnLocation(coordinates.getLatitude(), coordinates.getLongitude(), restoredFromCache);
         }
     }
 
@@ -316,7 +351,7 @@ public class FoodtruckViewerPresenter extends BaseMapPresenter<FoodtruckViewerMV
         if (model.getCachedViewModel() == null) {
             return false;
         }
-        processFoodtruck(model.getCachedViewModel().getFoodtruck(), true);
+        processFoodtruck(model.getCachedViewModel().getFoodtruck());
         postOnView(() -> {
             view.updateReviews(model.getCachedViewModel().getReviews());
             view.updateMyReview(model.getCachedViewModel().getMyReview());

@@ -58,6 +58,10 @@ public class DashboardPresenter extends BaseMapPresenter<DashboardMVP.View, Dash
     @Override
     public void reloadFoodtrucks() {
         setRefreshing(true);
+        if (model.getCachedViewModel() == null) {
+            loadViewModel();
+            return;
+        }
         compositeDisposable.add(model.getFoodtrucks()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableObserver<List<Foodtruck>>() {

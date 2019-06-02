@@ -11,7 +11,8 @@ import java.lang.annotation.RetentionPolicy;
         FoodtruckViewerMyReviewState.NO_REVIEW_SUBMITTED,
         FoodtruckViewerMyReviewState.REVIEW_SUBMITTED,
         FoodtruckViewerMyReviewState.EDIT_SUBMITTED_REVIEW,
-        FoodtruckViewerMyReviewState.OWN_FOODTRUCK
+        FoodtruckViewerMyReviewState.OWN_FOODTRUCK,
+        FoodtruckViewerMyReviewState.HIDDEN
 })
 @Retention(RetentionPolicy.SOURCE)
 public @interface FoodtruckViewerMyReviewState {
@@ -21,4 +22,5 @@ public @interface FoodtruckViewerMyReviewState {
     int REVIEW_SUBMITTED = 2;
     int EDIT_SUBMITTED_REVIEW = 3;
     int OWN_FOODTRUCK = 4;
+    int HIDDEN = 5;
 }
