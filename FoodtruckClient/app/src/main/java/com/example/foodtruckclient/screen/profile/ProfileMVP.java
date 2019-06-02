@@ -1,8 +1,5 @@
 package com.example.foodtruckclient.screen.profile;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import com.example.foodtruckclient.generic.mvp.BaseMVP;
 import com.example.foodtruckclient.network.foodtruckapi.model.Account;
 import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;

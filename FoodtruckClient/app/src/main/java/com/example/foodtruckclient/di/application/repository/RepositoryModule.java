@@ -3,13 +3,13 @@ package com.example.foodtruckclient.di.application.repository;
 import android.content.SharedPreferences;
 
 import com.example.foodtruckclient.authentication.AuthenticationRepository;
+import com.example.foodtruckclient.di.application.ApplicationScope;
+import com.example.foodtruckclient.network.NetworkRepository;
+import com.example.foodtruckclient.network.foodtruckapi.FoodtruckApiService;
 import com.example.foodtruckclient.persistence.SharedPreferencesRepository;
 import com.example.foodtruckclient.screen.dashboard.DashboardViewModelRepository;
-import com.example.foodtruckclient.di.application.ApplicationScope;
 import com.example.foodtruckclient.screen.foodtruckeditor.FoodtruckEditorViewModelRepository;
 import com.example.foodtruckclient.screen.foodtruckviewer.FoodtruckViewerViewModelRepository;
-import com.example.foodtruckclient.network.foodtruckapi.FoodtruckApiService;
-import com.example.foodtruckclient.network.NetworkRepository;
 import com.example.foodtruckclient.screen.profile.ProfileViewModelRepository;
 
 import dagger.Module;

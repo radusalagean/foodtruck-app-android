@@ -19,13 +19,13 @@ import com.example.foodtruckclient.authentication.AuthenticationBroadcastReceive
 import com.example.foodtruckclient.authentication.AuthenticationConstants;
 import com.example.foodtruckclient.authentication.AuthenticationRepository;
 import com.example.foodtruckclient.authentication.AuthenticationService;
+import com.example.foodtruckclient.generic.activity.BaseActivity;
+import com.example.foodtruckclient.generic.fragment.BaseFragment;
 import com.example.foodtruckclient.generic.viewmodel.ViewModelManager;
 import com.example.foodtruckclient.network.NetworkConstants;
 import com.example.foodtruckclient.network.foodtruckapi.model.Account;
 import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
 import com.example.foodtruckclient.screen.dashboard.DashboardFragment;
-import com.example.foodtruckclient.generic.fragment.BaseFragment;
-import com.example.foodtruckclient.generic.activity.BaseActivity;
 import com.example.foodtruckclient.screen.foodtruckeditor.FoodtruckEditorFragment;
 import com.example.foodtruckclient.screen.foodtruckviewer.FoodtruckViewerFragment;
 import com.example.foodtruckclient.screen.login.LoginFragment;

@@ -8,8 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.foodtruckclient.R;
-import com.example.foodtruckclient.generic.list.foodtruck.FoodtruckViewHolder;
 import com.example.foodtruckclient.generic.list.foodtruck.FoodtruckContract;
+import com.example.foodtruckclient.generic.list.foodtruck.FoodtruckViewHolder;
 import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
 
 import java.util.ArrayList;

@@ -15,8 +15,6 @@ import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
 import com.example.foodtruckclient.generic.view.MorphableView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import timber.log.Timber;
-
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class MorphableFloatingActionButton extends FloatingActionButton implements MorphableView {

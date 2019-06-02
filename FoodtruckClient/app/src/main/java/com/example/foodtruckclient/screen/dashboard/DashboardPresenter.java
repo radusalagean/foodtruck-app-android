@@ -3,9 +3,9 @@ package com.example.foodtruckclient.screen.dashboard;
 import androidx.annotation.NonNull;
 import androidx.collection.ArrayMap;
 
+import com.example.foodtruckclient.dialog.DialogManager;
 import com.example.foodtruckclient.generic.contentinvalidation.InvalidationEffect;
 import com.example.foodtruckclient.generic.mapmvp.BaseMapPresenter;
-import com.example.foodtruckclient.dialog.DialogManager;
 import com.example.foodtruckclient.location.LocationManager;
 import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
 import com.example.foodtruckclient.permission.PermissionManager;

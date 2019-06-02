@@ -3,7 +3,6 @@ package com.example.foodtruckclient.screen.foodtruckviewer;
 import android.animation.Animator;
 import android.content.Context;
 import android.os.Bundle;
-
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;

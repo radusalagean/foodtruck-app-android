@@ -1,7 +1,5 @@
 package com.example.foodtruckclient.di.application.network;
 
-import java.util.List;
-
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;

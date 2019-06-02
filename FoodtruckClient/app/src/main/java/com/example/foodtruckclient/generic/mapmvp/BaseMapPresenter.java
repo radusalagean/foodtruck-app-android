@@ -15,8 +15,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import timber.log.Timber;
-
 public abstract class BaseMapPresenter<T extends BaseMapMVP.View, S extends BaseMapMVP.Model>
         extends BasePresenter<T, S> implements BaseMapMVP.Presenter<T> {
 

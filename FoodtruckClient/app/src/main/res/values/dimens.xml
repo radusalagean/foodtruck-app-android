@@ -9,7 +9,6 @@
     <dimen name="item_dashboard_list_offset">8dp</dimen>
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="text_margin">16dp</dimen>
     <dimen name="card_style_title_text_size">18sp</dimen>
 
     <!--Tag View-->

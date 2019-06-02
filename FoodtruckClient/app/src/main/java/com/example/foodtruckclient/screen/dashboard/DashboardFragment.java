@@ -2,6 +2,13 @@ package com.example.foodtruckclient.screen.dashboard;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,18 +19,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 
-import android.os.Parcelable;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.example.foodtruckclient.R;
+import com.example.foodtruckclient.generic.activity.ActivityContract;
 import com.example.foodtruckclient.generic.decoration.GridItemDecoration;
 import com.example.foodtruckclient.generic.decoration.ListItemDecoration;
-import com.example.foodtruckclient.generic.activity.ActivityContract;
 import com.example.foodtruckclient.generic.list.foodtruck.FoodtruckContract;
 import com.example.foodtruckclient.generic.mapmvp.BaseMapFragment;
 import com.example.foodtruckclient.generic.mvp.BaseMVP;
