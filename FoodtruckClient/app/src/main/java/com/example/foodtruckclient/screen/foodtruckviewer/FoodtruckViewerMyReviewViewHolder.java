@@ -175,8 +175,10 @@ public class FoodtruckViewerMyReviewViewHolder extends RecyclerView.ViewHolder {
                     reviewTitleEditText.getText().toString().trim(),
                     reviewContentEditText.getText().toString().trim(),
                     ratingBar.getRating());
-            ViewCollections.run(editTexts, ((view, index) ->
-                view.setEnabled(false)));
+            ViewCollections.run(editTexts, ((view, index) -> {
+                view.setEnabled(false);
+                view.clearFocus();
+            }));
         });
         editButton.setOnClickListener(v -> {
             setCurrentState(FoodtruckViewerMyReviewState.EDIT_SUBMITTED_REVIEW);
@@ -193,8 +195,10 @@ public class FoodtruckViewerMyReviewViewHolder extends RecyclerView.ViewHolder {
                     reviewContentEditText.getText().toString().trim(),
                     ratingBar.getRating()
             );
-            ViewCollections.run(editTexts, ((view, index) ->
-                view.setEnabled(false)));
+            ViewCollections.run(editTexts, ((view, index) -> {
+                view.setEnabled(false);
+                view.clearFocus();
+            }));
         });
         removeButton.setOnClickListener((v -> {
             setCurrentState(FoodtruckViewerMyReviewState.UNKNOWN);
@@ -254,6 +258,7 @@ public class FoodtruckViewerMyReviewViewHolder extends RecyclerView.ViewHolder {
         ViewCollections.run(editTexts, ((view, index) -> {
             view.setVisibility(View.VISIBLE);
             view.setEnabled(false);
+            view.clearFocus();
         }));
         ratingBar.setVisibility(View.VISIBLE);
         ratingBar.setIsIndicator(false);
@@ -280,8 +285,10 @@ public class FoodtruckViewerMyReviewViewHolder extends RecyclerView.ViewHolder {
                 submitButton.setEnabled(areFieldsValid());
                 break;
             case FoodtruckViewerMyReviewState.REVIEW_SUBMITTED:
-                ViewCollections.run(editTexts, ((view, index) ->
-                    view.setEnabled(false)));
+                ViewCollections.run(editTexts, ((view, index) -> {
+                    view.setEnabled(false);
+                    view.clearFocus();
+                }));
                 ratingBar.setIsIndicator(true);
                 ViewCollections.run(reviewSubmittedButtons, ((view, index) ->
                         view.setVisibility(View.VISIBLE)));
