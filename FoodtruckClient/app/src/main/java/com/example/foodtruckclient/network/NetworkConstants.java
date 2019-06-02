@@ -41,4 +41,7 @@ public class NetworkConstants {
     public static String getAuthorizationHeader(String token) {
         return HEADER_VALUE_AUTHORIZATION_PREFIX_BEARER + token;
     }
+
+    // Project Page
+    public static final String PROJECT_PAGE_URL = "https://github.com/radusalagean/foodtruck-app-android";
 }

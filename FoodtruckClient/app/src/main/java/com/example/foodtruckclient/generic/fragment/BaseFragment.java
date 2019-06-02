@@ -1,10 +1,7 @@
 package com.example.foodtruckclient.generic.fragment;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +22,8 @@ import com.example.foodtruckclient.generic.activity.ActivityContract;
 import com.example.foodtruckclient.generic.mvp.BaseMVP;
 import com.example.foodtruckclient.permission.PermissionConstants;
 import com.example.foodtruckclient.permission.PermissionRequestDelegate;
-import com.example.foodtruckclient.util.ImageUtils;
+import com.example.foodtruckclient.util.IntentUtils;
+import com.example.foodtruckclient.util.StringUtils;
 
 import java.util.UUID;
 
@@ -33,9 +31,6 @@ import timber.log.Timber;
 
 public abstract class BaseFragment extends Fragment
         implements BaseMVP.View, PermissionRequestDelegate {
-
-    public static final int REQ_CODE_TAKE_PHOTO = 1;
-    public static final int REQ_CODE_PICK_FROM_GALLERY = 2;
 
     protected static final String ARG_UUID = "UUID";
 
@@ -240,33 +235,16 @@ public abstract class BaseFragment extends Fragment
                         getPresenter().doOnPermissionGranted(
                                 PermissionConstants.PERMISSION_CAMERA,
                                 R.string.alert_dialog_camera_no_permission_message,
-                                this, this::openCamera
+                                this, () -> IntentUtils.openCamera(BaseFragment.this)
                         );
                     } else if (items[which].equals(pickFromGallery)) {
                         getPresenter().doOnPermissionGranted(
                                 PermissionConstants.PERMISSION_READ_EXTERNAL_STORAGE,
                                 R.string.alert_dialog_read_storage_no_permission_message,
-                                this, this::openImagePicker
+                                this, () -> IntentUtils.openImagePicker(BaseFragment.this)
                         );
                     }
                 });
-    }
-
-    protected void openImagePicker() {
-        Intent intent = new Intent(Intent.ACTION_PICK,
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, REQ_CODE_PICK_FROM_GALLERY);
-    }
-
-    protected void openCamera() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
-            Uri uri = ImageUtils.getTempUriForCamera(getContext());
-            if (uri != null) {
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-                startActivityForResult(intent, REQ_CODE_TAKE_PHOTO);
-            }
-        }
     }
 
     /**
@@ -311,6 +289,14 @@ public abstract class BaseFragment extends Fragment
      * Override to return the presenter
      */
     protected abstract <T extends BaseMVP.View> BaseMVP.Presenter<T> getPresenter();
+
+    /**
+     * Override to return the content id associated with the entity displayed in the fragment.
+     * Used to identify fragments that display the same content.
+     */
+    public String getContentId() {
+        return StringUtils.emptyString();
+    }
 
     /**
      * Override to implement fragment-specific behavior on back press

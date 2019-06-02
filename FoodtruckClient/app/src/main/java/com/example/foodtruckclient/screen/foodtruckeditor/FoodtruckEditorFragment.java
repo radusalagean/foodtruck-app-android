@@ -35,6 +35,7 @@ import com.example.foodtruckclient.network.NetworkConstants;
 import com.example.foodtruckclient.network.foodtruckapi.model.Coordinates;
 import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
 import com.example.foodtruckclient.util.ImageUtils;
+import com.example.foodtruckclient.util.IntentUtils;
 import com.example.foodtruckclient.util.ViewUtils;
 import com.example.foodtruckclient.view.DotsView;
 import com.example.foodtruckclient.view.TagLayout;
@@ -280,11 +281,11 @@ public class FoodtruckEditorFragment extends BaseMapFragment
         File file;
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
-                case REQ_CODE_TAKE_PHOTO:
+                case IntentUtils.REQ_CODE_TAKE_PHOTO:
                     file = ImageUtils.getTempCameraFile(getContext());
                     onImageFileReceived(file, false);
                     break;
-                case REQ_CODE_PICK_FROM_GALLERY:
+                case IntentUtils.REQ_CODE_PICK_FROM_GALLERY:
                     file = ImageUtils.getFileFromGalleryIntent(getContext(), data);
                     onImageFileReceived(file, false);
                     break;
@@ -352,6 +353,12 @@ public class FoodtruckEditorFragment extends BaseMapFragment
     @SuppressWarnings("unchecked")
     protected <T extends BaseMVP.View> BaseMVP.Presenter<T> getPresenter() {
         return (BaseMVP.Presenter<T>) presenter;
+    }
+
+    @Override
+    public String getContentId() {
+        return presenter.getFoodtruck() != null ?
+                presenter.getFoodtruck().getId() : super.getContentId();
     }
 
     @Nullable

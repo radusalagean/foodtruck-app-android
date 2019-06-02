@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -28,6 +27,7 @@ import com.example.foodtruckclient.generic.mvp.BaseMVP;
 import com.example.foodtruckclient.network.foodtruckapi.model.Account;
 import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
 import com.example.foodtruckclient.util.ImageUtils;
+import com.example.foodtruckclient.util.IntentUtils;
 
 import java.io.File;
 import java.util.List;
@@ -143,11 +143,11 @@ public class ProfileFragment extends BaseFragment
         File file;
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
-                case REQ_CODE_TAKE_PHOTO:
+                case IntentUtils.REQ_CODE_TAKE_PHOTO:
                     file = ImageUtils.getTempCameraFile(getContext());
                     presenter.uploadProfilePicture(file);
                     break;
-                case REQ_CODE_PICK_FROM_GALLERY:
+                case IntentUtils.REQ_CODE_PICK_FROM_GALLERY:
                     file = ImageUtils.getFileFromGalleryIntent(getContext(), data);
                     if (file != null) {
                         presenter.uploadProfilePicture(file);
@@ -195,6 +195,11 @@ public class ProfileFragment extends BaseFragment
     @SuppressWarnings("unchecked")
     protected <T extends BaseMVP.View> BaseMVP.Presenter<T> getPresenter() {
         return (BaseMVP.Presenter<T>) presenter;
+    }
+
+    @Override
+    public String getContentId() {
+        return getArguments() != null ? getArguments().getString(ARG_PROFILE_ID) : profileId;
     }
 
     @Nullable

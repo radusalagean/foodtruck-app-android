@@ -20,6 +20,7 @@ import com.example.foodtruckclient.authentication.AuthenticationConstants;
 import com.example.foodtruckclient.authentication.AuthenticationRepository;
 import com.example.foodtruckclient.authentication.AuthenticationService;
 import com.example.foodtruckclient.generic.viewmodel.ViewModelManager;
+import com.example.foodtruckclient.network.NetworkConstants;
 import com.example.foodtruckclient.network.foodtruckapi.model.Account;
 import com.example.foodtruckclient.network.foodtruckapi.model.Foodtruck;
 import com.example.foodtruckclient.screen.dashboard.DashboardFragment;
@@ -30,6 +31,7 @@ import com.example.foodtruckclient.screen.foodtruckviewer.FoodtruckViewerFragmen
 import com.example.foodtruckclient.screen.login.LoginFragment;
 import com.example.foodtruckclient.screen.profile.ProfileFragment;
 import com.example.foodtruckclient.screen.register.RegisterFragment;
+import com.example.foodtruckclient.util.IntentUtils;
 import com.example.foodtruckclient.view.AuthenticationNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -229,6 +231,9 @@ public class MainActivity extends BaseActivity
             case R.id.nav_logout:
                 authenticationRepository.clearAuthenticatedAccount();
                 clearAuthenticatedAccount();
+                break;
+            case R.id.nav_project_page:
+                IntentUtils.openLinkInBrowser(this, NetworkConstants.PROJECT_PAGE_URL);
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);

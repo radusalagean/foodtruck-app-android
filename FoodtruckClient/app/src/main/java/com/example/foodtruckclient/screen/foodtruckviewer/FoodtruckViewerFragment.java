@@ -266,6 +266,11 @@ public class FoodtruckViewerFragment extends BaseMapFragment
     }
 
     @Override
+    public String getContentId() {
+        return getArguments() != null ? getArguments().getString(ARG_FOODTRUCK_ID) : foodtruckId;
+    }
+
+    @Override
     public boolean onBackPressed() {
         if (isMapPopupOpen()) {
             closeMapPopup();

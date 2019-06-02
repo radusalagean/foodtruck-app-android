@@ -124,6 +124,14 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
     protected <T extends BaseFragment> void showFragment(T fragment,
                                                          boolean addToBackStack,
                                                          @Nullable String backStackStateName) {
+        // Make sure we don't open unnecessary fragments
+        BaseFragment currentFragment = (BaseFragment) getSupportFragmentManager()
+                .findFragmentById(getFragmentContainerId());
+        if (currentFragment != null && currentFragment.getClass().equals(fragment.getClass()) &&
+            currentFragment.getContentId().equals(fragment.getContentId())) {
+            Timber.d("Attempting to open an unnecessary fragment, skipping request!");
+            return;
+        }
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction()
                 .replace(getFragmentContainerId(), fragment, fragment.getUuid().toString())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
