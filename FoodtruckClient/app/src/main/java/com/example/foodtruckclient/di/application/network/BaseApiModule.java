@@ -1,5 +1,7 @@
 package com.example.foodtruckclient.di.application.network;
 
+import androidx.annotation.Nullable;
+
 import com.example.foodtruckclient.BuildConfig;
 import com.example.foodtruckclient.authentication.AuthenticationRepository;
 import com.example.foodtruckclient.network.NetworkConstants;
@@ -22,6 +24,7 @@ public class BaseApiModule {
 
     @Provides
     @Named(NetworkConstants.NAMED_LOGGING_INTERCEPTOR)
+    @Nullable
     Interceptor provideLoggingInterceptor() {
         if (BuildConfig.DEBUG) {
             return new HttpLoggingInterceptor(message -> Timber.tag(NetworkConstants.OKHTTP_TAG).i(message))
@@ -32,6 +35,7 @@ public class BaseApiModule {
 
     @Provides
     @Named(NetworkConstants.NAMED_STETHO_INTERCEPTOR)
+    @Nullable
     Interceptor provideStethoInterceptor() {
         return BuildConfig.DEBUG ? new StethoInterceptor() : null;
     }

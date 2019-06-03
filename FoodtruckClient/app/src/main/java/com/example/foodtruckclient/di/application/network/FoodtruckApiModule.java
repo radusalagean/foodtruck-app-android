@@ -1,5 +1,7 @@
 package com.example.foodtruckclient.di.application.network;
 
+import androidx.annotation.Nullable;
+
 import com.example.foodtruckclient.di.application.ApplicationScope;
 import com.example.foodtruckclient.network.NetworkConstants;
 import com.example.foodtruckclient.network.foodtruckapi.FoodtruckApiService;
@@ -29,8 +31,8 @@ public class FoodtruckApiModule implements APIModuleContract<FoodtruckApiService
     @Override
     @Provides
     @ApplicationScope
-    public OkHttpClient provideClient(@Named(NetworkConstants.NAMED_LOGGING_INTERCEPTOR) Interceptor loggingInterceptor,
-                                      @Named(NetworkConstants.NAMED_STETHO_INTERCEPTOR) Interceptor stethoInterceptor,
+    public OkHttpClient provideClient(@Named(NetworkConstants.NAMED_LOGGING_INTERCEPTOR) @Nullable Interceptor loggingInterceptor,
+                                      @Named(NetworkConstants.NAMED_STETHO_INTERCEPTOR) @Nullable Interceptor stethoInterceptor,
                                       @Named(NetworkConstants.NAMED_HEADER_INTERCEPTOR) Interceptor headerInterceptor) {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         if (loggingInterceptor != null) {

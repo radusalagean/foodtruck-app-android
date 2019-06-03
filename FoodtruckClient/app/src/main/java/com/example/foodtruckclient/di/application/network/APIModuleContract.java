@@ -1,5 +1,7 @@
 package com.example.foodtruckclient.di.application.network;
 
+import androidx.annotation.Nullable;
+
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -19,8 +21,8 @@ public interface APIModuleContract<T> {
     /**
      * Provide the {@link OkHttpClient} instance
      */
-    OkHttpClient provideClient(Interceptor loggingInterceptor,
-                               Interceptor stethoInterceptor,
+    OkHttpClient provideClient(@Nullable Interceptor loggingInterceptor,
+                               @Nullable Interceptor stethoInterceptor,
                                Interceptor headerInterceptor);
 
     /**
