@@ -36,7 +36,6 @@ public abstract class BaseFragment extends Fragment
 
     private String tag = getClass().getSimpleName();
     private boolean isComponentUsed = false;
-    private UUID uuid;
 
     @Override
     public void onAttach(Context context) {
@@ -49,9 +48,9 @@ public abstract class BaseFragment extends Fragment
         Timber.tag(tag).v("-F-> onCreate(%s)", savedInstanceState);
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            uuid = (UUID) getArguments().getSerializable(ARG_UUID);
+            UUID uuid = (UUID) getArguments().getSerializable(ARG_UUID);
             getPresenter().setUuid(uuid);
-            Timber.d("Fragment's UUID: %s", uuid);
+            Timber.tag(getClass().getSimpleName()).d("Fragment's UUID: %s", uuid);
         }
     }
 
@@ -206,7 +205,12 @@ public abstract class BaseFragment extends Fragment
         return null;
     }
 
+    @Nullable
     public UUID getUuid() {
+        UUID uuid = null;
+        if (getArguments() != null) {
+            uuid = (UUID) getArguments().getSerializable(ARG_UUID);
+        }
         return uuid;
     }
 
@@ -215,12 +219,11 @@ public abstract class BaseFragment extends Fragment
      * Used for uniquely identifying the fragment's view model
      */
     public void generateUniqueId(@NonNull Bundle bundle) {
-        if (uuid != null) {
+        if (getUuid() != null) {
             throw new UnsupportedOperationException("You shouldn't generate a new unique id for this fragment if one already exists!");
         }
         UUID uuid = UUID.randomUUID();
         bundle.putSerializable(ARG_UUID, uuid);
-        this.uuid = uuid;
     }
 
     protected void openSelectImageDialog(DialogManager dialogManager) {
