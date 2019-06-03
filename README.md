@@ -21,10 +21,10 @@ The **debug apk**, however, is signed with the usual _Android Debug Certificate_
 As a result, if we want to run the **release** variant properly, only the one from the **Play Store** listing will work.
 If we want to run the **debug** variant, the apk provided **[here](https://github.com/radusalagean/foodtruck-app-android/releases)** should work just fine.
 
-If you want to get access to the **Play Store** listing, please send me an email at [busytrack@gmail.com](mailto://busytrack@gmail.com) with the email addess associated to your Google account that you are using on your Android device in order to add you to the **internal testing** channel.
+If you want to get access to the **Play Store** listing, please send me an email to [busytrack@gmail.com](mailto://busytrack@gmail.com) with the email addess linked to your Google account that you are using on your Android device in order to add you to the **internal testing** channel. Due to the demonstrative nature of this app, it is **not meant for public production use by any means**, thus public access is restricted from the Play Store.
 
 ### Debug vs. Release?
-The Debug version has additional _Logcat_ logs and the [Stetho](http://facebook.github.io/stetho/) library integrated for debugging purposes.
+The Debug version has additional _Logcat_ logs and the [Stetho](http://facebook.github.io/stetho/) library enabled for debugging purposes.
 
 ## Building the project
 1. Clone the repo
@@ -44,7 +44,17 @@ The Debug version has additional _Logcat_ logs and the [Stetho](http://facebook.
 TODO
 
 ## Libraries
-TODO
+- [Google Maps Android SDK](https://developers.google.com/maps/documentation/android-sdk/intro) - Display and select food truck location
+- [Retrofit](https://square.github.io/retrofit/) - Networking
+- [RxJava](https://github.com/ReactiveX/RxJava) - Concurrency
+- [Guava](https://github.com/google/guava) - Google Core Libray
+- [Gson](https://github.com/google/gson) - Json serialization / deserialization
+- [Butterknife](https://jakewharton.github.io/butterknife/) - Android View Binding
+- [Dagger2](https://github.com/google/dagger) - Dependency Injection
+- [Glide](https://github.com/bumptech/glide) - Image Loading
+- [Flexbox Layout](https://github.com/google/flexbox-layout) - CSS Flexible Box Layout Module adaptation for Android
+- [Stetho](http://facebook.github.io/stetho/) - Debugging
+- [Timber](https://github.com/JakeWharton/timber) - Logging (Android Logcat wrapper)
 
 ## License
 Apache License 2.0, see the [LICENSE](LICENSE) file for details.
