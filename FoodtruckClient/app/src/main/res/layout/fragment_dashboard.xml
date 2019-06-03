@@ -27,7 +27,7 @@
 
         </androidx.viewpager.widget.ViewPager>
 
-        <com.example.foodtruckclient.view.MorphableFloatingActionButton
+        <com.busytrack.foodtruckclient.view.MorphableFloatingActionButton
             android:id="@+id/fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

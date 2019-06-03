@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.foodtruckclient">
+    package="com.busytrack.foodtruckclient">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -20,7 +20,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.example.foodtruckclient.fileprovider"
+            android:authorities="com.busytrack.foodtruckclient.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

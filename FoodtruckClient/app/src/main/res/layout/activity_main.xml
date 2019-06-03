@@ -22,7 +22,7 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <com.example.foodtruckclient.view.AuthenticationNavigationView
+    <com.busytrack.foodtruckclient.view.AuthenticationNavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"

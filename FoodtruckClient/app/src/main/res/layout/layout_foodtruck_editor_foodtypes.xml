@@ -66,7 +66,7 @@
             app:layout_constraintTop_toTopOf="@+id/foodtruck_editor_input_layout_foodtype"
             app:srcCompat="@drawable/ic_add_circle_black_24dp"/>
 
-        <com.example.foodtruckclient.view.TagLayout
+        <com.busytrack.foodtruckclient.view.TagLayout
             android:id="@+id/foodtruck_editor_tag_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

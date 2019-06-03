@@ -13,7 +13,7 @@
         android:id="@+id/foodtruck_viewer_coordinator_layout"
         tools:context=".activity.MainActivity">
 
-        <com.example.foodtruckclient.view.StateAwareAppBarLayout
+        <com.busytrack.foodtruckclient.view.StateAwareAppBarLayout
             android:id="@+id/foodtruck_viewer_app_bar_layout"
             android:layout_width="match_parent"
             android:layout_height="@dimen/app_bar_height"
@@ -50,7 +50,7 @@
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-        </com.example.foodtruckclient.view.StateAwareAppBarLayout>
+        </com.busytrack.foodtruckclient.view.StateAwareAppBarLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.example.foodtruckclient.view.TagLayout
+    <com.busytrack.foodtruckclient.view.TagLayout
         android:id="@+id/foodtruck_viewer_tag_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

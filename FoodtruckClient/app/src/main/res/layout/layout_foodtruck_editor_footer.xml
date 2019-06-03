@@ -35,7 +35,7 @@
         app:srcCompat="@drawable/ic_navigate_next_black_24dp"
         android:background="?selectableItemBackgroundBorderless"/>
 
-    <com.example.foodtruckclient.view.DotsView
+    <com.busytrack.foodtruckclient.view.DotsView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/foodtruck_editor_dots_view"
