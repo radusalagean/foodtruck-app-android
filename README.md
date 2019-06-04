@@ -1,8 +1,13 @@
 # Foodtruck Client App (Android)
+![app_icon](FoodtruckClient/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png)
+
 This is a demonstrative client app, built around the **foodtruck api**, available and documented [here](https://github.com/radusalagean/foodtruck-api).
 
 ## Screenshots
-TODO
+![screenshot](https://lh3.googleusercontent.com/g0hnDiKiK5eAzKfutGH2VKMeV6btyEFPng5pj-ebzkKB2pyk4ixRegBosoWfkJtGJUA=w720-h310-rw)
+![screenshot](https://lh3.googleusercontent.com/efZyOAgAQ7wr19zL7NPXFmP8Qx8dah27mQA_383qJ_ylcj-UTjpYWGM-upeZk-Us9g=w720-h310-rw)
+![screenshot](https://lh3.googleusercontent.com/4LaI9eBsxCKunAd9yxyPU2Yv1_Sd2Q8qnFWcwUyFjUap-KIRsUPlFYBIA6exOCom_LbO=w720-h310-rw)
+![screenshot](https://lh3.googleusercontent.com/mq9g9NyAmN3yrWOf6lBl6rUITjnTTXhqSuVLVPKHpK5C9VEKNzxvy7yosxTlHKbdITw=w720-h310-rw)
 
 ## Features
 - Access a centralized network of food trucks
