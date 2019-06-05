@@ -46,7 +46,50 @@ The Debug version has additional _Logcat_ logs and the [Stetho](http://facebook.
 6. Build and run
 
 ## Architecture
-TODO
+
+### Overview
+The project is built around the `MVP` pattern. The following diagram displays the basic Model-View-Presenter structure.
+
+![fig. 1](https://i.imgur.com/KrnNXd8.png)
+
+### Roles
+Some roles I chose for each interface are listed below:
+- **`View`**
+  - Represents Android Fragments
+  - Handles Android-specific tasks, such as Fragment lifecycle, requesting and receiving permission results, etc.
+  - Inflates and manages Android views and their behavior
+  - Updates Android views to display data received from the `Presenter`
+- **`Presenter`**
+  - Subscribes to observables provided by the `Model`
+  - Processes received data in order to be displayed by the `View`
+  - Acts as a 'middle-man' between the `View` and the `Model`
+  - Decides whether to provide cached or fresh data to the view, based on cached data availability
+  - Interacts with `Manager` classes
+- **`Model`**
+  - Provides the path between the app and the Backend through `RxJava` observables that the `Presenter` can subscribe to
+  - Uses `RxJava` operators to combine data
+  - Provides access to cached View Models
+  - Interacts with `Repository` classes
+
+### Dependency Scoping
+Dependencies are managed with the **Dagger2** library. There are 3 components and 3 corresponding scopes defined:
+- `ApplicationComponent` <-> `@ApplicationScope`
+- `ActivityComponent` <-> `@ActivityScope`
+- `ServiceComponent` <-> `@ServiceScope`
+
+The defined scopes are linked to each component's lifetime. For example, a dependency provided with `@ApplicationScope` annotation will only be instantiated once per application lifetime and the instance will be cached and reused.
+
+A dependency provided with the `@ActivityScope` or `@ServiceScope` annotation will only be instantiated once per that Activity / Service's lifetime, cached and then reused throughout.
+
+An `@ApplicationScope` dependency will outlive any `@ActivityScope` or `@ServiceScope` dependency.
+
+### View Models
+
+In order to provide a seamless user experience on events like screen rotation, classes representing the data displayed on the screen are used. Those are called `ViewModel` classes and each screen type has its own `ViewModelRepository` class where `ViewModel` classes are kept for restoration purposes. Those view model repositories outlive the Activity lifetime, since they are provided with an `@ApplicationScope` annotation.
+
+In order to associate a `ViewModel` class to its corresponding, original `Fragment`, each Fragment has a random `UUID` generated and associated with it when the fragment is first created, through the `newInstance()` method. That `UUID` is stored in the fragment arguments as a `Bundle`, which can be restored later, when the parent `Activity` is destroyed and the re-created, thus creating a one on one association with the view model class.
+
+Every time a fragment is popped off the backstack, the view model repositories are checked and the view model classes that are obsolete are dereferenced, awaiting garbage collection.
 
 ## Libraries
 - [Google Maps Android SDK](https://developers.google.com/maps/documentation/android-sdk/intro) - Display and select food truck location
