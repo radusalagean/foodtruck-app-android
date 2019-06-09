@@ -36,14 +36,13 @@ The Debug version has additional _Logcat_ logs and the [Stetho](http://facebook.
 
 ## Building the project
 1. Clone the repo
-2. Create a **Google Maps API Key** by following the official [guide](https://developers.google.com/maps/documentation/android-sdk/get-api-key)
+2. Create a **Google Maps API Key** by following the official [guide](https://developers.google.com/maps/documentation/android-sdk/get-api-key). Please create 2 separate keys for debug / release if you also plan to create a release build.
 3. Go to the `.gradle` directory in your user account home directory
 4. Paste the API key(s) generated at step 2 in the `gradle.properties` file (create the file if it doesn't exist):
-```
-foodtruckClientGoogleMapsDebugKey=DEBUG_KEY_HERE
-foodtruckClientGoogleMapsReleaseKey=RELEASE_KEY_HERE
-```
-Note: Please create 2 separate keys for debug / release
+  ```
+  foodtruckClientGoogleMapsDebugKey=DEBUG_KEY_HERE
+  foodtruckClientGoogleMapsReleaseKey=RELEASE_KEY_HERE
+  ```
 5. Open the project in Android Studio
 6. Build and run
 
