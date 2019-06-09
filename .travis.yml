@@ -9,4 +9,4 @@ android:
 before_install:
   - cd FoodtruckClient
   - pwd
-  - chmod +x .gradlew
+  - chmod +x gradlew
