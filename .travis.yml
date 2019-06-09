@@ -2,6 +2,10 @@ language: android
 dist: xenial
 jdk: oraclejdk8
 
+android:
+  components:
+    - build-tools-28.0.3
+
 before_install:
-  - cd foodtruck-app-android
+  - cd FoodtruckClient
   - pwd
