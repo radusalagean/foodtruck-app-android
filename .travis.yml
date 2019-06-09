@@ -31,3 +31,8 @@ before_script:
   - chmod +x gradlew
   - mkdir -p ~/.gradle
   - echo foodtruckClientGoogleMapsDebugKey=$GOOGLE_MAPS_DEBUG_KEY >> ~/.gradle/gradle.properties
+  - echo foodtruckClientGoogleMapsReleaseKey=$GOOGLE_MAPS_RELEASE_KEY >> ~/.gradle/gradle.properties
+
+afterScript:
+  - cat ~/.gradle/gradle.properties # Million $ question, will they show my keys in the build logs? : >
+  - rm -vf ~/.gradle/gradle.properties
