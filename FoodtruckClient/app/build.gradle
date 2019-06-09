@@ -13,9 +13,14 @@ android {
         multiDexEnabled true
     }
     buildTypes {
+        debug {
+            // Creates a placeholder property to use in the manifest.
+            manifestPlaceholders = [googleMapsApiKey: foodtruckClientGoogleMapsDebugKey]
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            manifestPlaceholders = [googleMapsApiKey: foodtruckClientGoogleMapsReleaseKey]
         }
     }
     // Butterknife requires Java 8.

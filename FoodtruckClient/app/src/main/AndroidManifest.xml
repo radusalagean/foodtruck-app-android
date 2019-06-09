@@ -29,16 +29,19 @@
         </provider>
 
         <!--
-             The API key for Google Maps-based APIs is defined as a string resource.
-             (See the file "res/values/api_keys.xml").
-             Note that the API key is linked to the encryption key used to sign the APK.
-             You need a different API key for each encryption key, including the release key that is used to
-             sign the APK for publishing.
-             You can define the keys for the debug and release targets in src/debug/ and src/release/.
+            The API Key should be defined in the `gradle.properties` file located in the user's
+            `~/.gradle` directory.
+            There, 2 keys should be defined (one for debug and one for release).
+
+            Example format:
+            foodtruckClientGoogleMapsDebugKey=DEBUG_KEY_HERE
+            foodtruckClientGoogleMapsReleaseKey=RELEASE_KEY_HERE
+
+            Don't wrap the api keys between quotes.
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
+            android:value="${googleMapsApiKey}" />
 
         <activity
             android:name=".activity.MainActivity"

@@ -72,6 +72,3 @@ lint/generated/
 lint/outputs/
 lint/tmp/
 # lint/reports/
-
-# Api Keys
-api_keys.xml
