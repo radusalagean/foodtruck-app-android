@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <animated-vector
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:drawable="@drawable/ic_my_location_white_24dp">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:drawable="@drawable/ic_my_location_white_24dp"
+    tools:targetApi="lollipop">
     <target android:name="path"
         android:animation="@animator/location_to_add_path" />
     <target android:name="group"
