@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/radusalagean/foodtruck-app-android.svg?branch=master)](https://travis-ci.org/radusalagean/foodtruck-app-android)
+
 # Foodtruck Client App (Android)
 ![app_icon](FoodtruckClient/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png)
 
