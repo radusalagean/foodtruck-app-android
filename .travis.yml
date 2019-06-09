@@ -1,0 +1,7 @@
+language: android
+dist: xenial
+jdk: oraclejdk8
+
+before_install:
+  - cd foodtruck-app-android
+  - pwd
