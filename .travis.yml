@@ -37,5 +37,4 @@ script:
   - ./gradlew -Dorg.gradle.jvmargs=-Xmx1536m clean build
 
 after_script:
-  - cat ~/.gradle/gradle.properties # Million $ question, will they show my keys in the build logs? : >
   - rm -vf ~/.gradle/gradle.properties

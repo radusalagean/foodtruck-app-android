@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/radusalagean/foodtruck-app-android.svg?branch=master)](https://travis-ci.org/radusalagean/foodtruck-app-android)
+[![Latest Release](https://img.shields.io/github/release/radusalagean/foodtruck-app-android.svg)](https://github.com/radusalagean/foodtruck-app-android/releases)
 
 # Foodtruck Client App (Android)
 ![app_icon](FoodtruckClient/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png)
@@ -36,14 +37,13 @@ The Debug version has additional _Logcat_ logs and the [Stetho](http://facebook.
 ## Building the project
 1. Clone the repo
 2. Create a **Google Maps API Key** by following the official [guide](https://developers.google.com/maps/documentation/android-sdk/get-api-key)
-3. Go to your cloned repo, path `foodtruck-app-android/FoodtruckClient/app/src/debug/res/values` (create missing directories) and create a new file called `api_keys.xml`.
-  The content of the file should look like this:
-  ```xml
-  <resources>
-    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">YOUR API KEY</string>
-  </resources>
-  ```
-4. Paste the API key generated at step 2 in the file file created earlier
+3. Go to the `.gradle` directory in your user account home directory
+4. Paste the API key(s) generated at step 2 in the `gradle.properties` file (create the file if it doesn't exist):
+```
+foodtruckClientGoogleMapsDebugKey=DEBUG_KEY_HERE
+foodtruckClientGoogleMapsReleaseKey=RELEASE_KEY_HERE
+```
+Note: Please create 2 separate keys for debug / release
 5. Open the project in Android Studio
 6. Build and run
 
