@@ -37,10 +37,10 @@ import com.busytrack.foodtruckclient.network.foodtruckapi.model.Foodtruck;
 import com.busytrack.foodtruckclient.util.ImageUtils;
 import com.busytrack.foodtruckclient.util.IntentUtils;
 import com.busytrack.foodtruckclient.util.ViewUtils;
-import com.busytrack.foodtruckclient.view.DotsView;
 import com.busytrack.foodtruckclient.view.TagLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.common.base.Strings;
+import com.radusalagean.quickdotsview.QuickDotsView;
 
 import java.io.File;
 
@@ -74,8 +74,8 @@ public class FoodtruckEditorFragment extends BaseMapFragment
     @BindView(R.id.foodtruck_editor_navigate_next)
     ImageView nextButton;
 
-    @BindView(R.id.foodtruck_editor_dots_view)
-    DotsView dotsView;
+    @BindView(R.id.foodtruck_editor_quick_dots_view)
+    QuickDotsView quickDotsView;
 
     @Inject
     FoodtruckEditorMVP.Presenter presenter;
@@ -110,7 +110,6 @@ public class FoodtruckEditorFragment extends BaseMapFragment
 
         @Override
         public void onPageSelected(int position) {
-            dotsView.selectDot(position);
             handleNavigationButtonsVisibility(position);
             if (toolbar.getMenu().findItem(R.id.menu_show_my_location) != null) {
                 toolbar.getMenu().findItem(R.id.menu_show_my_location)
@@ -331,6 +330,7 @@ public class FoodtruckEditorFragment extends BaseMapFragment
 
     @Override
     protected void registerListeners() {
+        quickDotsView.linkViewPager(viewPager);
         viewPager.addOnPageChangeListener(onPageChangeListener);
         nextButton.setOnClickListener(v -> viewPager.setCurrentItem(viewPager.getCurrentItem() + 1));
         previousButton.setOnClickListener(v -> viewPager.setCurrentItem(viewPager.getCurrentItem() - 1));
@@ -338,6 +338,7 @@ public class FoodtruckEditorFragment extends BaseMapFragment
 
     @Override
     protected void unregisterListeners() {
+        quickDotsView.unlinkViewPager(viewPager);
         viewPager.removeOnPageChangeListener(onPageChangeListener);
         fab.setOnClickListener(null);
         nextButton.setOnClickListener(null);

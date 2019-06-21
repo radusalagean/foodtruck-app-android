@@ -54,9 +54,8 @@ ext {
     rxjavaVersion = '2.2.8'
     glideVersion = '4.9.0'
     flexboxVersion = '1.1.0'
-
-    // App debug dependencies
     stethoVersion = '1.5.1'
+    quickdotsviewVersion = '1.0.0'
 
     // App test dependencies
     junitVersion = '4.12'

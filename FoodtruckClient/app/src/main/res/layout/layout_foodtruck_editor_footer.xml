@@ -35,10 +35,10 @@
         app:srcCompat="@drawable/ic_navigate_next_black_24dp"
         android:background="?selectableItemBackgroundBorderless"/>
 
-    <com.busytrack.foodtruckclient.view.DotsView
+    <com.radusalagean.quickdotsview.QuickDotsView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/foodtruck_editor_dots_view"
+        android:id="@+id/foodtruck_editor_quick_dots_view"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
@@ -49,6 +49,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:count="4"/>
+        app:dotSeparation="@dimen/quick_dots_view_default_dot_separation"
+        app:dotRadius="@dimen/quick_dots_view_default_dot_radius"
+        app:selectedDotColor="@color/colorAccent"
+        app:unselectedDotColor="@color/colorWhite"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
