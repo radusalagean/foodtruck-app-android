@@ -11,6 +11,7 @@ import com.busytrack.foodtruckclient.generic.contentinvalidation.InvalidationBun
 import com.busytrack.foodtruckclient.generic.contentinvalidation.InvalidationEffect;
 import com.busytrack.foodtruckclient.generic.contentinvalidation.InvalidationType;
 import com.busytrack.foodtruckclient.generic.mvp.BasePresenter;
+import com.busytrack.foodtruckclient.generic.observer.ReactiveObserver;
 import com.busytrack.foodtruckclient.generic.viewmodel.ViewModelManager;
 import com.busytrack.foodtruckclient.network.NetworkConstants;
 import com.busytrack.foodtruckclient.network.foodtruckapi.model.Account;
@@ -23,9 +24,7 @@ import java.io.File;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.observers.DisposableObserver;
 import okhttp3.MultipartBody;
-import timber.log.Timber;
 
 public class ProfilePresenter extends BasePresenter<ProfileMVP.View, ProfileMVP.Model>
         implements ProfileMVP.Presenter {
@@ -47,25 +46,13 @@ public class ProfilePresenter extends BasePresenter<ProfileMVP.View, ProfileMVP.
         setRefreshing(true);
         compositeDisposable.add(model.getViewModel(profileId)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<ProfileViewModel>() {
+                .subscribeWith(new ReactiveObserver<ProfileViewModel>(this) {
                     @Override
                     public void onNext(ProfileViewModel viewModel) {
                         postOnView(() -> {
                             view.updateAccount(viewModel.getAccount());
                             view.updateFoodtrucks(viewModel.getFoodtrucks());
                         });
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Timber.e(e);
-                        postOnView(() -> view.toast(e.getMessage()));
-                        setRefreshing(false);
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        setRefreshing(false);
                     }
                 }));
     }
@@ -75,22 +62,15 @@ public class ProfilePresenter extends BasePresenter<ProfileMVP.View, ProfileMVP.
         setRefreshing(true);
         compositeDisposable.add(model.removeProfilePicture()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<Message>() {
+                .subscribeWith(new ReactiveObserver<Message>(this) {
                     @Override
                     public void onNext(Message message) {
                         postOnView(() -> view.showSnackBar(R.string.message_profile_image_removed));
                     }
 
                     @Override
-                    public void onError(Throwable e) {
-                        Timber.e(e);
-                        postOnView(() -> view.toast(e.getMessage()));
-                        setRefreshing(false);
-                    }
-
-                    @Override
                     public void onComplete() {
-                        setRefreshing(false);
+                        super.onComplete();
                         reloadAccount(model.getCachedViewModel().getAccount().getId());
                         reloadFoodtrucks(model.getCachedViewModel().getAccount().getId());
                         viewModelManager.sendInvalidationBundle(new InvalidationBundle(
@@ -109,22 +89,10 @@ public class ProfilePresenter extends BasePresenter<ProfileMVP.View, ProfileMVP.
         setRefreshing(true);
         compositeDisposable.add(model.getAccount(profileId)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<Account>() {
+                .subscribeWith(new ReactiveObserver<Account>(this) {
                     @Override
                     public void onNext(Account account) {
                         postOnView(() -> view.updateAccount(account));
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Timber.e(e);
-                        postOnView(() -> view.toast(e.getMessage()));
-                        setRefreshing(false);
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        setRefreshing(false);
                     }
                 }));
     }
@@ -134,22 +102,10 @@ public class ProfilePresenter extends BasePresenter<ProfileMVP.View, ProfileMVP.
         setRefreshing(true);
         compositeDisposable.add(model.getFoodtrucks(profileId)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<List<Foodtruck>>() {
+                .subscribeWith(new ReactiveObserver<List<Foodtruck>>(this) {
                     @Override
                     public void onNext(List<Foodtruck> foodtrucks) {
                         postOnView(() -> view.updateFoodtrucks(foodtrucks));
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Timber.e(e);
-                        postOnView(() -> view.toast(e.getMessage()));
-                        setRefreshing(false);
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        setRefreshing(false);
                     }
                 }));
     }
@@ -167,22 +123,15 @@ public class ProfilePresenter extends BasePresenter<ProfileMVP.View, ProfileMVP.
         setRefreshing(true);
         compositeDisposable.add(model.uploadProfilePicture(part)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<Message>() {
+                .subscribeWith(new ReactiveObserver<Message>(this) {
                     @Override
                     public void onNext(Message message) {
                         postOnView(() -> view.showSnackBar(R.string.message_profile_image_uploaded));
                     }
 
                     @Override
-                    public void onError(Throwable e) {
-                        Timber.e(e);
-                        postOnView(() -> view.toast(e.getMessage()));
-                        setRefreshing(false);
-                    }
-
-                    @Override
                     public void onComplete() {
-                        setRefreshing(false);
+                        super.onComplete();
                         reloadAccount(model.getCachedViewModel().getAccount().getId());
                         reloadFoodtrucks(model.getCachedViewModel().getAccount().getId());
                         viewModelManager.sendInvalidationBundle(new InvalidationBundle(

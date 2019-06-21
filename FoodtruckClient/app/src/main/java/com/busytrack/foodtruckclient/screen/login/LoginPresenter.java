@@ -2,11 +2,10 @@ package com.busytrack.foodtruckclient.screen.login;
 
 import com.busytrack.foodtruckclient.dialog.DialogManager;
 import com.busytrack.foodtruckclient.generic.mvp.BasePresenter;
+import com.busytrack.foodtruckclient.generic.observer.ReactiveObserver;
 import com.busytrack.foodtruckclient.network.foodtruckapi.model.Account;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.observers.DisposableObserver;
-import timber.log.Timber;
 
 public class LoginPresenter extends BasePresenter<LoginMVP.View, LoginMVP.Model>
         implements LoginMVP.Presenter {
@@ -25,23 +24,11 @@ public class LoginPresenter extends BasePresenter<LoginMVP.View, LoginMVP.Model>
         setRefreshing(true);
         compositeDisposable.add(model.login(account)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<Account>() {
+                .subscribeWith(new ReactiveObserver<Account>(this) {
                     @Override
                     public void onNext(Account account) {
                         postOnView(() ->
                             view.setAuthenticatedAccount(account));
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Timber.e(e);
-                        postOnView(() -> view.toast(e.getMessage()));
-                        setRefreshing(false);
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        setRefreshing(false);
                     }
                 }));
     }

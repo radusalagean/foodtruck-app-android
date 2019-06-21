@@ -8,6 +8,7 @@ import com.busytrack.foodtruckclient.generic.contentinvalidation.InvalidationEff
 import com.busytrack.foodtruckclient.generic.contentinvalidation.InvalidationType;
 import com.busytrack.foodtruckclient.generic.image.ImageBundle;
 import com.busytrack.foodtruckclient.generic.mapmvp.BaseMapPresenter;
+import com.busytrack.foodtruckclient.generic.observer.ReactiveCompletableObserver;
 import com.busytrack.foodtruckclient.generic.viewmodel.ViewModelManager;
 import com.busytrack.foodtruckclient.location.LocationManager;
 import com.busytrack.foodtruckclient.network.foodtruckapi.model.Coordinates;
@@ -23,7 +24,6 @@ import java.util.List;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.observers.DisposableCompletableObserver;
 import okhttp3.MultipartBody;
 import timber.log.Timber;
 
@@ -158,10 +158,10 @@ public class FoodtruckEditorPresenter extends BaseMapPresenter<FoodtruckEditorMV
         setRefreshing(true);
         compositeDisposable.add(Completable.concat(completables)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableCompletableObserver() {
+                .subscribeWith(new ReactiveCompletableObserver(this) {
                     @Override
                     public void onComplete() {
-                        setRefreshing(false);
+                        super.onComplete();
                         viewModelManager.sendInvalidationBundle(new InvalidationBundle(
                                 updateFoodtruck ? getFoodtruck().getId() : StringUtils.emptyString(),
                                 ContentType.FOODTRUCK,
@@ -175,13 +175,6 @@ public class FoodtruckEditorPresenter extends BaseMapPresenter<FoodtruckEditorMV
                             );
                             view.popFragment();
                         });
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Timber.e(e);
-                        postOnView(() -> view.toast(e.getMessage()));
-                        setRefreshing(false);
                     }
                 })
         );

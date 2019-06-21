@@ -2,12 +2,12 @@ package com.busytrack.foodtruckclient.screen.register;
 
 import com.busytrack.foodtruckclient.R;
 import com.busytrack.foodtruckclient.generic.mvp.BasePresenter;
+import com.busytrack.foodtruckclient.generic.observer.ReactiveObserver;
 import com.busytrack.foodtruckclient.network.foodtruckapi.model.Account;
 import com.busytrack.foodtruckclient.network.foodtruckapi.model.Message;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableCompletableObserver;
-import io.reactivex.observers.DisposableObserver;
 import timber.log.Timber;
 
 public class RegisterPresenter extends BasePresenter<RegisterMVP.View, RegisterMVP.Model>
@@ -25,22 +25,15 @@ public class RegisterPresenter extends BasePresenter<RegisterMVP.View, RegisterM
         setRefreshing(true);
         compositeDisposable.add(model.register(account)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<Message>() {
+                .subscribeWith(new ReactiveObserver<Message>(this) {
                     @Override
                     public void onNext(Message message) {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Timber.e(e);
-                        postOnView(() -> view.toast(e.getMessage()));
-                        setRefreshing(false);
+                        // nothing
                     }
 
                     @Override
                     public void onComplete() {
-                        setRefreshing(false);
+                        super.onComplete();
                         postOnView(() -> {
                             view.showSnackBar(R.string.registered_message, userName);
                             view.popFragment();

@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 
 import com.busytrack.foodtruckclient.R;
 import com.busytrack.foodtruckclient.dialog.DialogManager;
+import com.busytrack.foodtruckclient.generic.observer.ReactiveListener;
 import com.busytrack.foodtruckclient.generic.viewmodel.ViewModelManager;
 import com.busytrack.foodtruckclient.permission.PermissionManager;
 import com.busytrack.foodtruckclient.permission.PermissionRequestDelegate;
@@ -14,9 +15,10 @@ import com.busytrack.foodtruckclient.permission.PermissionRequestListener;
 import java.util.UUID;
 
 import io.reactivex.disposables.CompositeDisposable;
+import timber.log.Timber;
 
 public abstract class BasePresenter<T extends BaseMVP.View, S extends BaseMVP.Model>
-        implements BaseMVP.Presenter<T> {
+        implements BaseMVP.Presenter<T>, ReactiveListener {
 
     protected Context context;
     protected CompositeDisposable compositeDisposable;
@@ -114,5 +116,17 @@ public abstract class BasePresenter<T extends BaseMVP.View, S extends BaseMVP.Mo
     public void handleInvalidationEffects() {
         // default empty implementation
         // override for screen-specific behavior handling
+    }
+
+    @Override
+    public void onError(Throwable e) {
+        Timber.e(e);
+        postOnView(() -> view.toast(e.getMessage()));
+        setRefreshing(false);
+    }
+
+    @Override
+    public void onComplete() {
+        setRefreshing(false);
     }
 }

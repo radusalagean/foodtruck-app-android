@@ -10,6 +10,7 @@ import com.busytrack.foodtruckclient.generic.contentinvalidation.InvalidationBun
 import com.busytrack.foodtruckclient.generic.contentinvalidation.InvalidationEffect;
 import com.busytrack.foodtruckclient.generic.contentinvalidation.InvalidationType;
 import com.busytrack.foodtruckclient.generic.mapmvp.BaseMapPresenter;
+import com.busytrack.foodtruckclient.generic.observer.ReactiveObserver;
 import com.busytrack.foodtruckclient.generic.viewmodel.ViewModelManager;
 import com.busytrack.foodtruckclient.location.LocationManager;
 import com.busytrack.foodtruckclient.network.foodtruckapi.model.Coordinates;
@@ -24,7 +25,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.observers.DisposableObserver;
 import timber.log.Timber;
 
 public class FoodtruckViewerPresenter extends BaseMapPresenter<FoodtruckViewerMVP.View, FoodtruckViewerMVP.Model>
@@ -44,7 +44,7 @@ public class FoodtruckViewerPresenter extends BaseMapPresenter<FoodtruckViewerMV
         setRefreshing(true);
         compositeDisposable.add(model.getViewModel(foodtruckId)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<FoodtruckViewerViewModel>() {
+                .subscribeWith(new ReactiveObserver<FoodtruckViewerViewModel>(this) {
                     @Override
                     public void onNext(FoodtruckViewerViewModel foodtruckViewerViewModel) {
                         processFoodtruck(foodtruckViewerViewModel.getFoodtruck());
@@ -52,18 +52,6 @@ public class FoodtruckViewerPresenter extends BaseMapPresenter<FoodtruckViewerMV
                             view.updateMyReview(foodtruckViewerViewModel.getMyReview());
                             view.updateReviews(foodtruckViewerViewModel.getReviews());
                         });
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Timber.e(e);
-                        postOnView(() -> view.toast(e.getMessage()));
-                        setRefreshing(false);
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        setRefreshing(false);
                     }
                 }));
     }
@@ -73,22 +61,10 @@ public class FoodtruckViewerPresenter extends BaseMapPresenter<FoodtruckViewerMV
         setRefreshing(true);
         compositeDisposable.add(model.getFoodtruck(foodtruckId)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<Foodtruck>() {
+                .subscribeWith(new ReactiveObserver<Foodtruck>(this) {
                     @Override
                     public void onNext(Foodtruck foodtruck) {
                         processFoodtruck(foodtruck);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Timber.e(e);
-                        postOnView(() -> view.toast(e.getMessage()));
-                        setRefreshing(false);
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        setRefreshing(false);
                     }
                 }));
     }
@@ -98,22 +74,10 @@ public class FoodtruckViewerPresenter extends BaseMapPresenter<FoodtruckViewerMV
         setRefreshing(true);
         compositeDisposable.add(model.getAllReviews(foodtruckId)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<List<Review>>() {
+                .subscribeWith(new ReactiveObserver<List<Review>>(this) {
                     @Override
                     public void onNext(List<Review> reviews) {
                         postOnView(() -> view.updateReviews(reviews));
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Timber.e(e);
-                        postOnView(() -> view.toast(e.getMessage()));
-                        setRefreshing(false);
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        setRefreshing(false);
                     }
                 }));
     }
@@ -123,22 +87,10 @@ public class FoodtruckViewerPresenter extends BaseMapPresenter<FoodtruckViewerMV
         setRefreshing(false);
         compositeDisposable.add(model.getMyReview(foodtruckId)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<Review>() {
+                .subscribeWith(new ReactiveObserver<Review>(this) {
                     @Override
                     public void onNext(Review review) {
                         postOnView(() -> view.updateMyReview(review));
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Timber.e(e);
-                        postOnView(() -> view.toast(e.getMessage()));
-                        setRefreshing(false);
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        setRefreshing(false);
                     }
                 }));
     }
@@ -152,7 +104,7 @@ public class FoodtruckViewerPresenter extends BaseMapPresenter<FoodtruckViewerMV
         review.setRating(rating);
         compositeDisposable.add(model.submitReview(foodtruckId, review)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<Message>() {
+                .subscribeWith(new ReactiveObserver<Message>(this) {
                     @Override
                     public void onNext(Message message) {
                         postOnView(() ->
@@ -160,15 +112,8 @@ public class FoodtruckViewerPresenter extends BaseMapPresenter<FoodtruckViewerMV
                     }
 
                     @Override
-                    public void onError(Throwable e) {
-                        Timber.e(e);
-                        postOnView(() -> view.toast(e.getMessage()));
-                        setRefreshing(false);
-                    }
-
-                    @Override
                     public void onComplete() {
-                        setRefreshing(false);
+                        super.onComplete();
                         loadViewModel(foodtruckId);
                         viewModelManager.sendInvalidationBundle(new InvalidationBundle(
                                 foodtruckId,
@@ -187,7 +132,7 @@ public class FoodtruckViewerPresenter extends BaseMapPresenter<FoodtruckViewerMV
         review.setRating(rating);
         compositeDisposable.add(model.updateReview(reviewId, review)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<Message>() {
+                .subscribeWith(new ReactiveObserver<Message>(this) {
                     @Override
                     public void onNext(Message message) {
                         postOnView(() ->
@@ -195,15 +140,8 @@ public class FoodtruckViewerPresenter extends BaseMapPresenter<FoodtruckViewerMV
                     }
 
                     @Override
-                    public void onError(Throwable e) {
-                        Timber.e(e);
-                        postOnView(() -> view.toast(e.getMessage()));
-                        setRefreshing(false);
-                    }
-
-                    @Override
                     public void onComplete() {
-                        setRefreshing(false);
+                        super.onComplete();
                         loadViewModel(model.getCachedViewModel().getFoodtruck().getId());
                         viewModelManager.sendInvalidationBundle(new InvalidationBundle(
                                 model.getCachedViewModel().getFoodtruck().getId(),
@@ -219,7 +157,7 @@ public class FoodtruckViewerPresenter extends BaseMapPresenter<FoodtruckViewerMV
         setRefreshing(true);
         compositeDisposable.add(model.removeReview(reviewId)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<Message>() {
+                .subscribeWith(new ReactiveObserver<Message>(this) {
                     @Override
                     public void onNext(Message message) {
                         postOnView(() ->
@@ -227,15 +165,8 @@ public class FoodtruckViewerPresenter extends BaseMapPresenter<FoodtruckViewerMV
                     }
 
                     @Override
-                    public void onError(Throwable e) {
-                        Timber.e(e);
-                        postOnView(() -> view.toast(e.getMessage()));
-                        setRefreshing(false);
-                    }
-
-                    @Override
                     public void onComplete() {
-                        setRefreshing(false);
+                        super.onComplete();
                         loadViewModel(model.getCachedViewModel().getFoodtruck().getId());
                         viewModelManager.sendInvalidationBundle(new InvalidationBundle(
                                 model.getCachedViewModel().getFoodtruck().getId(),
@@ -251,22 +182,15 @@ public class FoodtruckViewerPresenter extends BaseMapPresenter<FoodtruckViewerMV
         setRefreshing(true);
         compositeDisposable.add(model.removeFoodtruck(foodtruckId)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<Message>() {
+                .subscribeWith(new ReactiveObserver<Message>(this) {
                     @Override
                     public void onNext(Message message) {
                         postOnView(() -> view.showSnackBar(R.string.foodtruck_removed_message));
                     }
 
                     @Override
-                    public void onError(Throwable e) {
-                        Timber.e(e);
-                        postOnView(() -> view.toast(e.getMessage()));
-                        setRefreshing(false);
-                    }
-
-                    @Override
                     public void onComplete() {
-                        setRefreshing(false);
+                        super.onComplete();
                         postOnView(() -> view.popFragment());
                         viewModelManager.sendInvalidationBundle(new InvalidationBundle(
                                 foodtruckId,

@@ -6,6 +6,7 @@ import androidx.collection.ArrayMap;
 import com.busytrack.foodtruckclient.dialog.DialogManager;
 import com.busytrack.foodtruckclient.generic.contentinvalidation.InvalidationEffect;
 import com.busytrack.foodtruckclient.generic.mapmvp.BaseMapPresenter;
+import com.busytrack.foodtruckclient.generic.observer.ReactiveObserver;
 import com.busytrack.foodtruckclient.location.LocationManager;
 import com.busytrack.foodtruckclient.network.foodtruckapi.model.Foodtruck;
 import com.busytrack.foodtruckclient.permission.PermissionManager;
@@ -16,7 +17,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.observers.DisposableObserver;
 import timber.log.Timber;
 
 public class DashboardPresenter extends BaseMapPresenter<DashboardMVP.View, DashboardMVP.Model>
@@ -35,22 +35,10 @@ public class DashboardPresenter extends BaseMapPresenter<DashboardMVP.View, Dash
         setRefreshing(true);
         compositeDisposable.add(model.getViewModel()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<DashboardViewModel>() {
+                .subscribeWith(new ReactiveObserver<DashboardViewModel>(this) {
                     @Override
                     public void onNext(DashboardViewModel dashboardViewModel) {
                         processFoodtrucks(dashboardViewModel.getFoodtrucks());
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Timber.e(e);
-                        postOnView(() -> view.toast(e.getMessage()));
-                        setRefreshing(false);
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        setRefreshing(false);
                     }
                 }));
     }
@@ -64,22 +52,10 @@ public class DashboardPresenter extends BaseMapPresenter<DashboardMVP.View, Dash
         }
         compositeDisposable.add(model.getFoodtrucks()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<List<Foodtruck>>() {
+                .subscribeWith(new ReactiveObserver<List<Foodtruck>>(this) {
                     @Override
                     public void onNext(List<Foodtruck> foodtrucks) {
                         processFoodtrucks(foodtrucks);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Timber.e(e);
-                        postOnView(() -> view.toast(e.getMessage()));
-                        setRefreshing(false);
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        setRefreshing(false);
                     }
                 }));
     }
