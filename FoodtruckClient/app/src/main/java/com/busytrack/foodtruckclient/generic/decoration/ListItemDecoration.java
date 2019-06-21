@@ -21,6 +21,7 @@ public class ListItemDecoration extends RecyclerView.ItemDecoration {
         outRect.right = offset;
         if (parent.getAdapter() != null &&
                 parent.getChildAdapterPosition(view) == parent.getAdapter().getItemCount() - 1)  {
+            // if the item is the last one, add 8 times the offset to the bottom
             outRect.bottom = 8 * offset;
         }
     }

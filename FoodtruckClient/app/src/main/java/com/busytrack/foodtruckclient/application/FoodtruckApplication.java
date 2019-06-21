@@ -6,8 +6,6 @@ import androidx.multidex.MultiDexApplication;
 import com.busytrack.foodtruckclient.di.application.ApplicationComponent;
 import com.busytrack.foodtruckclient.di.application.ApplicationModule;
 import com.busytrack.foodtruckclient.di.application.DaggerApplicationComponent;
-import com.busytrack.foodtruckclient.di.application.network.FoodtruckApiModule;
-import com.busytrack.foodtruckclient.di.application.repository.RepositoryModule;
 
 public class FoodtruckApplication extends MultiDexApplication {
 
@@ -19,12 +17,15 @@ public class FoodtruckApplication extends MultiDexApplication {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
+    /**
+     * @return the {@link ApplicationComponent} instance, the root component used for
+     * dependency injection
+     */
     public ApplicationComponent getApplicationComponent() {
         if (applicationComponent == null) {
+            // Note: Modules with empty constructor parameters are added automatically
             applicationComponent = DaggerApplicationComponent.builder()
                     .applicationModule(new ApplicationModule(this))
-                    .foodtruckApiModule(new FoodtruckApiModule())
-                    .repositoryModule(new RepositoryModule())
                     .build();
         }
         return applicationComponent;

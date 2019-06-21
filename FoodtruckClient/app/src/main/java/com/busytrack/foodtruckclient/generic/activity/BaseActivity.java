@@ -84,11 +84,6 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
         setSupportActionBar(toolbar);
     }
 
-    @Override
-    public FragmentManager getFragmentManagerCompat() {
-        return getSupportFragmentManager();
-    }
-
     /**
      * Adds a default fragment if no fragment is present for the specified container
      */
@@ -117,10 +112,16 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
                 .newActivityComponent(new ActivityModule(this));
     }
 
+    /**
+     * Show a fragment, adding it to the back stack
+     */
     protected <T extends BaseFragment> void showFragment(T fragment) {
         showFragment(fragment, true, null);
     }
 
+    /**
+     * Show a fragment
+     */
     protected <T extends BaseFragment> void showFragment(T fragment,
                                                          boolean addToBackStack,
                                                          @Nullable String backStackStateName) {

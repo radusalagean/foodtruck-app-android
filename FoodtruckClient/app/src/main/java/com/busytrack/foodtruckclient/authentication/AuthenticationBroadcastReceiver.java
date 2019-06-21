@@ -8,6 +8,9 @@ import com.busytrack.foodtruckclient.R;
 import com.busytrack.foodtruckclient.generic.activity.ActivityContract;
 import com.busytrack.foodtruckclient.generic.broadcastreceiver.BaseBroadcastReceiver;
 
+/**
+ * Receive account sync events executed by {@link AuthenticationService}
+ */
 public class AuthenticationBroadcastReceiver extends BaseBroadcastReceiver {
 
     private AuthenticationRepository authenticationRepository;

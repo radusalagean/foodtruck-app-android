@@ -5,11 +5,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.FragmentManager;
 
 import com.busytrack.foodtruckclient.network.foodtruckapi.model.Account;
 import com.busytrack.foodtruckclient.network.foodtruckapi.model.Foodtruck;
 
+/**
+ * An interface that provides Activity-related functionality
+ */
 public interface ActivityContract {
 
     @Nullable ActionBar getToolbar();
@@ -21,18 +23,35 @@ public interface ActivityContract {
      */
     @IdRes int getFragmentContainerId();
 
-    FragmentManager getFragmentManagerCompat();
-
+    /**
+     * Set the account of the currently authenticated user
+     *
+     * @param account the account of the authenticated user
+     * @param notifyUser true if a message should be displayed, false otherwise
+     */
     void setAuthenticatedAccount(@NonNull Account account, boolean notifyUser);
 
+    /**
+     * Clear the authenticated account from RAM and persistent storage
+     */
     void clearAuthenticatedAccount();
 
+    /**
+     * @return true if a user is currently logged in, false otherwise
+     */
     boolean isUserAuthenticated();
 
     @Nullable String getAuthenticatedUserId();
 
+    /**
+     * Show a temporary message on the screen
+     */
     void showSnackBar(String message);
 
+    /**
+     * Clear all fragments from the fragment back stack, up to the default fragment, added
+     * automatically on app start
+     */
     void popAllFragments();
 
     void showDashboardScreen();
@@ -45,7 +64,13 @@ public interface ActivityContract {
 
     void showProfileScreen(String profileId, String profileName);
 
+    /**
+     * Used for adding a new food truck
+     */
     void showFoodtruckEditorScreen();
 
+    /**
+     * Used for editing an existing food truck
+     */
     void showFoodtruckEditorScreen(Foodtruck foodtruck);
 }

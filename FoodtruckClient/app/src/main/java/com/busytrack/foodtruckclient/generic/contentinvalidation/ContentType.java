@@ -5,6 +5,9 @@ import androidx.annotation.IntDef;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+/**
+ * Defines the types of content available
+ */
 @IntDef({
         ContentType.NONE,
         ContentType.FOODTRUCK,

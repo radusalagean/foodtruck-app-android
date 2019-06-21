@@ -325,9 +325,4 @@ public class DashboardFragment extends BaseMapFragment
         presenter.zoomOnLocation(foodtruck.getCoordinates().getLatitude(),
                 foodtruck.getCoordinates().getLongitude(), false);
     }
-
-    @Override
-    public void onOwnerSelected(Account owner) {
-        activityContract.showProfileScreen(owner.getId(), owner.getUsername());
-    }
 }

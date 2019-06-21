@@ -5,6 +5,11 @@ import com.busytrack.foodtruckclient.generic.contentinvalidation.InvalidationEff
 
 public abstract class BaseViewModel {
 
+    /**
+     * The invalidation effects accumulated while the fragment is in background.
+     * Once the fragment is in the foreground again, the effects will be processed and then
+     * will be cleared from this variable.
+     */
     protected int invalidationEffects;
 
     public int getInvalidationEffects() {

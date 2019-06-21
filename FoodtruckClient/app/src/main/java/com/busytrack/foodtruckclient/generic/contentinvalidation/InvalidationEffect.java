@@ -5,6 +5,10 @@ import androidx.annotation.IntDef;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+/**
+ * Defines the types of invalidation effects resulted from processing an {@link InvalidationBundle}.
+ * These effects are applied to other screens.
+ */
 @IntDef({
         InvalidationEffect.NONE,
         InvalidationEffect.POP_FRAGMENT,

@@ -4,6 +4,9 @@ import androidx.annotation.CallSuper;
 
 import io.reactivex.observers.DisposableObserver;
 
+/**
+ * A general observer used to handle specific events through a listener
+ */
 public abstract class ReactiveObserver<T> extends DisposableObserver<T> {
 
     private ReactiveListener listener;

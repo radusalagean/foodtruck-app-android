@@ -4,7 +4,6 @@ import android.content.Context;
 
 import androidx.fragment.app.FragmentActivity;
 
-import com.busytrack.foodtruckclient.dialog.DialogManager;
 import com.busytrack.foodtruckclient.generic.activity.ActivityContract;
 
 import dagger.Module;
@@ -35,13 +34,5 @@ public class ActivityModule {
     @ActivityScope
     ActivityContract provideActivityContract() {
         return (ActivityContract) activity;
-    }
-
-    // Dialog
-
-    @Provides
-    @ActivityScope
-    DialogManager provideDialogManager() {
-        return new DialogManager(activity);
     }
 }

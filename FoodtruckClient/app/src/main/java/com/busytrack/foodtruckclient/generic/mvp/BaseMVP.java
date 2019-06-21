@@ -12,17 +12,53 @@ import java.util.UUID;
 public interface BaseMVP {
 
     interface Model<T extends BaseViewModel> {
+
+        /**
+         * Set the UUID of the associated fragment
+         */
         void setUuid(UUID uuid);
+
+        /**
+         * @return the UUID of the associated fragment
+         */
         UUID getUuid();
+
+        /**
+         * @return the cached instance of the view model, or null if the view model wasn't
+         * initialized yet
+         */
         T getCachedViewModel();
     }
 
     interface View {
+        /**
+         * Change the state of the refreshing indicator of the fragment
+         */
         void setRefreshingIndicator(boolean refreshing);
+
+        /**
+         * Shows a temporary toast
+         */
         void toast(String message);
+
+        /**
+         * Shows a temporary snack bar
+         */
         void showSnackBar(int stringResId);
+
+        /**
+         * Shows a temporary snack bar with string binding args
+         */
         void showSnackBar(int stringResId, Object... formatArgs);
+
+        /**
+         * @return permission delegate used to request Android OS permissions
+         */
         PermissionRequestDelegate getPermissionRequestDelegate();
+
+        /**
+         * Pop the current fragment
+         */
         void popFragment();
     }
 

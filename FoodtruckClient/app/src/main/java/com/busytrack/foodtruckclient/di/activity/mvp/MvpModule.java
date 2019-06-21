@@ -34,6 +34,10 @@ import com.busytrack.foodtruckclient.screen.register.RegisterPresenter;
 import dagger.Module;
 import dagger.Provides;
 
+/**
+ * Module that is responsible for providing the Model and Presenter classes to the Views (Fragments
+ * in our case), for each screen type
+ */
 @Module
 public class MvpModule {
 

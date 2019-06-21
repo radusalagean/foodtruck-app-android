@@ -81,14 +81,14 @@ public class MainActivity extends BaseActivity
         authenticationBroadcastReceiver.register(this);
         AuthenticationService.startService(getApplicationContext(),
                 AuthenticationConstants.ACTION_SYNC_USER_INFO);
-        viewModelManager.registerListener(getFragmentManagerCompat());
+        viewModelManager.registerListener(getSupportFragmentManager());
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         authenticationBroadcastReceiver.unregister(this);
-        viewModelManager.unregisterListener(getFragmentManagerCompat());
+        viewModelManager.unregisterListener(getSupportFragmentManager());
     }
 
     @NonNull
@@ -140,7 +140,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void popAllFragments() {
-        getFragmentManagerCompat()
+        getSupportFragmentManager()
                 .popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
@@ -148,6 +148,7 @@ public class MainActivity extends BaseActivity
     public void showDashboardScreen() {
         String dashboardTag = viewModelManager.getDashboardUuidString();
         BaseFragment fragment;
+        // if the fragment is already created, use that instance
         if (dashboardTag != null) {
             fragment = (DashboardFragment) getSupportFragmentManager()
                     .findFragmentByTag(dashboardTag);
@@ -189,6 +190,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void setToolbar(@NonNull Toolbar toolbar) {
+        // set up the navigation drawer toggle
         if (actionBarDrawerToggle != null) {
             drawerLayout.removeDrawerListener(actionBarDrawerToggle);
         }
@@ -204,9 +206,11 @@ public class MainActivity extends BaseActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        // first, let the navigation drawer toggle handle the event
         if (actionBarDrawerToggle != null && actionBarDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
+        // if the selected item was not our nav drawer toggle, pass the event deeper
         return super.onOptionsItemSelected(item);
     }
 
@@ -244,12 +248,14 @@ public class MainActivity extends BaseActivity
     public void onBackPressed() {
         Fragment currentFragment = getSupportFragmentManager()
                 .findFragmentById(getFragmentContainerId());
+        // Order of handling the back press event:
+        // 1. Close the navigation drawer if it's open
+        // 2. If event was not handled in step 1, let the current fragment handle it
+        // 3. If the event was not handled in step 2, pass the event deeper
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
-        } else if (currentFragment instanceof BaseFragment &&
-                ((BaseFragment) currentFragment).onBackPressed()) {
-            return;
-        } else {
+        } else if (!(currentFragment instanceof BaseFragment) ||
+                !((BaseFragment) currentFragment).onBackPressed()) {
             super.onBackPressed();
         }
     }

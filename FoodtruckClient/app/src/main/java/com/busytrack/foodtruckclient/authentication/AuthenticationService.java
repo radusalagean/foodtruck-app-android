@@ -12,6 +12,10 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
+/**
+ * Service that handles syncing the account of the currently authenticated user with the data from
+ * the server, effectively replacing any of its outdated data stored locally (e.g. profile image url)
+ */
 public class AuthenticationService extends BaseIntentService {
 
     @Inject

@@ -4,6 +4,9 @@ import androidx.annotation.CallSuper;
 
 import io.reactivex.observers.DisposableCompletableObserver;
 
+/**
+ * A general completable observer used to handle specific events through a listener
+ */
 public class ReactiveCompletableObserver extends DisposableCompletableObserver {
 
     private ReactiveListener listener;

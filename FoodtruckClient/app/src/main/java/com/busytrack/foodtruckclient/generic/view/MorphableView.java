@@ -2,6 +2,9 @@ package com.busytrack.foodtruckclient.generic.view;
 
 import androidx.annotation.DrawableRes;
 
+/**
+ * Defines the methods that should be implemented by a morphable view
+ */
 public interface MorphableView {
 
     /**

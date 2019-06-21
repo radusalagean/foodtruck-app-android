@@ -17,6 +17,10 @@ public class LocationModule {
         return new LocationManager(fusedLocationProviderClient);
     }
 
+    /**
+     * {@link FusedLocationProviderClient} is used in the app to provide the current location of the
+     * device
+     */
     @Provides
     FusedLocationProviderClient provideFusedLocationProviderClient(Context context) {
         return LocationServices.getFusedLocationProviderClient(context);

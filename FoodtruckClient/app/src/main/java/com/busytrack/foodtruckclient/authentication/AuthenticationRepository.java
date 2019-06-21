@@ -5,6 +5,11 @@ import androidx.annotation.Nullable;
 import com.busytrack.foodtruckclient.network.foodtruckapi.model.Account;
 import com.busytrack.foodtruckclient.persistence.SharedPreferencesRepository;
 
+/**
+ * Provides access to the account of the currently authenticated user.<br>
+ * Initially, it loads the account from persistent storage (Shared Preferences) and caches it in
+ * memory for quicker access during the app's lifetime.
+ */
 public class AuthenticationRepository {
 
     private SharedPreferencesRepository sharedPreferencesRepository;

@@ -5,6 +5,10 @@ import androidx.annotation.IntDef;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+/**
+ * Defines the invalidation types that are being sent with an {@link InvalidationBundle} in order
+ * to be processed for each screen.
+ */
 @IntDef({
         InvalidationType.NONE,
         InvalidationType.RELOAD,

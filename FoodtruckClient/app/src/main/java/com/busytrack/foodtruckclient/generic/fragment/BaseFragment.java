@@ -48,6 +48,7 @@ public abstract class BaseFragment extends Fragment
         Timber.tag(tag).v("-F-> onCreate(%s)", savedInstanceState);
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            // get the UUID that was generated in the newInstance() call and pass it to the presenter
             UUID uuid = (UUID) getArguments().getSerializable(ARG_UUID);
             getPresenter().setUuid(uuid);
             Timber.tag(getClass().getSimpleName()).d("Fragment's UUID: %s", uuid);
@@ -141,6 +142,7 @@ public abstract class BaseFragment extends Fragment
     public void requestPermission(String permission, int requestCode) {
         requestPermissions(new String[] { permission }, requestCode);
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         Timber.d("onRequestPermissionsResult(%d, %s, %s)", requestCode, permissions, grantResults);
