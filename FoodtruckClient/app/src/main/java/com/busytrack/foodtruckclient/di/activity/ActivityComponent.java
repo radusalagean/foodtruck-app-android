@@ -3,6 +3,7 @@ package com.busytrack.foodtruckclient.di.activity;
 import com.busytrack.foodtruckclient.activity.MainActivity;
 import com.busytrack.foodtruckclient.di.activity.authentication.AuthenticationModule;
 import com.busytrack.foodtruckclient.di.activity.location.LocationModule;
+import com.busytrack.foodtruckclient.di.activity.mvp.MvpModule;
 import com.busytrack.foodtruckclient.di.activity.permission.PermissionModule;
 import com.busytrack.foodtruckclient.di.activity.viewmodel.ViewModelModule;
 import com.busytrack.foodtruckclient.screen.dashboard.DashboardFragment;
@@ -20,6 +21,7 @@ import dagger.Subcomponent;
         LocationModule.class,
         PermissionModule.class,
         ViewModelModule.class,
+        MvpModule.class,
         AuthenticationModule.class
 })
 public interface ActivityComponent {

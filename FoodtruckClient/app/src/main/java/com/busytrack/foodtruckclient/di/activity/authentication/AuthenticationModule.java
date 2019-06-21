@@ -13,7 +13,7 @@ public class AuthenticationModule {
 
     @Provides
     @ActivityScope
-    AuthenticationBroadcastReceiver provideAuthenticationProadcastReceiver(
+    AuthenticationBroadcastReceiver provideAuthenticationBroadcastReceiver(
             AuthenticationRepository authenticationRepository,
             ActivityContract activityContract) {
         return new AuthenticationBroadcastReceiver(authenticationRepository, activityContract);
