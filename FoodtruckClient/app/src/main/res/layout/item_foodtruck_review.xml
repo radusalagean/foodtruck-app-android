@@ -13,7 +13,7 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/foodtruck_viewer_map_view"
-    app:cardElevation="4dp">
+    app:cardElevation="@dimen/general_card_elevation">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -21,8 +21,8 @@
         xmlns:tools="http://schemas.android.com/tools">
 
         <ImageView
-            android:layout_width="38dp"
-            android:layout_height="38dp"
+            android:layout_width="@dimen/foodtruck_review_image_size"
+            android:layout_height="@dimen/foodtruck_review_image_size"
             android:id="@+id/review_image_view_profile_picture"
             android:layout_marginLeft="@dimen/general_layout_margin"
             android:layout_marginStart="@dimen/general_layout_margin"

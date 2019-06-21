@@ -1,22 +1,63 @@
 <resources>
+    <!--Login-->
+    <dimen name="login_content_width">256dp</dimen>
+    <dimen name="login_button_margin_top">32dp</dimen>
+
+    <!--Register-->
+    <dimen name="register_content_width">256dp</dimen>
+    <dimen name="register_button_margin_top">16dp</dimen>
+
     <!--Dashboard-->
-    <dimen name="dashboard_fab_margin">16dp</dimen>
+    <dimen name="item_dashboard_list_offset">8dp</dimen>
 
     <!--Foodtruck Item-->
     <dimen name="item_thumbnail_image_size">75dp</dimen>
     <dimen name="item_card_image_size">150dp</dimen>
     <dimen name="foodtruck_item_owner_image_size">20dp</dimen>
-    <dimen name="item_dashboard_list_offset">8dp</dimen>
-    <dimen name="app_bar_height">180dp</dimen>
-    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="list_style_owner_image_margin_top">4dp</dimen>
+    <dimen name="list_style_owner_text_margin_start">4dp</dimen>
+    <dimen name="list_style_rating_bar_margin_top">4dp</dimen>
+    <dimen name="list_style_show_on_map_button_padding">8dp</dimen>
     <dimen name="card_style_title_text_size">18sp</dimen>
+    <dimen name="card_style_owner_image_margin_top">4dp</dimen>
+    <dimen name="card_style_owner_text_margin_start">4dp</dimen>
+    <dimen name="card_style_rating_bar_margin_top">4dp</dimen>
+    <dimen name="card_style_show_on_map_button_padding">8dp</dimen>
+
+    <!--Foodtruck Review-->
+    <dimen name="foodtruck_review_image_size">38dp</dimen>
+
+    <!--Profile-->
+    <dimen name="profile_header_image_size">200dp</dimen>
+    <dimen name="profile_header_image_margin_top">32dp</dimen>
+    <dimen name="profile_header_username_margin_top">24dp</dimen>
+    <dimen name="profile_header_joined_date_margin_bottom">16dp</dimen>
+
+    <!--Foodtruck Editor-->
+    <dimen name="foodtruck_editor_footer_navigation_button_size">36dp</dimen>
+    <dimen name="foodtruck_editor_name_hint_margin_top">48dp</dimen>
+    <dimen name="foodtruck_editor_name_edit_text_width">256dp</dimen>
+    <dimen name="foodtruck_editor_name_edit_text_margin_top">64dp</dimen>
+    <dimen name="foodtruck_editor_foodtypes_hint_margin_top">48dp</dimen>
+    <dimen name="foodtruck_editor_foodtypes_edit_text_width">200dp</dimen>
+    <dimen name="foodtruck_editor_foodtypes_edit_text_margin_top">48dp</dimen>
+    <dimen name="foodtruck_editor_foodtypes_add_button_size">36dp</dimen>
+    <dimen name="foodtruck_editor_location_hint_margin_vertical">16dp</dimen>
+    <dimen name="foodtruck_editor_image_hint_margin_top">48dp</dimen>
+    <dimen name="foodtruck_editor_image_preview_size">240dp</dimen>
+
+    <!--Map Popup-->
+    <dimen name="map_popup_margin">16dp</dimen>
+    <dimen name="map_popup_card_elevation">16dp</dimen>
+    <dimen name="map_popup_card_corner_radius">8dp</dimen>
 
     <!--Tag View-->
     <dimen name="tag_view_padding">8dp</dimen>
+    <dimen name="tag_view_item_corner_radius">4dp</dimen>
 
     <!--QuickDotsView-->
-    <dimen name="quick_dots_view_default_dot_radius">4dp</dimen>
-    <dimen name="quick_dots_view_default_dot_separation">4dp</dimen>
+    <dimen name="quick_dots_view_dot_radius">4dp</dimen>
+    <dimen name="quick_dots_view_dot_separation">4dp</dimen>
 
     <!--Rating Count-->
     <dimen name="rating_count_horizontal_padding">16dp</dimen>
@@ -25,10 +66,15 @@
     <!--General-->
     <dimen name="general_layout_margin">8dp</dimen>
 
+    <!--General Cards-->
+    <dimen name="general_card_elevation">4dp</dimen>
+
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="nav_header_vertical_spacing">8dp</dimen>
     <dimen name="nav_header_height">176dp</dimen>
+    <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 
 </resources>

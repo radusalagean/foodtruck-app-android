@@ -15,7 +15,7 @@
             android:id="@+id/foodtruck_editor_image_hint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="48dp"
+            android:layout_marginTop="@dimen/foodtruck_editor_image_hint_margin_top"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
@@ -62,8 +62,8 @@
             android:enabled="false"/>
 
         <ImageView
-            android:layout_width="240dp"
-            android:layout_height="240dp"
+            android:layout_width="@dimen/foodtruck_editor_image_preview_size"
+            android:layout_height="@dimen/foodtruck_editor_image_preview_size"
             android:id="@+id/foodtruck_editor_image_view_preview"
             android:layout_marginTop="@dimen/general_layout_margin"
             tools:ignore="ContentDescription"

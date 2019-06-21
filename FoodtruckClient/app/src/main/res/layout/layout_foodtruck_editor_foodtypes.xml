@@ -15,7 +15,7 @@
             android:id="@+id/foodtruck_editor_foodtype_hint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="48dp"
+            android:layout_marginTop="@dimen/foodtruck_editor_foodtypes_hint_margin_top"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
@@ -30,13 +30,14 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/foodtruck_editor_input_layout_foodtype"
-            android:layout_width="200dp"
+            android:layout_width="@dimen/foodtruck_editor_foodtypes_edit_text_width"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="48dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginLeft="@dimen/general_layout_margin"
+            android:layout_marginStart="@dimen/general_layout_margin"
+            android:layout_marginTop="@dimen/foodtruck_editor_foodtypes_edit_text_margin_top"
+            android:layout_marginEnd="@dimen/general_layout_margin"
+            android:layout_marginRight="@dimen/general_layout_margin"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/foodtruck_editor_foodtype_hint">
@@ -56,10 +57,10 @@
 
         <ImageView
             android:id="@+id/foodtruck_editor_image_view_add"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
+            android:layout_width="@dimen/foodtruck_editor_foodtypes_add_button_size"
+            android:layout_height="@dimen/foodtruck_editor_foodtypes_add_button_size"
+            android:layout_marginStart="@dimen/general_layout_margin"
+            android:layout_marginLeft="@dimen/general_layout_margin"
             android:background="?selectableItemBackgroundBorderless"
             app:layout_constraintBottom_toBottomOf="@+id/foodtruck_editor_input_layout_foodtype"
             app:layout_constraintStart_toEndOf="@+id/foodtruck_editor_input_layout_foodtype"

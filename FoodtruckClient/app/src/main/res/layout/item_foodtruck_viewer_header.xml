@@ -32,7 +32,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/foodtruck_viewer_tag_layout"
-        app:cardElevation="4dp">
+        app:cardElevation="@dimen/general_card_elevation">
 
         <include layout="@layout/layout_foodtruck_info_card" />
 
