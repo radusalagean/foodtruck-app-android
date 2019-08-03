@@ -27,7 +27,6 @@ import com.busytrack.foodtruckclient.generic.list.foodtruck.FoodtruckContract;
 import com.busytrack.foodtruckclient.generic.mapmvp.BaseMapFragment;
 import com.busytrack.foodtruckclient.generic.mvp.BaseMVP;
 import com.busytrack.foodtruckclient.generic.view.OnViewInflatedListener;
-import com.busytrack.foodtruckclient.network.foodtruckapi.model.Account;
 import com.busytrack.foodtruckclient.network.foodtruckapi.model.Foodtruck;
 import com.busytrack.foodtruckclient.persistence.SharedPreferencesRepository;
 import com.busytrack.foodtruckclient.util.ViewUtils;
@@ -198,7 +197,7 @@ public class DashboardFragment extends BaseMapFragment
 
     @Override
     public void onAttach(Context context) {
-        getControllerComponent().inject(this);
+        getActivityComponent().inject(this);
         super.onAttach(context);
     }
 

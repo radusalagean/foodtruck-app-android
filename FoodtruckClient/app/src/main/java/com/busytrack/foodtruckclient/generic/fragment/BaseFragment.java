@@ -14,11 +14,10 @@ import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.busytrack.foodtruckclient.R;
-import com.busytrack.foodtruckclient.application.FoodtruckApplication;
 import com.busytrack.foodtruckclient.di.activity.ActivityComponent;
-import com.busytrack.foodtruckclient.di.activity.ActivityModule;
 import com.busytrack.foodtruckclient.dialog.DialogManager;
 import com.busytrack.foodtruckclient.generic.activity.ActivityContract;
+import com.busytrack.foodtruckclient.generic.activity.BaseActivity;
 import com.busytrack.foodtruckclient.generic.mvp.BaseMVP;
 import com.busytrack.foodtruckclient.permission.PermissionConstants;
 import com.busytrack.foodtruckclient.permission.PermissionRequestDelegate;
@@ -35,7 +34,6 @@ public abstract class BaseFragment extends Fragment
     protected static final String ARG_UUID = "UUID";
 
     private String tag = getClass().getSimpleName();
-    private boolean isComponentUsed = false;
 
     @Override
     public void onAttach(Context context) {
@@ -187,14 +185,8 @@ public abstract class BaseFragment extends Fragment
     }
 
     @UiThread
-    protected ActivityComponent getControllerComponent() {
-        if (isComponentUsed) {
-            throw new IllegalStateException("You shouldn't use ActivityComponent more than once");
-        }
-        isComponentUsed = true;
-        return ((FoodtruckApplication) getActivity().getApplication())
-                .getApplicationComponent()
-                .newActivityComponent(new ActivityModule(getActivity()));
+    protected ActivityComponent getActivityComponent() {
+        return ((BaseActivity) getActivity()).getActivityComponent();
     }
 
     @Nullable

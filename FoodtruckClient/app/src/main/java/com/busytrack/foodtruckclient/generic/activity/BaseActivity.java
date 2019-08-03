@@ -9,9 +9,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
 import com.busytrack.foodtruckclient.application.FoodtruckApplication;
 import com.busytrack.foodtruckclient.di.activity.ActivityComponent;
 import com.busytrack.foodtruckclient.di.activity.ActivityModule;
@@ -22,7 +20,7 @@ import timber.log.Timber;
 public abstract class BaseActivity extends AppCompatActivity implements ActivityContract {
 
     private String tag = getClass().getSimpleName();
-    private boolean isComponentUsed = false;
+    private ActivityComponent activityComponent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -102,14 +100,13 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
     protected abstract @NonNull BaseFragment getDefaultFragment();
 
     @UiThread
-    protected ActivityComponent getControllerComponent() {
-        if (isComponentUsed) {
-            throw new IllegalStateException("You shouldn't use ActivityComponent more than once");
+    public ActivityComponent getActivityComponent() {
+        if (activityComponent == null) {
+            activityComponent = ((FoodtruckApplication) getApplication())
+                    .getApplicationComponent()
+                    .newActivityComponent(new ActivityModule(this));
         }
-        isComponentUsed = true;
-        return ((FoodtruckApplication) getApplication())
-                .getApplicationComponent()
-                .newActivityComponent(new ActivityModule(this));
+        return activityComponent;
     }
 
     /**

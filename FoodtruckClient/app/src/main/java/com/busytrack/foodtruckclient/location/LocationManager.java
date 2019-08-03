@@ -5,6 +5,8 @@ import android.location.Location;
 import androidx.annotation.Nullable;
 import androidx.collection.ArrayMap;
 
+import com.busytrack.foodtruckclient.R;
+import com.busytrack.foodtruckclient.dialog.DialogManager;
 import com.busytrack.foodtruckclient.network.foodtruckapi.model.Coordinates;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -30,14 +32,17 @@ public class LocationManager implements OnMapReadyCallback {
     public static final float DEFAULT_ZOOM = 18.0f;
 
     private FusedLocationProviderClient fusedLocationProviderClient;
+    private DialogManager dialogManager;
     private GoogleMap googleMap;
     private Location lastKnownLocation;
     private ArrayMap<String, MarkerOptions> pendingMarkers;
     private BiMap<String, Marker> addedMarkers;
     private Queue<Runnable> pendingRunnables;
 
-    public LocationManager(FusedLocationProviderClient fusedLocationProviderClient) {
+    public LocationManager(FusedLocationProviderClient fusedLocationProviderClient,
+                           DialogManager dialogManager) {
         this.fusedLocationProviderClient = fusedLocationProviderClient;
+        this.dialogManager = dialogManager;
         pendingMarkers = new ArrayMap<>();
         addedMarkers = HashBiMap.create();
         pendingRunnables = new LinkedList<>();
@@ -105,6 +110,11 @@ public class LocationManager implements OnMapReadyCallback {
             if (task.isSuccessful() && task.getResult() != null) {
                 lastKnownLocation = task.getResult();
                 zoomOnLocation(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude(), false);
+            } else {
+                dialogManager.showBasicAlertDialog(
+                        R.string.message_location_unavailable_title,
+                        R.string.message_location_unavailable_message
+                );
             }
         });
     }

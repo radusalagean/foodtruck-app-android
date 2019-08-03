@@ -20,6 +20,8 @@
     <string name="dashboard_pager_map">🗺️ Locations</string>
     <string name="dashboard_pager_list">🚚 Food trucks</string>
     <string name="menu_toggle_layout">Toggle Layout</string>
+    <string name="message_location_unavailable_title">Location unavailable</string>
+    <string name="message_location_unavailable_message">Unable to get current device location. Please make sure location services are turned on in the phone\'s settings.</string>
 
     <!--Rating count-->
     <string name="rating_count">(%d ratings)</string>

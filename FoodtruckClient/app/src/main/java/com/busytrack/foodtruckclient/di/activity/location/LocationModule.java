@@ -2,6 +2,7 @@ package com.busytrack.foodtruckclient.di.activity.location;
 
 import android.content.Context;
 
+import com.busytrack.foodtruckclient.dialog.DialogManager;
 import com.busytrack.foodtruckclient.location.LocationManager;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -13,8 +14,9 @@ import dagger.Provides;
 public class LocationModule {
 
     @Provides
-    LocationManager provideLocationManager(FusedLocationProviderClient fusedLocationProviderClient) {
-        return new LocationManager(fusedLocationProviderClient);
+    LocationManager provideLocationManager(FusedLocationProviderClient fusedLocationProviderClient,
+                                           DialogManager dialogManager) {
+        return new LocationManager(fusedLocationProviderClient, dialogManager);
     }
 
     /**

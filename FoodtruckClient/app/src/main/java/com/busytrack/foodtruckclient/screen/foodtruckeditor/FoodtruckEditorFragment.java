@@ -249,7 +249,7 @@ public class FoodtruckEditorFragment extends BaseMapFragment
 
     @Override
     public void onAttach(Context context) {
-        getControllerComponent().inject(this);
+        getActivityComponent().inject(this);
         super.onAttach(context);
     }
 

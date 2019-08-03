@@ -79,7 +79,7 @@ public class LoginFragment extends BaseFragment implements LoginMVP.View {
 
     @Override
     public void onAttach(Context context) {
-        getControllerComponent().inject(this);
+        getActivityComponent().inject(this);
         super.onAttach(context);
     }
 

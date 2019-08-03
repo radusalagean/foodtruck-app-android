@@ -82,7 +82,7 @@ public class ProfileFragment extends BaseFragment
 
     @Override
     public void onAttach(Context context) {
-        getControllerComponent().inject(this);
+        getActivityComponent().inject(this);
         super.onAttach(context);
     }
 

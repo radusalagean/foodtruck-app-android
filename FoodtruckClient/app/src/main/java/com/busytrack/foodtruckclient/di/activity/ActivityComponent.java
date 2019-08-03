@@ -27,8 +27,9 @@ import dagger.Subcomponent;
         DialogModule.class
 })
 public interface ActivityComponent {
-
+    // Activity
     void inject(MainActivity mainActivity);
+    // Fragment
     void inject(DashboardFragment dashboardFragment);
     void inject(FoodtruckViewerFragment foodtruckViewerFragment);
     void inject(LoginFragment loginFragment);
