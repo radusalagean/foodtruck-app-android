@@ -6,6 +6,9 @@
 
 This is a demonstrative client app, built around the **foodtruck api**, available and documented [here](https://github.com/radusalagean/foodtruck-api).
 
+## Download
+[![Get it on Google Play](https://i.imgur.com/2LewwTZ.png)](https://play.google.com/store/apps/details?id=com.busytrack.foodtruckclient)
+
 ## Screenshots
 ![screenshot](https://lh3.googleusercontent.com/g0hnDiKiK5eAzKfutGH2VKMeV6btyEFPng5pj-ebzkKB2pyk4ixRegBosoWfkJtGJUA=w720-h310-rw)
 ![screenshot](https://lh3.googleusercontent.com/efZyOAgAQ7wr19zL7NPXFmP8Qx8dah27mQA_383qJ_ylcj-UTjpYWGM-upeZk-Us9g=w720-h310-rw)
@@ -21,7 +24,7 @@ This is a demonstrative client app, built around the **foodtruck api**, availabl
 - Viewing available food trucks and profiles does not require authentication
 
 ## Using the app
-If you want to get access to the **Play Store** listing, please send me an email to [busytrack@gmail.com](mailto://busytrack@gmail.com) with your request and I will send you a link to join the **internal testing** channel. Due to the demonstrative nature of this app, it is **not meant for public production use by any means**, thus public access is restricted from the Play Store.
+Due to the demonstrative nature of this app, it is **not meant for public production usage**, thus account creation inside the app is allowed only with the `Service Access Code`, which you are required to enter when you create your account. If you received a link from me to this project, that code should already be specified next to the link.
 
 ### Debug vs. Release?
 The Debug version has additional _Logcat_ logs and the [Stetho](http://facebook.github.io/stetho/) library enabled for debugging purposes.
