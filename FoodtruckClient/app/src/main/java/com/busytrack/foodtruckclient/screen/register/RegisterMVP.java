@@ -20,7 +20,7 @@ public interface RegisterMVP {
     }
 
     interface Presenter extends BaseMVP.Presenter<View> {
-        void register(String userName, String password);
+        void register(String userName, String password, String serviceAccessCode);
         void checkUsernameAvailability(String username);
     }
 }

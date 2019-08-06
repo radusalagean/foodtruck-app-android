@@ -21,6 +21,8 @@ import com.busytrack.foodtruckclient.R;
 import com.busytrack.foodtruckclient.generic.activity.ActivityContract;
 import com.busytrack.foodtruckclient.generic.fragment.BaseFragment;
 import com.busytrack.foodtruckclient.generic.mvp.BaseMVP;
+import com.busytrack.foodtruckclient.network.NetworkConstants;
+import com.busytrack.foodtruckclient.util.IntentUtils;
 
 import java.util.List;
 
@@ -51,10 +53,17 @@ public class RegisterFragment extends BaseFragment implements RegisterMVP.View {
     @BindView(R.id.register_edit_text_password_retype)
     EditText retypePasswordEditText;
 
+    @BindView(R.id.register_edit_text_service_access_code)
+    EditText serviceAccessCodeEditText;
+
+    @BindView(R.id.privacy_policy_text_view)
+    TextView privacyPolicyTextView;
+
     @BindViews({
             R.id.register_edit_text_username,
             R.id.register_edit_text_password,
-            R.id.register_edit_text_password_retype
+            R.id.register_edit_text_password_retype,
+            R.id.register_edit_text_service_access_code
     })
     List<EditText> editTexts;
 
@@ -142,8 +151,12 @@ public class RegisterFragment extends BaseFragment implements RegisterMVP.View {
                 view.addTextChangedListener(onTextChangeListener)));
         registerButton.setOnClickListener((v -> presenter.register(
                 usernameEditText.getText().toString(),
-                passwordEditText.getText().toString()
+                passwordEditText.getText().toString(),
+                serviceAccessCodeEditText.getText().toString()
         )));
+        privacyPolicyTextView.setOnClickListener(v -> {
+            IntentUtils.openLinkInBrowser(getContext(), NetworkConstants.PRIVACY_POLICY_URL);
+        });
     }
 
     @Override
@@ -152,6 +165,7 @@ public class RegisterFragment extends BaseFragment implements RegisterMVP.View {
         ViewCollections.run(editTexts, ((view, index) ->
                 view.removeTextChangedListener(onTextChangeListener)));
         registerButton.setOnClickListener(null);
+        privacyPolicyTextView.setOnClickListener(null);
     }
 
     @Override
@@ -181,10 +195,12 @@ public class RegisterFragment extends BaseFragment implements RegisterMVP.View {
         String username = usernameEditText.getText().toString().trim();
         String password = passwordEditText.getText().toString();
         String retypedPassword = retypePasswordEditText.getText().toString();
+        String serviceAccessCode = serviceAccessCodeEditText.getText().toString();
         registerButton.setEnabled(
                 username.length() > 0 &&
                 password.length() > 0 &&
-                password.equals(retypedPassword)
+                password.equals(retypedPassword) &&
+                serviceAccessCode.length() > 0
         );
     }
 

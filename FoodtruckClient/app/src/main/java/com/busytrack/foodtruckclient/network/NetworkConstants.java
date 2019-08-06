@@ -42,6 +42,7 @@ public class NetworkConstants {
         return HEADER_VALUE_AUTHORIZATION_PREFIX_BEARER + token;
     }
 
-    // Project Page
+    // External links
     public static final String PROJECT_PAGE_URL = "https://github.com/radusalagean/foodtruck-app-android";
+    public static final String PRIVACY_POLICY_URL = "https://releasetracker.app/foodtruck_client_privacy_policy.html";
 }

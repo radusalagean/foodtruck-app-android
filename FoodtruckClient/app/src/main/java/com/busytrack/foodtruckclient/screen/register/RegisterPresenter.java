@@ -18,10 +18,11 @@ public class RegisterPresenter extends BasePresenter<RegisterMVP.View, RegisterM
     }
 
     @Override
-    public void register(String userName, String password) {
+    public void register(String userName, String password, String serviceAccessCode) {
         Account account = new Account();
         account.setUsername(userName);
         account.setPassword(password);
+        account.setServiceAccessCode(serviceAccessCode);
         setRefreshing(true);
         compositeDisposable.add(model.register(account)
                 .observeOn(AndroidSchedulers.mainThread())

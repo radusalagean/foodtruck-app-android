@@ -239,6 +239,9 @@ public class MainActivity extends BaseActivity
             case R.id.nav_project_page:
                 IntentUtils.openLinkInBrowser(this, NetworkConstants.PROJECT_PAGE_URL);
                 break;
+            case R.id.nav_privacy_policy:
+                IntentUtils.openLinkInBrowser(this, NetworkConstants.PRIVACY_POLICY_URL);
+                break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;

@@ -37,6 +37,10 @@
                 android:id="@+id/nav_project_page"
                 android:icon="@drawable/ic_code_black_24dp"
                 android:title="@string/menu_project_page"/>
+            <item
+                android:id="@+id/nav_privacy_policy"
+                android:icon="@drawable/ic_security_black_24dp"
+                android:title="@string/menu_privacy_policy"/>
         </menu>
     </item>
 

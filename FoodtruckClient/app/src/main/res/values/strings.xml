@@ -74,6 +74,7 @@
     <string name="username_hint">Username</string>
     <string name="password_hint">Password</string>
     <string name="retype_password_hint">Retype password</string>
+    <string name="service_access_code_hint">Service Access Code</string>
     <string name="login">Login</string>
     <string name="register">Register</string>
     <string name="register_link">No account?</string>
@@ -83,6 +84,7 @@
     <string name="username_unavailable">Username unavailable</string>
     <string name="registered_message">%s successfully registered</string>
     <string name="user_info_sync_failed_message">Your user account data could not be refreshed at the moment</string>
+    <string name="privacy_policy_link"><u>Privacy Policy</u></string>
 
     <!--Profile-->
     <string name="profile_joined_date">Joined: %s</string>
@@ -117,4 +119,5 @@
     <string name="menu_register">Register</string>
     <string name="menu_logout">Logout</string>
     <string name="menu_project_page">Project Page</string>
+    <string name="menu_privacy_policy">Privacy Policy</string>
 </resources>

@@ -29,6 +29,9 @@ public class Account {
     @SerializedName("token")
     private String token;
 
+    @SerializedName("serviceAccessCode")
+    private String serviceAccessCode;
+
     public String getId() {
         return id;
     }
@@ -83,6 +86,14 @@ public class Account {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getServiceAccessCode() {
+        return serviceAccessCode;
+    }
+
+    public void setServiceAccessCode(String serviceAccessCode) {
+        this.serviceAccessCode = serviceAccessCode;
     }
 
     public String getImageUrl() {
