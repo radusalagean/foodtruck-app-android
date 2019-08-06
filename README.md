@@ -21,15 +21,7 @@ This is a demonstrative client app, built around the **foodtruck api**, availabl
 - Viewing available food trucks and profiles does not require authentication
 
 ## Using the app
-The **Google Maps API** release key is restricted to the apk signed by Google Play (_App Signing Certificate_).
-Running a release build variant signed with my local intermediary certificate (aka. _App Upload Certificate_) will result in the maps not being displayed, so there is no point in providing a release-variant apk, other than the final one signed by Google and only accessible through the **Google Play store listing**.
-
-The **debug apk**, however, is signed with the usual _Android Debug Certificate_ and the Google Maps API key for the debug version points to that certificate's _SHA-1_.
-
-As a result, if we want to run the **release** variant properly, only the one from the **Play Store** listing will work.
-If we want to run the **debug** variant, the apk provided **[here](https://github.com/radusalagean/foodtruck-app-android/releases)** should work just fine.
-
-If you want to get access to the **Play Store** listing, please send me an email to [busytrack@gmail.com](mailto://busytrack@gmail.com) with the email addess linked to your Google account that you are using on your Android device in order to add you to the **internal testing** channel. Due to the demonstrative nature of this app, it is **not meant for public production use by any means**, thus public access is restricted from the Play Store.
+If you want to get access to the **Play Store** listing, please send me an email to [busytrack@gmail.com](mailto://busytrack@gmail.com) with your request and I will send you a link to join the **internal testing** channel. Due to the demonstrative nature of this app, it is **not meant for public production use by any means**, thus public access is restricted from the Play Store.
 
 ### Debug vs. Release?
 The Debug version has additional _Logcat_ logs and the [Stetho](http://facebook.github.io/stetho/) library enabled for debugging purposes.
@@ -54,7 +46,7 @@ The project is built around the `MVP` pattern. The following diagram displays th
 ![fig. 1](https://i.imgur.com/KrnNXd8.png)
 
 ### Roles
-Some roles I chose for each interface are listed below:
+While I try to follow the architecture principles as close as possible, I am not overly rigid with my design choices. As I noticed, everyone has a slightly different approach when designing an Android app from an architecture point of view. This is my approach for this particular project:
 - **`View`**
   - Represents Android Fragments
   - Handles Android-specific tasks, such as Fragment lifecycle, requesting and receiving permission results, etc.
