@@ -1,3 +1,5 @@
+**Update October 14, 2020:** Both the server and the client app are now retired. Feel free to use the sources if you want to deploy your own server-client configuration of this project.
+
 [![Build Status](https://travis-ci.org/radusalagean/foodtruck-app-android.svg?branch=master)](https://travis-ci.org/radusalagean/foodtruck-app-android)
 [![Latest Release](https://img.shields.io/github/release/radusalagean/foodtruck-app-android.svg)](https://github.com/radusalagean/foodtruck-app-android/releases)
 
@@ -5,9 +7,6 @@
 ![app_icon](FoodtruckClient/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png)
 
 This is a demonstrative client app, built around the **foodtruck api**, available and documented [here](https://github.com/radusalagean/foodtruck-api).
-
-## Download
-[![Get it on Google Play](https://i.imgur.com/2LewwTZ.png)](https://play.google.com/store/apps/details?id=com.busytrack.foodtruckclient)
 
 ## Screenshots
 ![screenshot](https://lh3.googleusercontent.com/g0hnDiKiK5eAzKfutGH2VKMeV6btyEFPng5pj-ebzkKB2pyk4ixRegBosoWfkJtGJUA=w720-h310-rw)
